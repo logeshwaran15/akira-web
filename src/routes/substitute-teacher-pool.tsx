@@ -10,9 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -140,6 +138,38 @@ function SubstituteTeacherPoolPage() {
     }
   };
 
+  const columns: Column<PoolRow>[] = [
+    { key: "teacherName", header: "Teacher", sortable: true, accessor: (p) => <span className="font-medium">{p.teacherName ?? "—"}</span> },
+    {
+      key: "scope",
+      header: "Scope",
+      sortable: true,
+      sortValue: (p) => p.subjectName ?? p.departmentName ?? "",
+      accessor: (p) =>
+        p.subjectName ? (
+          <Badge variant="outline" className="rounded-md">{p.subjectName}</Badge>
+        ) : (
+          <Badge variant="outline" className="rounded-md">{p.departmentName ?? "—"} (dept)</Badge>
+        ),
+    },
+    {
+      key: "isActive",
+      header: "Active",
+      sortable: true,
+      accessor: (p) => <Switch checked={p.isActive} onCheckedChange={(v) => toggleActive(p, v)} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      className: "text-right",
+      accessor: (p) => (
+        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
+          <Trash2 className="h-3.5 w-3.5" />
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <div>
       <PageHeader
@@ -156,46 +186,15 @@ function SubstituteTeacherPoolPage() {
         <span>A pre-approved backup teacher, scoped to either one subject or one department, ready before anyone actually goes absent.</span>
       </div>
 
-      <div className="rounded-md border border-border bg-card shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Teacher</TableHead>
-              <TableHead>Scope</TableHead>
-              <TableHead>Active</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center text-sm text-muted-foreground">Loading...</TableCell></TableRow>
-            ) : pool.length === 0 ? (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center text-sm text-muted-foreground">No substitutes configured yet.</TableCell></TableRow>
-            ) : (
-              pool.map((p) => (
-                <TableRow key={p.substituteTeacherPoolKey}>
-                  <TableCell className="font-medium">{p.teacherName ?? "—"}</TableCell>
-                  <TableCell>
-                    {p.subjectName ? (
-                      <Badge variant="outline" className="rounded-md">{p.subjectName}</Badge>
-                    ) : (
-                      <Badge variant="outline" className="rounded-md">{p.departmentName ?? "—"} (dept)</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Switch checked={p.isActive} onCheckedChange={(v) => toggleActive(p, v)} />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <DataTable
+        data={pool}
+        columns={columns}
+        rowKey={(p) => p.substituteTeacherPoolKey}
+        searchPlaceholder="Search substitutes..."
+        searchFields={(p) => `${p.teacherName ?? ""} ${p.subjectName ?? ""} ${p.departmentName ?? ""}`}
+        emptyMessage={loading ? "Loading..." : "No substitutes configured yet."}
+        storageKey="substitute-teacher-pool"
+      />
 
       <FormDialog
         open={open}

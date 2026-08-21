@@ -13,9 +13,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -233,6 +231,55 @@ function LessonPlansPage() {
     }
   };
 
+  const columns: Column<LessonPlan>[] = [
+    { key: "planDate", header: "Date", sortable: true, accessor: (p) => formatDate(p.planDate) },
+    { key: "teacherName", header: "Teacher", sortable: true, accessor: (p) => <span className="font-medium">{p.teacherName ?? "—"}</span> },
+    {
+      key: "className",
+      header: "Class / Subject",
+      sortable: true,
+      sortValue: (p) => `${p.className ?? ""} ${p.sectionLabel ?? ""} ${p.subjectName ?? ""}`,
+      accessor: (p) => `${p.className} - ${p.sectionLabel} / ${p.subjectName}`,
+    },
+    { key: "chapterCount", header: "Chapters", sortable: true, accessor: (p) => p.chapterCount },
+    {
+      key: "status",
+      header: "Status",
+      sortable: true,
+      accessor: (p) => {
+        const meta = STATUS_META[p.status] ?? STATUS_META.DRAFT;
+        return <Badge className={cn("rounded-md border-0 px-2 py-0.5 text-xs font-medium", meta.className)}>{meta.label}</Badge>;
+      },
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      className: "text-right",
+      accessor: (p) => (
+        <div className="flex items-center justify-end gap-1">
+          {p.status === "DRAFT" && (
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-info" title="Approve" onClick={() => setStatus(p, "APPROVED")}>
+              <ClipboardCheck className="h-3.5 w-3.5" />
+            </Button>
+          )}
+          {p.status === "APPROVED" && (
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-success" title="Mark conducted" onClick={() => setStatus(p, "CONDUCTED")}>
+              <CheckCircle2 className="h-3.5 w-3.5" />
+            </Button>
+          )}
+          {p.status !== "CONDUCTED" && (
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(p)}>
+              <Pencil className="h-3.5 w-3.5" />
+            </Button>
+          )}
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div>
       <PageHeader
@@ -268,64 +315,15 @@ function LessonPlansPage() {
         </Select>
       </div>
 
-      <div className="rounded-md border border-border bg-card shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Teacher</TableHead>
-              <TableHead>Class / Subject</TableHead>
-              <TableHead>Chapters</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={6} className="h-24 text-center text-sm text-muted-foreground">Loading...</TableCell></TableRow>
-            ) : plans.length === 0 ? (
-              <TableRow><TableCell colSpan={6} className="h-24 text-center text-sm text-muted-foreground">No lesson plans yet.</TableCell></TableRow>
-            ) : (
-              plans.map((p) => {
-                const meta = STATUS_META[p.status] ?? STATUS_META.DRAFT;
-                return (
-                  <TableRow key={p.lessonPlanKey}>
-                    <TableCell>{formatDate(p.planDate)}</TableCell>
-                    <TableCell className="font-medium">{p.teacherName ?? "—"}</TableCell>
-                    <TableCell>{p.className} - {p.sectionLabel} / {p.subjectName}</TableCell>
-                    <TableCell>{p.chapterCount}</TableCell>
-                    <TableCell>
-                      <Badge className={cn("rounded-md border-0 px-2 py-0.5 text-xs font-medium", meta.className)}>{meta.label}</Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        {p.status === "DRAFT" && (
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-info" title="Approve" onClick={() => setStatus(p, "APPROVED")}>
-                            <ClipboardCheck className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                        {p.status === "APPROVED" && (
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-success" title="Mark conducted" onClick={() => setStatus(p, "CONDUCTED")}>
-                            <CheckCircle2 className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                        {p.status !== "CONDUCTED" && (
-                          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(p)}>
-                            <Pencil className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <DataTable
+        data={plans}
+        columns={columns}
+        rowKey={(p) => p.lessonPlanKey}
+        searchPlaceholder="Search lesson plans..."
+        searchFields={(p) => `${p.teacherName ?? ""} ${p.className ?? ""} ${p.sectionLabel ?? ""} ${p.subjectName ?? ""}`}
+        emptyMessage={loading ? "Loading..." : "No lesson plans yet."}
+        storageKey="lesson-plans"
+      />
 
       <FormDialog
         open={open}

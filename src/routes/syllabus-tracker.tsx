@@ -6,9 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import { AlertTriangle, TrendingUp, CalendarClock } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -69,6 +67,53 @@ function SyllabusTrackerPage() {
   const behindCount = rows.filter((r) => r.isBehindSchedule).length;
   const avgActual = rows.length > 0 ? Math.round(rows.reduce((sum, r) => sum + r.actualPercent, 0) / rows.length) : 0;
   const plannedPercent = rows.length > 0 ? Math.round(rows[0].plannedPercent) : 0;
+
+  const columns: Column<Progress>[] = [
+    { key: "className", header: "Class", sortable: true, accessor: (r) => <span className="font-medium">{r.className}</span> },
+    { key: "subjectName", header: "Subject", sortable: true, accessor: (r) => r.subjectName },
+    {
+      key: "conductedChapters",
+      header: "Chapters Covered",
+      sortable: true,
+      sortValue: (r) => r.conductedChapters,
+      accessor: (r) => `${r.conductedChapters} / ${r.totalChapters}`,
+    },
+    {
+      key: "actualPercent",
+      header: "Actual vs Planned",
+      sortable: true,
+      sortValue: (r) => r.actualPercent,
+      accessor: (r) => (
+        <div className="min-w-[180px]">
+          <div className="text-sm">{Math.round(r.actualPercent)}% actual vs {Math.round(r.plannedPercent)}% expected</div>
+          <div className="relative mt-1 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+            <div
+              className={cn("h-full rounded-full", r.isBehindSchedule ? "bg-destructive" : "bg-primary")}
+              style={{ width: `${Math.min(100, r.actualPercent)}%` }}
+            />
+            <div
+              className="absolute top-0 h-full w-0.5 bg-foreground/50"
+              style={{ left: `${Math.min(100, r.plannedPercent)}%` }}
+            />
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      accessor: (r) =>
+        r.totalChapters === 0 ? (
+          <Badge className="rounded-md border-0 bg-muted text-muted-foreground">No chapters mapped</Badge>
+        ) : r.isBehindSchedule ? (
+          <Badge className="gap-1 rounded-md border-0 bg-destructive/15 text-destructive">
+            <AlertTriangle className="h-3 w-3" /> Behind Schedule
+          </Badge>
+        ) : (
+          <Badge className="rounded-md border-0 bg-success/15 text-success">On Track</Badge>
+        ),
+    },
+  ];
 
   return (
     <div>
@@ -142,58 +187,15 @@ function SyllabusTrackerPage() {
             Actual = distinct curriculum chapters marked "Conducted" on a Lesson Plan. Planned = how far through the academic year we are today. Nothing here is typed in by hand.
           </p>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Class</TableHead>
-              <TableHead>Subject</TableHead>
-              <TableHead>Chapters Covered</TableHead>
-              <TableHead>Actual vs Planned</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={5} className="h-24 text-center text-sm text-muted-foreground">Loading...</TableCell></TableRow>
-            ) : rows.length === 0 ? (
-              <TableRow><TableCell colSpan={5} className="h-24 text-center text-sm text-muted-foreground">No curriculum maps found. Build one on the Curriculum Mapping page first.</TableCell></TableRow>
-            ) : (
-              rows.map((r) => (
-                <TableRow key={r.curriculumKey}>
-                  <TableCell className="font-medium">{r.className}</TableCell>
-                  <TableCell>{r.subjectName}</TableCell>
-                  <TableCell>{r.conductedChapters} / {r.totalChapters}</TableCell>
-                  <TableCell>
-                    <div className="min-w-[180px]">
-                      <div className="text-sm">{Math.round(r.actualPercent)}% actual vs {Math.round(r.plannedPercent)}% expected</div>
-                      <div className="relative mt-1 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-                        <div
-                          className={cn("h-full rounded-full", r.isBehindSchedule ? "bg-destructive" : "bg-primary")}
-                          style={{ width: `${Math.min(100, r.actualPercent)}%` }}
-                        />
-                        <div
-                          className="absolute top-0 h-full w-0.5 bg-foreground/50"
-                          style={{ left: `${Math.min(100, r.plannedPercent)}%` }}
-                        />
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {r.totalChapters === 0 ? (
-                      <Badge className="rounded-md border-0 bg-muted text-muted-foreground">No chapters mapped</Badge>
-                    ) : r.isBehindSchedule ? (
-                      <Badge className="gap-1 rounded-md border-0 bg-destructive/15 text-destructive">
-                        <AlertTriangle className="h-3 w-3" /> Behind Schedule
-                      </Badge>
-                    ) : (
-                      <Badge className="rounded-md border-0 bg-success/15 text-success">On Track</Badge>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+        <DataTable
+          data={rows}
+          columns={columns}
+          rowKey={(r) => r.curriculumKey}
+          searchPlaceholder="Search class or subject..."
+          searchFields={(r) => `${r.className} ${r.subjectName}`}
+          emptyMessage={loading ? "Loading..." : "No curriculum maps found. Build one on the Curriculum Mapping page first."}
+          storageKey="syllabus-tracker"
+        />
       </div>
     </div>
   );

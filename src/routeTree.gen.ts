@@ -16,10 +16,13 @@ import { Route as TenantsRouteImport } from './routes/tenants'
 import { Route as TenantRoleMenuRouteImport } from './routes/tenant-role-menu'
 import { Route as TenantFormRouteImport } from './routes/tenant-form'
 import { Route as TeacherWorkloadRouteImport } from './routes/teacher-workload'
+import { Route as TeacherScheduleViewRouteImport } from './routes/teacher-schedule-view'
 import { Route as SyllabusTrackerRouteImport } from './routes/syllabus-tracker'
 import { Route as SubstituteTeacherPoolRouteImport } from './routes/substitute-teacher-pool'
+import { Route as SubstituteTeacherManagementRouteImport } from './routes/substitute-teacher-management'
 import { Route as SubscriptionsRouteImport } from './routes/subscriptions'
 import { Route as SubjectsCurriculumRouteImport } from './routes/subjects-curriculum'
+import { Route as SubjectDistributionTrackerRouteImport } from './routes/subject-distribution-tracker'
 import { Route as SubjectAllocationRouteImport } from './routes/subject-allocation'
 import { Route as StudentsRouteImport } from './routes/students'
 import { Route as StudentLifeDevelopmentRouteImport } from './routes/student-life-development'
@@ -52,6 +55,7 @@ import { Route as GovernanceDashboardRouteImport } from './routes/governance-das
 import { Route as FeesRouteImport } from './routes/fees'
 import { Route as FeeConfigurationRouteImport } from './routes/fee-configuration'
 import { Route as ExaminationsRouteImport } from './routes/examinations'
+import { Route as ExamTimetableBuilderRouteImport } from './routes/exam-timetable-builder'
 import { Route as ExamDetailRouteImport } from './routes/exam-detail'
 import { Route as ExamCorrectionsRouteImport } from './routes/exam-corrections'
 import { Route as EmailTemplatesRouteImport } from './routes/email-templates'
@@ -62,10 +66,12 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CurriculumMappingRouteImport } from './routes/curriculum-mapping'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as CommunicationSettingsRouteImport } from './routes/communication-settings'
+import { Route as ClassroomUtilizationDashboardRouteImport } from './routes/classroom-utilization-dashboard'
 import { Route as ClassesSectionsRouteImport } from './routes/classes-sections'
 import { Route as ClassTeacherAllocationRouteImport } from './routes/class-teacher-allocation'
 import { Route as CampusSetupRouteImport } from './routes/campus-setup'
 import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as BellScheduleManagerRouteImport } from './routes/bell-schedule-manager'
 import { Route as AuditLogsRouteImport } from './routes/audit-logs'
 import { Route as AttendanceRequestsRouteImport } from './routes/attendance-requests'
 import { Route as AttendancePolicyRouteImport } from './routes/attendance-policy'
@@ -118,6 +124,11 @@ const TeacherWorkloadRoute = TeacherWorkloadRouteImport.update({
   path: '/teacher-workload',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeacherScheduleViewRoute = TeacherScheduleViewRouteImport.update({
+  id: '/teacher-schedule-view',
+  path: '/teacher-schedule-view',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SyllabusTrackerRoute = SyllabusTrackerRouteImport.update({
   id: '/syllabus-tracker',
   path: '/syllabus-tracker',
@@ -128,6 +139,12 @@ const SubstituteTeacherPoolRoute = SubstituteTeacherPoolRouteImport.update({
   path: '/substitute-teacher-pool',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubstituteTeacherManagementRoute =
+  SubstituteTeacherManagementRouteImport.update({
+    id: '/substitute-teacher-management',
+    path: '/substitute-teacher-management',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SubscriptionsRoute = SubscriptionsRouteImport.update({
   id: '/subscriptions',
   path: '/subscriptions',
@@ -138,6 +155,12 @@ const SubjectsCurriculumRoute = SubjectsCurriculumRouteImport.update({
   path: '/subjects-curriculum',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubjectDistributionTrackerRoute =
+  SubjectDistributionTrackerRouteImport.update({
+    id: '/subject-distribution-tracker',
+    path: '/subject-distribution-tracker',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SubjectAllocationRoute = SubjectAllocationRouteImport.update({
   id: '/subject-allocation',
   path: '/subject-allocation',
@@ -298,6 +321,11 @@ const ExaminationsRoute = ExaminationsRouteImport.update({
   path: '/examinations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExamTimetableBuilderRoute = ExamTimetableBuilderRouteImport.update({
+  id: '/exam-timetable-builder',
+  path: '/exam-timetable-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExamDetailRoute = ExamDetailRouteImport.update({
   id: '/exam-detail',
   path: '/exam-detail',
@@ -348,6 +376,12 @@ const CommunicationSettingsRoute = CommunicationSettingsRouteImport.update({
   path: '/communication-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClassroomUtilizationDashboardRoute =
+  ClassroomUtilizationDashboardRouteImport.update({
+    id: '/classroom-utilization-dashboard',
+    path: '/classroom-utilization-dashboard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ClassesSectionsRoute = ClassesSectionsRouteImport.update({
   id: '/classes-sections',
   path: '/classes-sections',
@@ -366,6 +400,11 @@ const CampusSetupRoute = CampusSetupRouteImport.update({
 const CalendarRoute = CalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BellScheduleManagerRoute = BellScheduleManagerRouteImport.update({
+  id: '/bell-schedule-manager',
+  path: '/bell-schedule-manager',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditLogsRoute = AuditLogsRouteImport.update({
@@ -468,10 +507,12 @@ export interface FileRoutesByFullPath {
   '/attendance-policy': typeof AttendancePolicyRoute
   '/attendance-requests': typeof AttendanceRequestsRoute
   '/audit-logs': typeof AuditLogsRoute
+  '/bell-schedule-manager': typeof BellScheduleManagerRoute
   '/calendar': typeof CalendarRoute
   '/campus-setup': typeof CampusSetupRoute
   '/class-teacher-allocation': typeof ClassTeacherAllocationRoute
   '/classes-sections': typeof ClassesSectionsRoute
+  '/classroom-utilization-dashboard': typeof ClassroomUtilizationDashboardRoute
   '/communication-settings': typeof CommunicationSettingsRoute
   '/components': typeof ComponentsRoute
   '/curriculum-mapping': typeof CurriculumMappingRoute
@@ -482,6 +523,7 @@ export interface FileRoutesByFullPath {
   '/email-templates': typeof EmailTemplatesRoute
   '/exam-corrections': typeof ExamCorrectionsRoute
   '/exam-detail': typeof ExamDetailRoute
+  '/exam-timetable-builder': typeof ExamTimetableBuilderRoute
   '/examinations': typeof ExaminationsRoute
   '/fee-configuration': typeof FeeConfigurationRoute
   '/fees': typeof FeesRoute
@@ -514,10 +556,13 @@ export interface FileRoutesByFullPath {
   '/student-life-development': typeof StudentLifeDevelopmentRoute
   '/students': typeof StudentsRoute
   '/subject-allocation': typeof SubjectAllocationRoute
+  '/subject-distribution-tracker': typeof SubjectDistributionTrackerRoute
   '/subjects-curriculum': typeof SubjectsCurriculumRoute
   '/subscriptions': typeof SubscriptionsRoute
+  '/substitute-teacher-management': typeof SubstituteTeacherManagementRoute
   '/substitute-teacher-pool': typeof SubstituteTeacherPoolRoute
   '/syllabus-tracker': typeof SyllabusTrackerRoute
+  '/teacher-schedule-view': typeof TeacherScheduleViewRoute
   '/teacher-workload': typeof TeacherWorkloadRoute
   '/tenant-form': typeof TenantFormRoute
   '/tenant-role-menu': typeof TenantRoleMenuRoute
@@ -543,10 +588,12 @@ export interface FileRoutesByTo {
   '/attendance-policy': typeof AttendancePolicyRoute
   '/attendance-requests': typeof AttendanceRequestsRoute
   '/audit-logs': typeof AuditLogsRoute
+  '/bell-schedule-manager': typeof BellScheduleManagerRoute
   '/calendar': typeof CalendarRoute
   '/campus-setup': typeof CampusSetupRoute
   '/class-teacher-allocation': typeof ClassTeacherAllocationRoute
   '/classes-sections': typeof ClassesSectionsRoute
+  '/classroom-utilization-dashboard': typeof ClassroomUtilizationDashboardRoute
   '/communication-settings': typeof CommunicationSettingsRoute
   '/components': typeof ComponentsRoute
   '/curriculum-mapping': typeof CurriculumMappingRoute
@@ -557,6 +604,7 @@ export interface FileRoutesByTo {
   '/email-templates': typeof EmailTemplatesRoute
   '/exam-corrections': typeof ExamCorrectionsRoute
   '/exam-detail': typeof ExamDetailRoute
+  '/exam-timetable-builder': typeof ExamTimetableBuilderRoute
   '/examinations': typeof ExaminationsRoute
   '/fee-configuration': typeof FeeConfigurationRoute
   '/fees': typeof FeesRoute
@@ -589,10 +637,13 @@ export interface FileRoutesByTo {
   '/student-life-development': typeof StudentLifeDevelopmentRoute
   '/students': typeof StudentsRoute
   '/subject-allocation': typeof SubjectAllocationRoute
+  '/subject-distribution-tracker': typeof SubjectDistributionTrackerRoute
   '/subjects-curriculum': typeof SubjectsCurriculumRoute
   '/subscriptions': typeof SubscriptionsRoute
+  '/substitute-teacher-management': typeof SubstituteTeacherManagementRoute
   '/substitute-teacher-pool': typeof SubstituteTeacherPoolRoute
   '/syllabus-tracker': typeof SyllabusTrackerRoute
+  '/teacher-schedule-view': typeof TeacherScheduleViewRoute
   '/teacher-workload': typeof TeacherWorkloadRoute
   '/tenant-form': typeof TenantFormRoute
   '/tenant-role-menu': typeof TenantRoleMenuRoute
@@ -619,10 +670,12 @@ export interface FileRoutesById {
   '/attendance-policy': typeof AttendancePolicyRoute
   '/attendance-requests': typeof AttendanceRequestsRoute
   '/audit-logs': typeof AuditLogsRoute
+  '/bell-schedule-manager': typeof BellScheduleManagerRoute
   '/calendar': typeof CalendarRoute
   '/campus-setup': typeof CampusSetupRoute
   '/class-teacher-allocation': typeof ClassTeacherAllocationRoute
   '/classes-sections': typeof ClassesSectionsRoute
+  '/classroom-utilization-dashboard': typeof ClassroomUtilizationDashboardRoute
   '/communication-settings': typeof CommunicationSettingsRoute
   '/components': typeof ComponentsRoute
   '/curriculum-mapping': typeof CurriculumMappingRoute
@@ -633,6 +686,7 @@ export interface FileRoutesById {
   '/email-templates': typeof EmailTemplatesRoute
   '/exam-corrections': typeof ExamCorrectionsRoute
   '/exam-detail': typeof ExamDetailRoute
+  '/exam-timetable-builder': typeof ExamTimetableBuilderRoute
   '/examinations': typeof ExaminationsRoute
   '/fee-configuration': typeof FeeConfigurationRoute
   '/fees': typeof FeesRoute
@@ -665,10 +719,13 @@ export interface FileRoutesById {
   '/student-life-development': typeof StudentLifeDevelopmentRoute
   '/students': typeof StudentsRoute
   '/subject-allocation': typeof SubjectAllocationRoute
+  '/subject-distribution-tracker': typeof SubjectDistributionTrackerRoute
   '/subjects-curriculum': typeof SubjectsCurriculumRoute
   '/subscriptions': typeof SubscriptionsRoute
+  '/substitute-teacher-management': typeof SubstituteTeacherManagementRoute
   '/substitute-teacher-pool': typeof SubstituteTeacherPoolRoute
   '/syllabus-tracker': typeof SyllabusTrackerRoute
+  '/teacher-schedule-view': typeof TeacherScheduleViewRoute
   '/teacher-workload': typeof TeacherWorkloadRoute
   '/tenant-form': typeof TenantFormRoute
   '/tenant-role-menu': typeof TenantRoleMenuRoute
@@ -696,10 +753,12 @@ export interface FileRouteTypes {
     | '/attendance-policy'
     | '/attendance-requests'
     | '/audit-logs'
+    | '/bell-schedule-manager'
     | '/calendar'
     | '/campus-setup'
     | '/class-teacher-allocation'
     | '/classes-sections'
+    | '/classroom-utilization-dashboard'
     | '/communication-settings'
     | '/components'
     | '/curriculum-mapping'
@@ -710,6 +769,7 @@ export interface FileRouteTypes {
     | '/email-templates'
     | '/exam-corrections'
     | '/exam-detail'
+    | '/exam-timetable-builder'
     | '/examinations'
     | '/fee-configuration'
     | '/fees'
@@ -742,10 +802,13 @@ export interface FileRouteTypes {
     | '/student-life-development'
     | '/students'
     | '/subject-allocation'
+    | '/subject-distribution-tracker'
     | '/subjects-curriculum'
     | '/subscriptions'
+    | '/substitute-teacher-management'
     | '/substitute-teacher-pool'
     | '/syllabus-tracker'
+    | '/teacher-schedule-view'
     | '/teacher-workload'
     | '/tenant-form'
     | '/tenant-role-menu'
@@ -771,10 +834,12 @@ export interface FileRouteTypes {
     | '/attendance-policy'
     | '/attendance-requests'
     | '/audit-logs'
+    | '/bell-schedule-manager'
     | '/calendar'
     | '/campus-setup'
     | '/class-teacher-allocation'
     | '/classes-sections'
+    | '/classroom-utilization-dashboard'
     | '/communication-settings'
     | '/components'
     | '/curriculum-mapping'
@@ -785,6 +850,7 @@ export interface FileRouteTypes {
     | '/email-templates'
     | '/exam-corrections'
     | '/exam-detail'
+    | '/exam-timetable-builder'
     | '/examinations'
     | '/fee-configuration'
     | '/fees'
@@ -817,10 +883,13 @@ export interface FileRouteTypes {
     | '/student-life-development'
     | '/students'
     | '/subject-allocation'
+    | '/subject-distribution-tracker'
     | '/subjects-curriculum'
     | '/subscriptions'
+    | '/substitute-teacher-management'
     | '/substitute-teacher-pool'
     | '/syllabus-tracker'
+    | '/teacher-schedule-view'
     | '/teacher-workload'
     | '/tenant-form'
     | '/tenant-role-menu'
@@ -846,10 +915,12 @@ export interface FileRouteTypes {
     | '/attendance-policy'
     | '/attendance-requests'
     | '/audit-logs'
+    | '/bell-schedule-manager'
     | '/calendar'
     | '/campus-setup'
     | '/class-teacher-allocation'
     | '/classes-sections'
+    | '/classroom-utilization-dashboard'
     | '/communication-settings'
     | '/components'
     | '/curriculum-mapping'
@@ -860,6 +931,7 @@ export interface FileRouteTypes {
     | '/email-templates'
     | '/exam-corrections'
     | '/exam-detail'
+    | '/exam-timetable-builder'
     | '/examinations'
     | '/fee-configuration'
     | '/fees'
@@ -892,10 +964,13 @@ export interface FileRouteTypes {
     | '/student-life-development'
     | '/students'
     | '/subject-allocation'
+    | '/subject-distribution-tracker'
     | '/subjects-curriculum'
     | '/subscriptions'
+    | '/substitute-teacher-management'
     | '/substitute-teacher-pool'
     | '/syllabus-tracker'
+    | '/teacher-schedule-view'
     | '/teacher-workload'
     | '/tenant-form'
     | '/tenant-role-menu'
@@ -922,10 +997,12 @@ export interface RootRouteChildren {
   AttendancePolicyRoute: typeof AttendancePolicyRoute
   AttendanceRequestsRoute: typeof AttendanceRequestsRoute
   AuditLogsRoute: typeof AuditLogsRoute
+  BellScheduleManagerRoute: typeof BellScheduleManagerRoute
   CalendarRoute: typeof CalendarRoute
   CampusSetupRoute: typeof CampusSetupRoute
   ClassTeacherAllocationRoute: typeof ClassTeacherAllocationRoute
   ClassesSectionsRoute: typeof ClassesSectionsRoute
+  ClassroomUtilizationDashboardRoute: typeof ClassroomUtilizationDashboardRoute
   CommunicationSettingsRoute: typeof CommunicationSettingsRoute
   ComponentsRoute: typeof ComponentsRoute
   CurriculumMappingRoute: typeof CurriculumMappingRoute
@@ -936,6 +1013,7 @@ export interface RootRouteChildren {
   EmailTemplatesRoute: typeof EmailTemplatesRoute
   ExamCorrectionsRoute: typeof ExamCorrectionsRoute
   ExamDetailRoute: typeof ExamDetailRoute
+  ExamTimetableBuilderRoute: typeof ExamTimetableBuilderRoute
   ExaminationsRoute: typeof ExaminationsRoute
   FeeConfigurationRoute: typeof FeeConfigurationRoute
   FeesRoute: typeof FeesRoute
@@ -968,10 +1046,13 @@ export interface RootRouteChildren {
   StudentLifeDevelopmentRoute: typeof StudentLifeDevelopmentRoute
   StudentsRoute: typeof StudentsRoute
   SubjectAllocationRoute: typeof SubjectAllocationRoute
+  SubjectDistributionTrackerRoute: typeof SubjectDistributionTrackerRoute
   SubjectsCurriculumRoute: typeof SubjectsCurriculumRoute
   SubscriptionsRoute: typeof SubscriptionsRoute
+  SubstituteTeacherManagementRoute: typeof SubstituteTeacherManagementRoute
   SubstituteTeacherPoolRoute: typeof SubstituteTeacherPoolRoute
   SyllabusTrackerRoute: typeof SyllabusTrackerRoute
+  TeacherScheduleViewRoute: typeof TeacherScheduleViewRoute
   TeacherWorkloadRoute: typeof TeacherWorkloadRoute
   TenantFormRoute: typeof TenantFormRoute
   TenantRoleMenuRoute: typeof TenantRoleMenuRoute
@@ -1032,6 +1113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeacherWorkloadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/teacher-schedule-view': {
+      id: '/teacher-schedule-view'
+      path: '/teacher-schedule-view'
+      fullPath: '/teacher-schedule-view'
+      preLoaderRoute: typeof TeacherScheduleViewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/syllabus-tracker': {
       id: '/syllabus-tracker'
       path: '/syllabus-tracker'
@@ -1046,6 +1134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubstituteTeacherPoolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/substitute-teacher-management': {
+      id: '/substitute-teacher-management'
+      path: '/substitute-teacher-management'
+      fullPath: '/substitute-teacher-management'
+      preLoaderRoute: typeof SubstituteTeacherManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/subscriptions': {
       id: '/subscriptions'
       path: '/subscriptions'
@@ -1058,6 +1153,13 @@ declare module '@tanstack/react-router' {
       path: '/subjects-curriculum'
       fullPath: '/subjects-curriculum'
       preLoaderRoute: typeof SubjectsCurriculumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subject-distribution-tracker': {
+      id: '/subject-distribution-tracker'
+      path: '/subject-distribution-tracker'
+      fullPath: '/subject-distribution-tracker'
+      preLoaderRoute: typeof SubjectDistributionTrackerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subject-allocation': {
@@ -1284,6 +1386,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExaminationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/exam-timetable-builder': {
+      id: '/exam-timetable-builder'
+      path: '/exam-timetable-builder'
+      fullPath: '/exam-timetable-builder'
+      preLoaderRoute: typeof ExamTimetableBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/exam-detail': {
       id: '/exam-detail'
       path: '/exam-detail'
@@ -1354,6 +1463,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunicationSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/classroom-utilization-dashboard': {
+      id: '/classroom-utilization-dashboard'
+      path: '/classroom-utilization-dashboard'
+      fullPath: '/classroom-utilization-dashboard'
+      preLoaderRoute: typeof ClassroomUtilizationDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/classes-sections': {
       id: '/classes-sections'
       path: '/classes-sections'
@@ -1380,6 +1496,13 @@ declare module '@tanstack/react-router' {
       path: '/calendar'
       fullPath: '/calendar'
       preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bell-schedule-manager': {
+      id: '/bell-schedule-manager'
+      path: '/bell-schedule-manager'
+      fullPath: '/bell-schedule-manager'
+      preLoaderRoute: typeof BellScheduleManagerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit-logs': {
@@ -1514,10 +1637,12 @@ const rootRouteChildren: RootRouteChildren = {
   AttendancePolicyRoute: AttendancePolicyRoute,
   AttendanceRequestsRoute: AttendanceRequestsRoute,
   AuditLogsRoute: AuditLogsRoute,
+  BellScheduleManagerRoute: BellScheduleManagerRoute,
   CalendarRoute: CalendarRoute,
   CampusSetupRoute: CampusSetupRoute,
   ClassTeacherAllocationRoute: ClassTeacherAllocationRoute,
   ClassesSectionsRoute: ClassesSectionsRoute,
+  ClassroomUtilizationDashboardRoute: ClassroomUtilizationDashboardRoute,
   CommunicationSettingsRoute: CommunicationSettingsRoute,
   ComponentsRoute: ComponentsRoute,
   CurriculumMappingRoute: CurriculumMappingRoute,
@@ -1528,6 +1653,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailTemplatesRoute: EmailTemplatesRoute,
   ExamCorrectionsRoute: ExamCorrectionsRoute,
   ExamDetailRoute: ExamDetailRoute,
+  ExamTimetableBuilderRoute: ExamTimetableBuilderRoute,
   ExaminationsRoute: ExaminationsRoute,
   FeeConfigurationRoute: FeeConfigurationRoute,
   FeesRoute: FeesRoute,
@@ -1560,10 +1686,13 @@ const rootRouteChildren: RootRouteChildren = {
   StudentLifeDevelopmentRoute: StudentLifeDevelopmentRoute,
   StudentsRoute: StudentsRoute,
   SubjectAllocationRoute: SubjectAllocationRoute,
+  SubjectDistributionTrackerRoute: SubjectDistributionTrackerRoute,
   SubjectsCurriculumRoute: SubjectsCurriculumRoute,
   SubscriptionsRoute: SubscriptionsRoute,
+  SubstituteTeacherManagementRoute: SubstituteTeacherManagementRoute,
   SubstituteTeacherPoolRoute: SubstituteTeacherPoolRoute,
   SyllabusTrackerRoute: SyllabusTrackerRoute,
+  TeacherScheduleViewRoute: TeacherScheduleViewRoute,
   TeacherWorkloadRoute: TeacherWorkloadRoute,
   TenantFormRoute: TenantFormRoute,
   TenantRoleMenuRoute: TenantRoleMenuRoute,

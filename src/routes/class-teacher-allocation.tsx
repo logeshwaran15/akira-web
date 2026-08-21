@@ -11,9 +11,7 @@ import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import { Users2, History } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useFormatDate } from "@/hooks/use-tenant-setting";
@@ -136,6 +134,37 @@ function ClassTeacherAllocationPage() {
 
   const sortedRows = [...rows].sort((a, b) => a.classSortOrder - b.classSortOrder || a.sectionLabel.localeCompare(b.sectionLabel));
 
+  const columns: Column<AllocationRow>[] = [
+    { key: "className", header: "Class", accessor: (r) => r.className, sortable: true },
+    { key: "sectionLabel", header: "Section", accessor: (r) => r.sectionLabel, sortable: true },
+    {
+      key: "classTeacherName",
+      header: "Class Teacher",
+      sortable: true,
+      accessor: (r) =>
+        r.classTeacherName ? (
+          r.classTeacherName
+        ) : (
+          <Badge className="rounded-md border-0 bg-warning/25 text-[oklch(0.45_0.12_65)]">Unassigned</Badge>
+        ),
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      className: "text-right",
+      accessor: (r) => (
+        <div className="flex items-center justify-end gap-1">
+          <Button variant="ghost" size="sm" className="h-8 rounded-md" onClick={() => openAssign(r)}>
+            {r.classTeacherName ? "Reassign" : "Assign"}
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openHistory(r)} title="Handover history">
+            <History className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div>
       <PageHeader title="Class Teacher Allocation" />
@@ -151,49 +180,15 @@ function ClassTeacherAllocationPage() {
         <span>Every active section should have exactly one class teacher. A teacher can only lead one section per academic year.</span>
       </div>
 
-      <div className="rounded-md border border-border bg-card shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Class</TableHead>
-              <TableHead>Section</TableHead>
-              <TableHead>Class Teacher</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center text-sm text-muted-foreground">Loading...</TableCell></TableRow>
-            ) : sortedRows.length === 0 ? (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center text-sm text-muted-foreground">No sections found for this academic year.</TableCell></TableRow>
-            ) : (
-              sortedRows.map((r) => (
-                <TableRow key={r.sectionKey}>
-                  <TableCell className="font-medium">{r.className}</TableCell>
-                  <TableCell>{r.sectionLabel}</TableCell>
-                  <TableCell>
-                    {r.classTeacherName ? (
-                      r.classTeacherName
-                    ) : (
-                      <Badge className="rounded-md border-0 bg-warning/25 text-[oklch(0.45_0.12_65)]">Unassigned</Badge>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button variant="ghost" size="sm" className="h-8 rounded-md" onClick={() => openAssign(r)}>
-                        {r.classTeacherName ? "Reassign" : "Assign"}
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openHistory(r)} title="Handover history">
-                        <History className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <DataTable
+        data={sortedRows}
+        columns={columns}
+        rowKey={(r) => r.sectionKey}
+        searchPlaceholder="Search class, section or teacher..."
+        searchFields={(r) => `${r.className} ${r.sectionLabel} ${r.classTeacherName ?? ""}`}
+        emptyMessage={loading ? "Loading..." : "No sections found for this academic year."}
+        storageKey="class-teacher-allocation"
+      />
 
       <FormDialog
         open={!!assignTarget}

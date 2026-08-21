@@ -10,9 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -167,6 +165,42 @@ function PeriodStructureSetupPage() {
     }
   };
 
+  const columns: Column<Period>[] = [
+    { key: "periodNumber", header: "Period #", sortable: true, accessor: (p) => <span className="font-medium">{p.periodNumber}</span> },
+    { key: "periodName", header: "Name", sortable: true, accessor: (p) => p.periodName },
+    {
+      key: "startTime",
+      header: "Time",
+      sortable: true,
+      accessor: (p) => `${p.startTime.slice(0, 5)} – ${p.endTime.slice(0, 5)}`,
+    },
+    {
+      key: "periodType",
+      header: "Type",
+      sortable: true,
+      accessor: (p) => (
+        <Badge className={cn("rounded-md border-0 px-2 py-0.5 text-xs font-medium", typeBadge[p.periodType])}>
+          {PERIOD_TYPES.find((t) => t.value === p.periodType)?.label ?? p.periodType}
+        </Badge>
+      ),
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      className: "text-right",
+      accessor: (p) => (
+        <div className="flex items-center justify-end gap-1">
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(p)}>
+            <Pencil className="h-3.5 w-3.5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div>
       <PageHeader
@@ -198,49 +232,15 @@ function PeriodStructureSetupPage() {
         </Select>
       </div>
 
-      <div className="rounded-md border border-border bg-card shadow-sm">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Period #</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={5} className="h-24 text-center text-sm text-muted-foreground">Loading...</TableCell></TableRow>
-            ) : periods.length === 0 ? (
-              <TableRow><TableCell colSpan={5} className="h-24 text-center text-sm text-muted-foreground">No periods configured for this stage yet.</TableCell></TableRow>
-            ) : (
-              periods.map((p) => (
-                <TableRow key={p.periodMasterKey}>
-                  <TableCell className="font-medium">{p.periodNumber}</TableCell>
-                  <TableCell>{p.periodName}</TableCell>
-                  <TableCell>{p.startTime.slice(0, 5)} – {p.endTime.slice(0, 5)}</TableCell>
-                  <TableCell>
-                    <Badge className={cn("rounded-md border-0 px-2 py-0.5 text-xs font-medium", typeBadge[p.periodType])}>
-                      {PERIOD_TYPES.find((t) => t.value === p.periodType)?.label ?? p.periodType}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(p)}>
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <DataTable
+        data={periods}
+        columns={columns}
+        rowKey={(p) => p.periodMasterKey}
+        searchPlaceholder="Search periods..."
+        searchFields={(p) => p.periodName}
+        emptyMessage={loading ? "Loading..." : "No periods configured for this stage yet."}
+        storageKey="period-structure-setup"
+      />
 
       <FormDialog
         open={open}

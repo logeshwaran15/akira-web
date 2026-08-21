@@ -6,9 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import { Target, Users2 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -145,7 +143,40 @@ function LearningOutcomesPage() {
   };
 
   const outcomeKeys = [...new Set(matrix.map((r) => r.curriculumLearningOutcomeKey))];
-  const students = [...new Map(matrix.map((r) => [r.studentKey, r.studentName])).entries()];
+  const students = [...new Map(matrix.map((r) => [r.studentKey, r.studentName])).entries()]
+    .map(([studentKey, studentName]) => ({ studentKey, studentName }));
+
+  const matrixColumns: Column<{ studentKey: string; studentName: string }>[] = [
+    {
+      key: "studentName",
+      header: "Student",
+      sortable: true,
+      className: "sticky left-0 bg-card",
+      accessor: (s) => <span className="font-medium">{s.studentName}</span>,
+    },
+    ...outcomeKeys.map((ok) => ({
+      key: ok,
+      header: matrix.find((r) => r.curriculumLearningOutcomeKey === ok)?.outcomeText ?? ok,
+      className: "min-w-[200px]",
+      accessor: (s: { studentKey: string; studentName: string }) => {
+        const row = matrix.find((r) => r.studentKey === s.studentKey && r.curriculumLearningOutcomeKey === ok);
+        if (!row) return null;
+        const meta = STATUS_OPTIONS.find((o) => o.value === row.masteryStatus) ?? STATUS_OPTIONS[0];
+        return (
+          <Select value={row.masteryStatus} onValueChange={(v) => setStatus(row, v)}>
+            <SelectTrigger className="h-8 w-[150px] rounded-md">
+              <SelectValue>
+                <Badge className={cn("rounded-md border-0 px-2 py-0.5 text-xs font-medium", meta.className)}>{meta.label}</Badge>
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        );
+      },
+    })),
+  ];
 
   return (
     <div>
@@ -214,44 +245,15 @@ function LearningOutcomesPage() {
             </div>
           )}
 
-          <div className="overflow-x-auto rounded-md border border-border bg-card shadow-sm">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="sticky left-0 bg-card">Student</TableHead>
-                  {outcomeKeys.map((ok) => (
-                    <TableHead key={ok} className="min-w-[200px]">{matrix.find((r) => r.curriculumLearningOutcomeKey === ok)?.outcomeText}</TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {students.map(([studentKey, studentName]) => (
-                  <TableRow key={studentKey}>
-                    <TableCell className="sticky left-0 bg-card font-medium">{studentName}</TableCell>
-                    {outcomeKeys.map((ok) => {
-                      const row = matrix.find((r) => r.studentKey === studentKey && r.curriculumLearningOutcomeKey === ok);
-                      if (!row) return <TableCell key={ok} />;
-                      const meta = STATUS_OPTIONS.find((o) => o.value === row.masteryStatus) ?? STATUS_OPTIONS[0];
-                      return (
-                        <TableCell key={ok}>
-                          <Select value={row.masteryStatus} onValueChange={(v) => setStatus(row, v)}>
-                            <SelectTrigger className="h-8 w-[150px] rounded-md">
-                              <SelectValue>
-                                <Badge className={cn("rounded-md border-0 px-2 py-0.5 text-xs font-medium", meta.className)}>{meta.label}</Badge>
-                              </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                              {STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <DataTable
+            data={students}
+            columns={matrixColumns}
+            rowKey={(s) => s.studentKey}
+            searchPlaceholder="Search students..."
+            searchFields={(s) => s.studentName}
+            emptyMessage={loading ? "Loading..." : "No students found."}
+            storageKey="learning-outcomes"
+          />
         </>
       )}
     </div>

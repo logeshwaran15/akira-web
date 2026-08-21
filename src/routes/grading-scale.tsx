@@ -13,7 +13,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Trash2, Pencil, Percent } from "lucide-react";
+import { Plus, Trash2, Pencil, Percent, ChevronLeft, ChevronRight } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 
 export const Route = createFileRoute("/grading-scale")({
@@ -36,6 +36,7 @@ type GradeBand = {
 };
 
 const emptyDraft = { gradeName: "", minPercent: "", maxPercent: "", gradePoint: "", sortOrder: "" };
+const PAGE_SIZE = 10;
 
 function GradingScalePage() {
   const [bands, setBands] = useState<GradeBand[]>([]);
@@ -46,6 +47,7 @@ function GradingScalePage() {
   const [draft, setDraft] = useState(emptyDraft);
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<GradeBand | null>(null);
+  const [page, setPage] = useState(1);
 
   const load = () => {
     setLoading(true);
@@ -56,6 +58,10 @@ function GradingScalePage() {
   };
 
   useEffect(load, []);
+
+  useEffect(() => {
+    setPage((p) => Math.min(p, Math.max(1, Math.ceil(bands.length / PAGE_SIZE))));
+  }, [bands.length]);
 
   const openNew = () => {
     setEditing(null);
@@ -124,6 +130,8 @@ function GradingScalePage() {
   };
 
   const sortedBands = [...bands].sort((a, b) => a.sortOrder - b.sortOrder);
+  const totalPages = Math.max(1, Math.ceil(sortedBands.length / PAGE_SIZE));
+  const pageBands = sortedBands.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -161,7 +169,7 @@ function GradingScalePage() {
             ) : sortedBands.length === 0 ? (
               <TableRow><TableCell colSpan={5} className="h-24 text-center text-sm text-muted-foreground">No grade bands configured yet.</TableCell></TableRow>
             ) : (
-              sortedBands.map((b) => (
+              pageBands.map((b) => (
                 <TableRow key={b.gradeScaleKey}>
                   <TableCell className="font-medium">{b.gradeName}</TableCell>
                   <TableCell>{b.minPercent}% – {b.maxPercent}%</TableCell>
@@ -182,6 +190,23 @@ function GradingScalePage() {
             )}
           </TableBody>
         </Table>
+
+        {sortedBands.length > 0 && (
+          <div className="flex items-center justify-between border-t border-border px-4 py-3 text-sm text-muted-foreground">
+            <span>
+              Showing {(page - 1) * PAGE_SIZE + 1} to {Math.min(page * PAGE_SIZE, sortedBands.length)} of {sortedBands.length} grade bands
+            </span>
+            <div className="flex items-center gap-1">
+              <Button variant="outline" size="icon" className="h-8 w-8 rounded-md" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+                <ChevronLeft className="h-3.5 w-3.5" />
+              </Button>
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-xs font-semibold text-primary-foreground">{page}</span>
+              <Button variant="outline" size="icon" className="h-8 w-8 rounded-md" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <FormDialog

@@ -3,9 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/erp/PageHeader";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { DataTable, type Column } from "@/components/erp/DataTable";
 import { AlertTriangle, Gauge } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -60,6 +58,45 @@ function TeacherWorkloadPage() {
 
   const sorted = [...workload].sort((a, b) => (b.assignedWeeklyPeriods - b.maxWeeklyPeriods) - (a.assignedWeeklyPeriods - a.maxWeeklyPeriods));
 
+  const columns: Column<Workload>[] = [
+    { key: "userName", header: "Teacher", accessor: (w) => <span className="font-medium">{w.userName}</span>, sortable: true },
+    { key: "allocationCount", header: "Subjects Assigned", accessor: (w) => w.allocationCount, sortable: true },
+    {
+      key: "assignedWeeklyPeriods",
+      header: "Assigned / Max",
+      sortable: true,
+      accessor: (w) => {
+        const overloaded = w.assignedWeeklyPeriods > w.maxWeeklyPeriods;
+        const pct = w.maxWeeklyPeriods > 0 ? Math.min(100, Math.round((w.assignedWeeklyPeriods / w.maxWeeklyPeriods) * 100)) : 0;
+        return (
+          <div className="min-w-[140px]">
+            <div className="text-sm">{w.assignedWeeklyPeriods} / {w.maxWeeklyPeriods}</div>
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+              <div
+                className={cn("h-full rounded-full", overloaded ? "bg-destructive" : "bg-primary")}
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: "status",
+      header: "Status",
+      accessor: (w) => {
+        const overloaded = w.assignedWeeklyPeriods > w.maxWeeklyPeriods;
+        return overloaded ? (
+          <Badge className="gap-1 rounded-md border-0 bg-destructive/15 text-destructive">
+            <AlertTriangle className="h-3 w-3" /> Overloaded
+          </Badge>
+        ) : (
+          <Badge className="rounded-md border-0 bg-success/15 text-success">OK</Badge>
+        );
+      },
+    },
+  ];
+
   return (
     <div>
       <PageHeader title="Teacher Workload Dashboard" />
@@ -112,54 +149,15 @@ function TeacherWorkloadPage() {
             Recomputed live from active Subject Teacher Allocations. Substitute-coverage periods aren't counted here.
           </p>
         </div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Teacher</TableHead>
-              <TableHead>Subjects Assigned</TableHead>
-              <TableHead>Assigned / Max</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center text-sm text-muted-foreground">Loading...</TableCell></TableRow>
-            ) : sorted.length === 0 ? (
-              <TableRow><TableCell colSpan={4} className="h-24 text-center text-sm text-muted-foreground">No subject allocations yet.</TableCell></TableRow>
-            ) : (
-              sorted.map((w) => {
-                const overloaded = w.assignedWeeklyPeriods > w.maxWeeklyPeriods;
-                const pct = w.maxWeeklyPeriods > 0 ? Math.min(100, Math.round((w.assignedWeeklyPeriods / w.maxWeeklyPeriods) * 100)) : 0;
-                return (
-                  <TableRow key={w.akiraUserKey}>
-                    <TableCell className="font-medium">{w.userName}</TableCell>
-                    <TableCell>{w.allocationCount}</TableCell>
-                    <TableCell>
-                      <div className="min-w-[140px]">
-                        <div className="text-sm">{w.assignedWeeklyPeriods} / {w.maxWeeklyPeriods}</div>
-                        <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-                          <div
-                            className={cn("h-full rounded-full", overloaded ? "bg-destructive" : "bg-primary")}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {overloaded ? (
-                        <Badge className="gap-1 rounded-md border-0 bg-destructive/15 text-destructive">
-                          <AlertTriangle className="h-3 w-3" /> Overloaded
-                        </Badge>
-                      ) : (
-                        <Badge className="rounded-md border-0 bg-success/15 text-success">OK</Badge>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </Table>
+        <DataTable
+          data={sorted}
+          columns={columns}
+          rowKey={(w) => w.akiraUserKey}
+          searchPlaceholder="Search teachers..."
+          searchFields={(w) => w.userName}
+          emptyMessage={loading ? "Loading..." : "No subject allocations yet."}
+          storageKey="teacher-workload"
+        />
       </div>
     </div>
   );

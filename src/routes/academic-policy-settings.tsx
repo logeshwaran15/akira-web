@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/erp/PageHeader";
@@ -20,11 +20,14 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Pencil, Trash2, History, ShieldAlert, Settings2 } from "lucide-react";
+import { Plus, Pencil, Trash2, History, ShieldAlert, Settings2, ChevronLeft, ChevronRight } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useFormatDate } from "@/hooks/use-tenant-setting";
 
 export const Route = createFileRoute("/academic-policy-settings")({
+  validateSearch: (search: Record<string, unknown>): { tab?: string } => ({
+    tab: typeof search.tab === "string" ? search.tab : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Academic Policy Settings — Akira School ERP" },
@@ -43,18 +46,47 @@ type HistoryEntry = { academicPolicyHistoryKey: string; oldValue: string | null;
 
 const CATEGORIES = ["ATTENDANCE", "PROMOTION", "EXAMINATION"];
 
+const POLICY_KEYS_BY_CATEGORY: Record<string, string[]> = {
+  ATTENDANCE: [
+    "MIN_ATTENDANCE_PERCENT_EXAM_ELIGIBILITY",
+    "MIN_ATTENDANCE_PERCENT_PROMOTION",
+    "ATTENDANCE_GRACE_DAYS",
+    "HALF_DAY_THRESHOLD_PERCENT",
+  ],
+  PROMOTION: [
+    "MIN_PASS_PERCENT_PROMOTION",
+    "MAX_FAILED_SUBJECTS_ALLOWED",
+    "PROMOTION_GRACE_MARKS",
+    "MIN_ATTENDANCE_PERCENT_PROMOTION",
+  ],
+  EXAMINATION: [
+    "MIN_PASS_PERCENT_PER_SUBJECT",
+    "MIN_THEORY_PASS_PERCENT",
+    "MIN_PRACTICAL_PASS_PERCENT",
+    "GRACE_MARKS_LIMIT",
+    "MAX_REVALUATION_ATTEMPTS",
+  ],
+};
+const CUSTOM_KEY_OPTION = "__custom__";
+const PAGE_SIZE = 10;
+
 const emptyDraft = { boardKey: "", policyCategory: "ATTENDANCE", policyKey: "", policyValue: "", requiresApproval: false, effectiveDate: "" };
 
 function AcademicPolicySettingsPage() {
   const formatDate = useFormatDate();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const { tab: tabParam } = Route.useSearch();
   const [boards, setBoards] = useState<Board[]>([]);
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState("ATTENDANCE");
+  const tab = tabParam && CATEGORIES.includes(tabParam) ? tabParam : "ATTENDANCE";
+  const setTab = (v: string) => navigate({ search: { tab: v }, replace: true });
+  const [page, setPage] = useState(1);
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Policy | null>(null);
   const [draft, setDraft] = useState(emptyDraft);
+  const [customKey, setCustomKey] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Policy | null>(null);
 
@@ -77,8 +109,13 @@ function AcademicPolicySettingsPage() {
     load();
   }, []);
 
+  useEffect(() => {
+    setPage(1);
+  }, [tab]);
+
   const openNew = () => {
     setEditing(null);
+    setCustomKey(false);
     setDraft({ ...emptyDraft, policyCategory: tab, effectiveDate: new Date().toISOString().slice(0, 10) });
     setOpen(true);
   };
@@ -171,6 +208,8 @@ function AcademicPolicySettingsPage() {
   };
 
   const filtered = policies.filter((p) => p.policyCategory === tab);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -202,7 +241,7 @@ function AcademicPolicySettingsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Policy Key</TableHead>
+                    <TableHead>Policy Name</TableHead>
                     <TableHead>Value</TableHead>
                     <TableHead>Board</TableHead>
                     <TableHead>Effective Date</TableHead>
@@ -216,7 +255,7 @@ function AcademicPolicySettingsPage() {
                   ) : filtered.length === 0 ? (
                     <TableRow><TableCell colSpan={6} className="h-24 text-center text-sm text-muted-foreground">No {c.toLowerCase()} policies yet.</TableCell></TableRow>
                   ) : (
-                    filtered.map((p) => (
+                    pageItems.map((p) => (
                       <TableRow key={p.academicPolicyKey}>
                         <TableCell className="font-mono text-xs">{p.policyKey}</TableCell>
                         <TableCell className="font-medium">{p.policyValue}</TableCell>
@@ -247,6 +286,23 @@ function AcademicPolicySettingsPage() {
                   )}
                 </TableBody>
               </Table>
+
+              {filtered.length > 0 && (
+                <div className="flex items-center justify-between border-t border-border px-4 py-3 text-sm text-muted-foreground">
+                  <span>
+                    Showing {(page - 1) * PAGE_SIZE + 1} to {Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} policies
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-md" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                    </Button>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-xs font-semibold text-primary-foreground">{page}</span>
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-md" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </TabsContent>
         ))}
@@ -266,7 +322,13 @@ function AcademicPolicySettingsPage() {
             <>
               <div className="space-y-1.5">
                 <Label required>Category</Label>
-                <Select value={draft.policyCategory} onValueChange={(v) => setDraft({ ...draft, policyCategory: v })}>
+                <Select
+                  value={draft.policyCategory}
+                  onValueChange={(v) => {
+                    setCustomKey(false);
+                    setDraft({ ...draft, policyCategory: v, policyKey: "" });
+                  }}
+                >
                   <SelectTrigger className="rounded-md"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c.charAt(0) + c.slice(1).toLowerCase()}</SelectItem>)}
@@ -275,7 +337,36 @@ function AcademicPolicySettingsPage() {
               </div>
               <div className="space-y-1.5">
                 <Label required>Policy Key</Label>
-                <Input value={draft.policyKey} onChange={(e) => setDraft({ ...draft, policyKey: e.target.value.toUpperCase().replace(/\s+/g, "_") })} placeholder="MIN_ATTENDANCE_PERCENT_EXAM_ELIGIBILITY" className="rounded-md font-mono text-xs" required />
+                {customKey ? (
+                  <Input
+                    value={draft.policyKey}
+                    onChange={(e) => setDraft({ ...draft, policyKey: e.target.value.toUpperCase().replace(/\s+/g, "_") })}
+                    placeholder="CUSTOM_POLICY_KEY"
+                    className="rounded-md font-mono text-xs"
+                    required
+                    autoFocus
+                  />
+                ) : (
+                  <Select
+                    value={draft.policyKey}
+                    onValueChange={(v) => {
+                      if (v === CUSTOM_KEY_OPTION) {
+                        setCustomKey(true);
+                        setDraft({ ...draft, policyKey: "" });
+                      } else {
+                        setDraft({ ...draft, policyKey: v });
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose a policy key" /></SelectTrigger>
+                    <SelectContent>
+                      {(POLICY_KEYS_BY_CATEGORY[draft.policyCategory] ?? []).map((k) => (
+                        <SelectItem key={k} value={k} className="font-mono text-xs">{k}</SelectItem>
+                      ))}
+                      <SelectItem value={CUSTOM_KEY_OPTION}>Custom key…</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
               <div className="space-y-1.5">
                 <Label>Board (optional — overrides the tenant-wide default for this board only)</Label>
