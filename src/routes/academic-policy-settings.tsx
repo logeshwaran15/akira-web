@@ -273,7 +273,7 @@ function AcademicPolicySettingsPage() {
                             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openHistory(p)} title="Change history">
                               <History className="h-3.5 w-3.5" />
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(p)}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEdit(p)}>
                               <Pencil className="h-3.5 w-3.5" />
                             </Button>
                             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>

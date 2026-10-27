@@ -9,6 +9,7 @@ import {
 import { ClipboardList, CalendarCheck2, Gauge, Users2 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useAcademicYear } from "@/hooks/use-academic-year";
 
 export const Route = createFileRoute("/teacher-schedule-view")({
   head: () => ({
@@ -20,7 +21,6 @@ export const Route = createFileRoute("/teacher-schedule-view")({
   component: TeacherScheduleViewPage,
 });
 
-type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type UserOption = { akiraUserKey: string; userName: string };
 type Slot = {
   timetableSlotKey: string; dayOfWeek: number; periodNumber: number;
@@ -46,8 +46,7 @@ const colorFor = (subjectKey: string | null) => {
 };
 
 function TeacherScheduleViewPage() {
-  const [years, setYears] = useState<AcademicYear[]>([]);
-  const [yearKey, setYearKey] = useState("");
+  const { selectedYearKey: yearKey } = useAcademicYear();
   const [teachers, setTeachers] = useState<UserOption[]>([]);
   const [teacherKey, setTeacherKey] = useState("");
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -55,12 +54,9 @@ function TeacherScheduleViewPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    Promise.all([apiFetch("/api/AcademicYear"), apiFetch("/api/User")])
-      .then(([y, u]) => {
-        setYears(y);
+    apiFetch("/api/User")
+      .then((u: UserOption[]) => {
         setTeachers(u);
-        const active = (y as AcademicYear[]).find((yy) => yy.status === "Active") ?? y[0];
-        if (active) setYearKey(active.academicYearKey);
         if (u.length > 0) setTeacherKey(u[0].akiraUserKey);
       })
       .catch((err) => toast.error(err instanceof Error ? err.message : "Failed to load filters"));
@@ -82,16 +78,7 @@ function TeacherScheduleViewPage() {
     <div>
       <PageHeader title="Teacher Schedule View" breadcrumbs={[{ label: "Staff" }, { label: "Teacher Schedule View" }]} />
 
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label>Academic Year</Label>
-          <Select value={yearKey} onValueChange={setYearKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose year" /></SelectTrigger>
-            <SelectContent>
-              {years.map((y) => <SelectItem key={y.academicYearKey} value={y.academicYearKey}>{y.yearName}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="mb-4 max-w-xs">
         <div className="space-y-1.5">
           <Label>Teacher</Label>
           <Select value={teacherKey} onValueChange={setTeacherKey}>

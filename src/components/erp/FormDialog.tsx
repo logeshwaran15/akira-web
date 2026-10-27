@@ -45,12 +45,12 @@ export function FormDialog({
             <Button
               type="button"
               variant="outline"
-              className="rounded-md border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="rounded-md border-destructive text-destructive"
               onClick={() => onOpenChange(false)}
             >
               {cancelLabel}
             </Button>
-            <Button type="submit" className="rounded-md" disabled={submitting}>
+            <Button type="submit" variant="success" className="rounded-md" disabled={submitting}>
               {submitting ? "Saving..." : submitLabel}
             </Button>
           </DialogFooter>

@@ -12,11 +12,12 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  Sparkles, ChevronLeft, ChevronRight, ClipboardList, BookOpen, Users2, Clock,
+  ChevronLeft, ChevronRight,
   AlertTriangle, Send, CheckCircle2, Rocket,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useAcademicYear } from "@/hooks/use-academic-year";
 
 export const Route = createFileRoute("/timetable")({
   head: () => ({
@@ -28,7 +29,6 @@ export const Route = createFileRoute("/timetable")({
   component: TimetablePage,
 });
 
-type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type SchoolClass = { schoolClassKey: string; className: string };
 type SectionOption = { sectionKey: string; sectionLabel: string };
 type SubjectOption = { subjectKey: string; subjectName: string };
@@ -56,6 +56,14 @@ type Conflict = {
 const DAY_NAMES = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const WORKING_DAYS = [1, 2, 3, 4, 5, 6];
 const PERIODS_PER_DAY = 8;
+const MONTH_SHORT_NAMES = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+// Locale-independent "31 Aug" / "31 Aug 2027" formatting -- toLocaleDateString(undefined, ...)
+// resolves to whatever locale the runtime defaults to, which differs between the SSR
+// (Node) environment and the browser and causes a hydration text mismatch.
+const formatShortDate = (d: Date, withYear = false) =>
+  `${d.getDate()} ${MONTH_SHORT_NAMES[d.getMonth()]}${withYear ? ` ${d.getFullYear()}` : ""}`;
 const SLOT_COLORS = [
   "bg-primary/10 text-primary", "bg-info/10 text-info", "bg-success/10 text-success",
   "bg-warning/15 text-[oklch(0.45_0.12_65)]", "bg-destructive/10 text-destructive",
@@ -81,8 +89,7 @@ const STATUS_LABEL: Record<string, string> = {
 const emptyDraft = { subjectKey: "", teacherUserKey: "", roomKey: "", isPractical: false, isBreak: false, remarks: "" };
 
 function TimetablePage() {
-  const [years, setYears] = useState<AcademicYear[]>([]);
-  const [yearKey, setYearKey] = useState("");
+  const { selectedYearKey: yearKey } = useAcademicYear();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [classKey, setClassKey] = useState("");
   const [sections, setSections] = useState<SectionOption[]>([]);
@@ -95,7 +102,6 @@ function TimetablePage() {
   const [conflicts, setConflicts] = useState<Conflict[]>([]);
   const [conflictsOpen, setConflictsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [generating, setGenerating] = useState(false);
   const [workflowBusy, setWorkflowBusy] = useState(false);
   const [weekOffset, setWeekOffset] = useState(0);
 
@@ -105,27 +111,27 @@ function TimetablePage() {
 
   useEffect(() => {
     Promise.all([
-      apiFetch("/api/AcademicYear"), apiFetch("/api/SchoolClass"),
-      apiFetch("/api/Subject"), apiFetch("/api/User"), apiFetch("/api/Room"),
+      apiFetch("/api/SchoolClass"), apiFetch("/api/Subject"), apiFetch("/api/User"), apiFetch("/api/Room"),
     ])
-      .then(([y, c, subj, u, r]) => {
-        setYears(y);
+      .then(([c, subj, u, r]) => {
         setClasses(c);
         setSubjects(subj);
         setTeachers(u);
         setRooms(r);
-        const active = (y as AcademicYear[]).find((yy) => yy.status === "Active") ?? y[0];
-        if (active) setYearKey(active.academicYearKey);
         if (c.length > 0) setClassKey(c[0].schoolClassKey);
       })
       .catch((err) => toast.error(err instanceof Error ? err.message : "Failed to load timetable filters"));
   }, []);
 
   useEffect(() => {
+    setSectionKey("");
     if (!classKey || !yearKey) { setSections([]); return; }
     apiFetch(`/api/Section?schoolClassId=${classKey}&academicYearId=${yearKey}`)
       .then((d: SectionOption[]) => { setSections(d); setSectionKey(d[0]?.sectionKey ?? ""); })
-      .catch(() => setSections([]));
+      .catch((err) => {
+        setSections([]);
+        toast.error(err instanceof Error ? err.message : "Failed to load sections");
+      });
   }, [classKey, yearKey]);
 
   const loadSlots = () => {
@@ -154,25 +160,6 @@ function TimetablePage() {
   useEffect(loadSlots, [sectionKey, yearKey]);
   useEffect(loadStatus, [sectionKey, yearKey]);
   useEffect(loadConflicts, [yearKey]);
-
-  const generate = async () => {
-    if (!sectionKey || !yearKey) return;
-    setGenerating(true);
-    try {
-      const data = await apiFetch("/api/Timetable/generate", {
-        method: "POST",
-        body: JSON.stringify({ academicYearKey: yearKey, sectionKey }),
-      });
-      setSlots(data);
-      loadStatus();
-      loadConflicts();
-      toast.success("Timetable auto-filled from subject allocation");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to generate timetable");
-    } finally {
-      setGenerating(false);
-    }
-  };
 
   const openCell = (day: number, period: number) => {
     const slot = slots.find((s) => s.dayOfWeek === day && s.periodNumber === period) ?? null;
@@ -259,9 +246,6 @@ function TimetablePage() {
     }
   };
 
-  const uniqueSubjects = useMemo(() => new Set(slots.map((s) => s.subjectKey).filter(Boolean)).size, [slots]);
-  const uniqueTeachers = useMemo(() => new Set(slots.map((s) => s.akiraUserKey).filter(Boolean)).size, [slots]);
-
   const weekStart = useMemo(() => {
     const d = new Date();
     d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + weekOffset * 7); // Monday of the week
@@ -300,11 +284,6 @@ function TimetablePage() {
       <PageHeader
         title="Timetable Builder"
         breadcrumbs={[{ label: "Academics" }, { label: "Timetable Builder" }]}
-        actions={
-          <Button variant="outline" className="h-10 gap-1.5 rounded-md shadow-sm" onClick={generate} disabled={generating || !sectionKey}>
-            <Sparkles className="h-4 w-4" /> {generating ? "Filling..." : "Auto-fill from Allocation"}
-          </Button>
-        }
       />
 
       <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -313,14 +292,15 @@ function TimetablePage() {
             {STATUS_LABEL[status.status] ?? status.status}
           </Badge>
         )}
-        <Button
-          variant="outline" size="sm" className="h-8 gap-1.5 rounded-md"
-          onClick={() => setConflictsOpen(true)}
-          disabled={conflicts.length === 0}
-        >
-          <AlertTriangle className="h-3.5 w-3.5" />
-          {conflicts.length === 0 ? "No conflicts" : `${conflicts.length} conflict${conflicts.length === 1 ? "" : "s"}`}
-        </Button>
+        {conflicts.length > 0 && (
+          <Button
+            variant="outline" size="sm" className="h-8 gap-1.5 rounded-md"
+            onClick={() => setConflictsOpen(true)}
+          >
+            <AlertTriangle className="h-3.5 w-3.5" />
+            {conflicts.length} conflict{conflicts.length === 1 ? "" : "s"}
+          </Button>
+        )}
         <div className="ml-auto flex items-center gap-2">
           {status?.status === "DRAFT" && (
             <Button size="sm" className="h-8 gap-1.5 rounded-md" onClick={submitForReview} disabled={workflowBusy}>
@@ -340,29 +320,20 @@ function TimetablePage() {
         </div>
       </div>
 
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label>Academic Year</Label>
-          <Select value={yearKey} onValueChange={setYearKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose year" /></SelectTrigger>
-            <SelectContent>
-              {years.map((y) => <SelectItem key={y.academicYearKey} value={y.academicYearKey}>{y.yearName}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1.5">
-          <Label>Class</Label>
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div className="w-40 space-y-1">
+          <Label className="text-xs">Class</Label>
           <Select value={classKey} onValueChange={setClassKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose class" /></SelectTrigger>
+            <SelectTrigger className="h-8 rounded-md text-sm"><SelectValue placeholder="Choose class" /></SelectTrigger>
             <SelectContent>
               {classes.map((c) => <SelectItem key={c.schoolClassKey} value={c.schoolClassKey}>{c.className}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-1.5">
-          <Label>Section</Label>
+        <div className="w-32 space-y-1">
+          <Label className="text-xs">Section</Label>
           <Select value={sectionKey} onValueChange={setSectionKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose section" /></SelectTrigger>
+            <SelectTrigger className="h-8 rounded-md text-sm"><SelectValue placeholder="Choose section" /></SelectTrigger>
             <SelectContent>
               {sections.map((s) => <SelectItem key={s.sectionKey} value={s.sectionKey}>{s.sectionLabel}</SelectItem>)}
             </SelectContent>
@@ -375,18 +346,11 @@ function TimetablePage() {
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <div className="flex h-9 items-center gap-1.5 rounded-md border border-border px-3 text-sm">
-          {weekStart.toLocaleDateString(undefined, { day: "numeric", month: "short" })} - {weekEnd.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}
+          {formatShortDate(weekStart)} - {formatShortDate(weekEnd, true)}
         </div>
         <Button variant="outline" size="icon" className="h-9 w-9 rounded-md" onClick={() => setWeekOffset((w) => w + 1)}>
           <ChevronRight className="h-4 w-4" />
         </Button>
-      </div>
-
-      <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <StatCard icon={ClipboardList} tone="text-primary bg-primary/10" label="Total Periods" value={slots.filter((s) => s.subjectKey).length} sub="This Week" />
-        <StatCard icon={BookOpen} tone="text-success bg-success/10" label="Subjects" value={uniqueSubjects} sub="This Week" />
-        <StatCard icon={Users2} tone="text-warning bg-warning/15" label="Teachers" value={uniqueTeachers} sub="This Week" />
-        <StatCard icon={Clock} tone="text-info bg-info/10" label="Daily Periods" value={PERIODS_PER_DAY} sub="Per Day" />
       </div>
 
       <div className="overflow-x-auto rounded-md border border-border bg-card shadow-sm">
@@ -403,7 +367,7 @@ function TimetablePage() {
                   <th key={dow} className="border-b border-border p-2 text-center text-xs font-semibold uppercase text-muted-foreground">
                     {DAY_NAMES[dow]}
                     <div className="font-mono text-[10px] font-normal normal-case text-muted-foreground/70">
-                      {dayDate(dow).toLocaleDateString(undefined, { day: "numeric", month: "short" })}
+                      {formatShortDate(dayDate(dow))}
                     </div>
                   </th>
                 ))}
@@ -552,21 +516,6 @@ function TimetablePage() {
           </div>
         )}
       </FormDialog>
-    </div>
-  );
-}
-
-function StatCard({ icon: Icon, tone, label, value, sub }: { icon: typeof ClipboardList; tone: string; label: string; value: number; sub: string }) {
-  return (
-    <div className="flex items-center gap-3 rounded-md border border-border bg-card p-4 shadow-sm">
-      <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-md", tone)}>
-        <Icon className="h-5 w-5" />
-      </div>
-      <div>
-        <div className="text-xs text-muted-foreground">{label}</div>
-        <div className="font-display text-xl font-bold">{value}</div>
-        <div className="text-[11px] text-muted-foreground">{sub}</div>
-      </div>
     </div>
   );
 }

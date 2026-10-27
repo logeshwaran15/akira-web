@@ -11,6 +11,7 @@ import { DataTable, type Column } from "@/components/erp/DataTable";
 import { AlertTriangle, ClipboardCheck } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useAcademicYear } from "@/hooks/use-academic-year";
 
 export const Route = createFileRoute("/subject-distribution-tracker")({
   head: () => ({
@@ -22,7 +23,6 @@ export const Route = createFileRoute("/subject-distribution-tracker")({
   component: SubjectDistributionTrackerPage,
 });
 
-type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type SchoolClass = { schoolClassKey: string; className: string };
 type SectionOption = { sectionKey: string; sectionLabel: string };
 type DistributionRow = {
@@ -31,8 +31,7 @@ type DistributionRow = {
 };
 
 function SubjectDistributionTrackerPage() {
-  const [years, setYears] = useState<AcademicYear[]>([]);
-  const [yearKey, setYearKey] = useState("");
+  const { selectedYearKey: yearKey } = useAcademicYear();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [classKey, setClassKey] = useState("");
   const [sections, setSections] = useState<SectionOption[]>([]);
@@ -41,12 +40,9 @@ function SubjectDistributionTrackerPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    Promise.all([apiFetch("/api/AcademicYear"), apiFetch("/api/SchoolClass")])
-      .then(([y, c]) => {
-        setYears(y);
+    apiFetch("/api/SchoolClass")
+      .then((c: SchoolClass[]) => {
         setClasses(c);
-        const active = (y as AcademicYear[]).find((yy) => yy.status === "Active") ?? y[0];
-        if (active) setYearKey(active.academicYearKey);
         if (c.length > 0) setClassKey(c[0].schoolClassKey);
       })
       .catch((err) => toast.error(err instanceof Error ? err.message : "Failed to load filters"));
@@ -108,16 +104,7 @@ function SubjectDistributionTrackerPage() {
         </span>
       </div>
 
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label>Academic Year</Label>
-          <Select value={yearKey} onValueChange={setYearKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose year" /></SelectTrigger>
-            <SelectContent>
-              {years.map((y) => <SelectItem key={y.academicYearKey} value={y.academicYearKey}>{y.yearName}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label>Class</Label>
           <Select value={classKey} onValueChange={setClassKey}>

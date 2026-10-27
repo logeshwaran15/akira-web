@@ -97,7 +97,7 @@ function RolePermissionsPage() {
         title="Role Permission Assign"
         breadcrumbs={[{ label: "System" }, { label: "Role Permission Assign" }]}
         actions={
-          <Button className="h-10 gap-1.5 rounded-md shadow-sm" onClick={save} disabled={saving || loading || !roleKey}>
+          <Button variant="success" className="h-10 gap-1.5 rounded-md shadow-sm" onClick={save} disabled={saving || loading || !roleKey}>
             <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Permissions"}
           </Button>
         }

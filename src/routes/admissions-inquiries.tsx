@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -334,13 +335,11 @@ function InquiriesPage() {
               statusDraft.status === "FOLLOW_UP_SCHEDULED") && (
               <div className="space-y-1.5">
                 <Label>Next Follow-up Date</Label>
-                <Input
-                  type="date"
+                <DatePicker
                   value={statusDraft.nextFollowUpDate}
-                  onChange={(e) =>
-                    setStatusDraft({ ...statusDraft, nextFollowUpDate: e.target.value })
+                  onChange={(v) =>
+                    setStatusDraft({ ...statusDraft, nextFollowUpDate: v })
                   }
-                  className="rounded-md"
                 />
               </div>
             )}

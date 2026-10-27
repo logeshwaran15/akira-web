@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { UserCheck, AlertTriangle } from "lucide-react";
 import { apiFetch } from "@/lib/api";
+import { useAcademicYear } from "@/hooks/use-academic-year";
 
 export const Route = createFileRoute("/substitute-teacher-management")({
   head: () => ({
@@ -24,7 +25,6 @@ export const Route = createFileRoute("/substitute-teacher-management")({
   component: SubstituteTeacherManagementPage,
 });
 
-type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type UserOption = { akiraUserKey: string; userName: string };
 type DaySlot = {
   timetableSlotKey: string; dayOfWeek: number; periodNumber: number;
@@ -40,8 +40,7 @@ function todayISO() {
 }
 
 function SubstituteTeacherManagementPage() {
-  const [years, setYears] = useState<AcademicYear[]>([]);
-  const [yearKey, setYearKey] = useState("");
+  const { selectedYearKey: yearKey } = useAcademicYear();
   const [teachers, setTeachers] = useState<UserOption[]>([]);
   const [teacherKey, setTeacherKey] = useState("");
   const [leaveDate, setLeaveDate] = useState(todayISO());
@@ -55,12 +54,9 @@ function SubstituteTeacherManagementPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    Promise.all([apiFetch("/api/AcademicYear"), apiFetch("/api/User")])
-      .then(([y, u]) => {
-        setYears(y);
+    apiFetch("/api/User")
+      .then((u: UserOption[]) => {
         setTeachers(u);
-        const active = (y as AcademicYear[]).find((yy) => yy.status === "Active") ?? y[0];
-        if (active) setYearKey(active.academicYearKey);
         if (u.length > 0) setTeacherKey(u[0].akiraUserKey);
       })
       .catch((err) => toast.error(err instanceof Error ? err.message : "Failed to load filters"));
@@ -138,16 +134,7 @@ function SubstituteTeacherManagementPage() {
         </span>
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label>Academic Year</Label>
-          <Select value={yearKey} onValueChange={setYearKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose year" /></SelectTrigger>
-            <SelectContent>
-              {years.map((y) => <SelectItem key={y.academicYearKey} value={y.academicYearKey}>{y.yearName}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label>Absent Teacher</Label>
           <Select value={teacherKey} onValueChange={setTeacherKey}>

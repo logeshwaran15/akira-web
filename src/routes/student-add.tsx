@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/erp/PageHeader";
+import { BackButton } from "@/components/erp/BackButton";
 import {
   FormEngine,
   validateFormSchema,
@@ -11,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
-  Loader2, Save, Check, ArrowLeft, Info,
+  Loader2, Save, Check, Info,
   GraduationCap, User, MapPin, FileText, Camera, Plus, X, File as FileIcon,
 } from "lucide-react";
 import { apiFetch, apiUpload } from "@/lib/api";
@@ -351,11 +352,7 @@ function StudentAddPage() {
       <PageHeader
         title="Add Student"
         breadcrumbs={[{ label: "Students", to: "/students" }, { label: "Add Student" }]}
-        actions={
-          <Button type="button" variant="outline" className="gap-1.5 rounded-md" onClick={cancel}>
-            <ArrowLeft className="h-4 w-4" /> Back to Students
-          </Button>
-        }
+        actions={<BackButton to="/students" label="Back to Students" className="mb-0" />}
       />
 
       <div className="mb-5 flex items-start gap-2.5 rounded-md border border-info/30 bg-info/10 px-4 py-3 text-sm text-foreground">
@@ -388,7 +385,7 @@ function StudentAddPage() {
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <Button type="button" variant="outline" className="gap-1.5 rounded-md" onClick={saveDraft}>
+              <Button type="button" variant="success" className="gap-1.5 rounded-md" onClick={saveDraft}>
                 <Save className="h-4 w-4" /> Save as Draft
               </Button>
               <Button type="button" className="gap-1.5 rounded-md" disabled={saving} onClick={submit}>

@@ -20,6 +20,7 @@ import {
 import { Plus, Pencil, Trash2, CalendarClock, Star } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useAcademicYear } from "@/hooks/use-academic-year";
 
 export const Route = createFileRoute("/bell-schedule-manager")({
   head: () => ({
@@ -33,7 +34,6 @@ export const Route = createFileRoute("/bell-schedule-manager")({
 
 type Board = { boardKey: string; boardCode: string; boardName: string };
 type Stage = { academicStageKey: string; stageName: string };
-type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type PeriodMaster = {
   periodMasterKey: string; periodNumber: number; periodName: string;
   startTime: string; endTime: string; periodType: string;
@@ -50,8 +50,7 @@ function BellScheduleManagerPage() {
   const [boardCode, setBoardCode] = useState("");
   const [stages, setStages] = useState<Stage[]>([]);
   const [stageKey, setStageKey] = useState("");
-  const [years, setYears] = useState<AcademicYear[]>([]);
-  const [yearKey, setYearKey] = useState("");
+  const { selectedYearKey: yearKey } = useAcademicYear();
   const [periodMasters, setPeriodMasters] = useState<PeriodMaster[]>([]);
   const [schedules, setSchedules] = useState<BellSchedule[]>([]);
   const [loading, setLoading] = useState(false);
@@ -64,13 +63,10 @@ function BellScheduleManagerPage() {
   const [deleteTarget, setDeleteTarget] = useState<BellSchedule | null>(null);
 
   useEffect(() => {
-    Promise.all([apiFetch("/api/Board"), apiFetch("/api/AcademicYear")])
-      .then(([b, y]) => {
+    apiFetch("/api/Board")
+      .then((b: Board[]) => {
         setBoards(b);
         if (b.length > 0) setBoardCode(b[0].boardCode);
-        setYears(y);
-        const active = (y as AcademicYear[]).find((yy) => yy.status === "Active");
-        setYearKey(active?.academicYearKey ?? "");
       })
       .catch(() => {});
   }, []);
@@ -246,7 +242,7 @@ function BellScheduleManagerPage() {
       className: "text-right",
       accessor: (s) => (
         <div className="flex items-center justify-end gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(s)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEdit(s)}>
             <Pencil className="h-3.5 w-3.5" />
           </Button>
           <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(s)}>
@@ -288,12 +284,6 @@ function BellScheduleManagerPage() {
           <SelectTrigger className="h-9 w-[200px] rounded-md"><SelectValue placeholder="Stage" /></SelectTrigger>
           <SelectContent>
             {stages.map((s) => <SelectItem key={s.academicStageKey} value={s.academicStageKey}>{s.stageName}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <Select value={yearKey} onValueChange={setYearKey}>
-          <SelectTrigger className="h-9 w-[200px] rounded-md"><SelectValue placeholder="Academic Year" /></SelectTrigger>
-          <SelectContent>
-            {years.map((y) => <SelectItem key={y.academicYearKey} value={y.academicYearKey}>{y.yearName}</SelectItem>)}
           </SelectContent>
         </Select>
       </div>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -370,11 +371,9 @@ function AdmissionTestsPage() {
               </div>
               <div className="space-y-1.5">
                 <Label required>Test Date</Label>
-                <Input
-                  type="date"
-                  className="rounded-md"
+                <DatePicker
                   value={draft.testDate}
-                  onChange={(e) => setDraft({ ...draft, testDate: e.target.value })}
+                  onChange={(v) => setDraft({ ...draft, testDate: v })}
                 />
               </div>
               <div className="space-y-1.5">

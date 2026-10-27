@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Building2,
@@ -45,6 +45,8 @@ function DashboardRouter() {
   // Kept strictly separate: the platform's own AKIRA-DEFAULT tenant sees the
   // cross-tenant admin dashboard below; every real school tenant gets its
   // own scoped dashboard instead.
+  if (user?.roleCode === "PARENT") return <Navigate to="/parent-dashboard" replace />;
+
   return user && !user.isPlatformTenant ? <TenantAdminDashboard /> : <PlatformDashboardPage />;
 }
 

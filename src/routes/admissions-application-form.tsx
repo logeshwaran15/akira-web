@@ -699,12 +699,12 @@ function ApplicationFormPage() {
           <Button
             type="button"
             variant="outline"
-            className="rounded-md border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            className="rounded-md border-destructive text-destructive"
             onClick={cancel}
           >
             Cancel
           </Button>
-          <Button type="submit" className="gap-1.5 rounded-md" disabled={saving}>
+          <Button type="submit" variant="success" className="gap-1.5 rounded-md" disabled={saving}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {saving ? "Saving..." : isEditing ? "Save Changes" : "Create Application"}
           </Button>

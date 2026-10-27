@@ -10,14 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as YearRolloverRouteImport } from './routes/year-rollover'
+import { Route as UserManualRouteImport } from './routes/user-manual'
+import { Route as TransportZonesRouteImport } from './routes/transport-zones'
+import { Route as TransportVehiclesRouteImport } from './routes/transport-vehicles'
+import { Route as TransportStaffRouteImport } from './routes/transport-staff'
+import { Route as TransportRoutesRouteImport } from './routes/transport-routes'
+import { Route as TransportRouteAssignmentsRouteImport } from './routes/transport-route-assignments'
+import { Route as TransportLiveRouteImport } from './routes/transport-live'
+import { Route as TransportAttendanceRouteImport } from './routes/transport-attendance'
+import { Route as TransportAllocationsRouteImport } from './routes/transport-allocations'
 import { Route as TimetableConfigRouteImport } from './routes/timetable-config'
+import { Route as TimetableChangeRequestRouteImport } from './routes/timetable-change-request'
+import { Route as TimetableAuditLogRouteImport } from './routes/timetable-audit-log'
+import { Route as TimetableApprovalWorkflowRouteImport } from './routes/timetable-approval-workflow'
 import { Route as TimetableRouteImport } from './routes/timetable'
 import { Route as TenantsRouteImport } from './routes/tenants'
 import { Route as TenantRoleMenuRouteImport } from './routes/tenant-role-menu'
+import { Route as TenantMenuRouteImport } from './routes/tenant-menu'
 import { Route as TenantFormRouteImport } from './routes/tenant-form'
 import { Route as TeacherWorkloadRouteImport } from './routes/teacher-workload'
 import { Route as TeacherScheduleViewRouteImport } from './routes/teacher-schedule-view'
 import { Route as SyllabusTrackerRouteImport } from './routes/syllabus-tracker'
+import { Route as SupportCenterRouteImport } from './routes/support-center'
+import { Route as SupportAssistantRouteImport } from './routes/support-assistant'
 import { Route as SubstituteTeacherPoolRouteImport } from './routes/substitute-teacher-pool'
 import { Route as SubstituteTeacherManagementRouteImport } from './routes/substitute-teacher-management'
 import { Route as SubscriptionsRouteImport } from './routes/subscriptions'
@@ -27,54 +42,97 @@ import { Route as SubjectAllocationRouteImport } from './routes/subject-allocati
 import { Route as StudentsRouteImport } from './routes/students'
 import { Route as StudentLifeDevelopmentRouteImport } from './routes/student-life-development'
 import { Route as StudentIdConfigRouteImport } from './routes/student-id-config'
+import { Route as StudentFeeDetailsRouteImport } from './routes/student-fee-details'
+import { Route as StudentFeeAssignmentAddRouteImport } from './routes/student-fee-assignment-add'
+import { Route as StudentFeeAssignmentRouteImport } from './routes/student-fee-assignment'
 import { Route as StudentEditRouteImport } from './routes/student-edit'
 import { Route as StudentDetailRouteImport } from './routes/student-detail'
+import { Route as StudentAttendanceCalendarRouteImport } from './routes/student-attendance-calendar'
 import { Route as StudentAddRouteImport } from './routes/student-add'
 import { Route as StaffSetupRouteImport } from './routes/staff-setup'
+import { Route as StaffLeaveRouteImport } from './routes/staff-leave'
+import { Route as StaffEditRouteImport } from './routes/staff-edit'
+import { Route as StaffDetailRouteImport } from './routes/staff-detail'
+import { Route as StaffAttendanceRouteImport } from './routes/staff-attendance'
+import { Route as StaffAddRouteImport } from './routes/staff-add'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SessionExpiredRouteImport } from './routes/session-expired'
 import { Route as SchoolsRouteImport } from './routes/schools'
 import { Route as SchoolCalendarRouteImport } from './routes/school-calendar'
 import { Route as RolesRouteImport } from './routes/roles'
 import { Route as RolePermissionsRouteImport } from './routes/role-permissions'
 import { Route as RoleMenuRouteImport } from './routes/role-menu'
+import { Route as ResultPublishRouteImport } from './routes/result-publish'
+import { Route as ResultProcessingRouteImport } from './routes/result-processing'
 import { Route as ReportsClassicRouteImport } from './routes/reports-classic'
 import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ReportingStructureRouteImport } from './routes/reporting-structure'
 import { Route as ReportViewerRouteImport } from './routes/report-viewer'
 import { Route as ReportConfigEditRouteImport } from './routes/report-config-edit'
 import { Route as ReportConfigRouteImport } from './routes/report-config'
+import { Route as ReportCardGeneratorRouteImport } from './routes/report-card-generator'
+import { Route as QuestionBankEditRouteImport } from './routes/question-bank-edit'
+import { Route as QuestionBankAddRouteImport } from './routes/question-bank-add'
+import { Route as QuestionBankRouteImport } from './routes/question-bank'
 import { Route as PromotionRulesRouteImport } from './routes/promotion-rules'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PeriodStructureSetupRouteImport } from './routes/period-structure-setup'
+import { Route as PeriodAttendanceRouteImport } from './routes/period-attendance'
+import { Route as ParentTimetableRouteImport } from './routes/parent-timetable'
+import { Route as ParentSubjectsRouteImport } from './routes/parent-subjects'
+import { Route as ParentReportCardsRouteImport } from './routes/parent-report-cards'
+import { Route as ParentFeesRouteImport } from './routes/parent-fees'
+import { Route as ParentDashboardRouteImport } from './routes/parent-dashboard'
+import { Route as ParentAttendanceRouteImport } from './routes/parent-attendance'
+import { Route as ParentAccountsRouteImport } from './routes/parent-accounts'
+import { Route as ParentAcademicPerformanceRouteImport } from './routes/parent-academic-performance'
+import { Route as PaperBlueprintRouteImport } from './routes/paper-blueprint'
 import { Route as NotificationSettingsRouteImport } from './routes/notification-settings'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as MarksVerificationRouteImport } from './routes/marks-verification'
+import { Route as MarksEntryRouteImport } from './routes/marks-entry'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LessonPlansRouteImport } from './routes/lesson-plans'
 import { Route as LearningOutcomesRouteImport } from './routes/learning-outcomes'
-import { Route as GradingScaleRouteImport } from './routes/grading-scale'
+import { Route as LateEarlyLogRouteImport } from './routes/late-early-log'
+import { Route as HostelAttendanceRouteImport } from './routes/hostel-attendance'
+import { Route as GradingScaleSetupRouteImport } from './routes/grading-scale-setup'
 import { Route as GovernanceDashboardRouteImport } from './routes/governance-dashboard'
-import { Route as FeesRouteImport } from './routes/fees'
-import { Route as FeeConfigurationRouteImport } from './routes/fee-configuration'
-import { Route as ExaminationsRouteImport } from './routes/examinations'
+import { Route as FeeStructureRouteImport } from './routes/fee-structure'
+import { Route as FeeReportsRouteImport } from './routes/fee-reports'
+import { Route as FeePaymentHistoryRouteImport } from './routes/fee-payment-history'
+import { Route as FeePaymentDetailsRouteImport } from './routes/fee-payment-details'
+import { Route as FeeDashboardRouteImport } from './routes/fee-dashboard'
+import { Route as FeeCollectionCollectRouteImport } from './routes/fee-collection-collect'
+import { Route as FeeCollectionRouteImport } from './routes/fee-collection'
+import { Route as ExamTypeMasterRouteImport } from './routes/exam-type-master'
 import { Route as ExamTimetableBuilderRouteImport } from './routes/exam-timetable-builder'
-import { Route as ExamDetailRouteImport } from './routes/exam-detail'
 import { Route as ExamCorrectionsRouteImport } from './routes/exam-corrections'
+import { Route as ExamConfigurationRouteImport } from './routes/exam-configuration'
+import { Route as EmisExportRouteImport } from './routes/emis-export'
 import { Route as EmailTemplatesRouteImport } from './routes/email-templates'
 import { Route as DocumentNumberingRouteImport } from './routes/document-numbering'
 import { Route as DepartmentsRouteImport } from './routes/departments'
 import { Route as DateFormatRouteImport } from './routes/date-format'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CurriculumMappingRouteImport } from './routes/curriculum-mapping'
+import { Route as ConfigTypesRouteImport } from './routes/config-types'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as CommunicationSettingsRouteImport } from './routes/communication-settings'
+import { Route as CommNoticeBoardRouteImport } from './routes/comm-notice-board'
 import { Route as ClassroomUtilizationDashboardRouteImport } from './routes/classroom-utilization-dashboard'
 import { Route as ClassesSectionsRouteImport } from './routes/classes-sections'
 import { Route as ClassTeacherAllocationRouteImport } from './routes/class-teacher-allocation'
+import { Route as ClassAttendanceOverviewRouteImport } from './routes/class-attendance-overview'
+import { Route as ChatRouteImport } from './routes/chat'
 import { Route as CampusSetupRouteImport } from './routes/campus-setup'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BellScheduleManagerRouteImport } from './routes/bell-schedule-manager'
 import { Route as AuditLogsRouteImport } from './routes/audit-logs'
 import { Route as AttendanceRequestsRouteImport } from './routes/attendance-requests'
 import { Route as AttendancePolicyRouteImport } from './routes/attendance-policy'
+import { Route as AttendanceAnalyticsRouteImport } from './routes/attendance-analytics'
 import { Route as AttendanceRouteImport } from './routes/attendance'
 import { Route as AkiraUserListRouteImport } from './routes/akira-user-list'
 import { Route as AdmissionsTestsRouteImport } from './routes/admissions-tests'
@@ -85,7 +143,6 @@ import { Route as AdmissionsApplicationFormRouteImport } from './routes/admissio
 import { Route as AcademicsRouteImport } from './routes/academics'
 import { Route as AcademicPolicySettingsRouteImport } from './routes/academic-policy-settings'
 import { Route as AcademicHealthDashboardRouteImport } from './routes/academic-health-dashboard'
-import { Route as AcademicCoordinatorDashboardRouteImport } from './routes/academic-coordinator-dashboard'
 import { Route as AcademicCalendarRouteImport } from './routes/academic-calendar'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -94,11 +151,73 @@ const YearRolloverRoute = YearRolloverRouteImport.update({
   path: '/year-rollover',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserManualRoute = UserManualRouteImport.update({
+  id: '/user-manual',
+  path: '/user-manual',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportZonesRoute = TransportZonesRouteImport.update({
+  id: '/transport-zones',
+  path: '/transport-zones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportVehiclesRoute = TransportVehiclesRouteImport.update({
+  id: '/transport-vehicles',
+  path: '/transport-vehicles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportStaffRoute = TransportStaffRouteImport.update({
+  id: '/transport-staff',
+  path: '/transport-staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportRoutesRoute = TransportRoutesRouteImport.update({
+  id: '/transport-routes',
+  path: '/transport-routes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportRouteAssignmentsRoute =
+  TransportRouteAssignmentsRouteImport.update({
+    id: '/transport-route-assignments',
+    path: '/transport-route-assignments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TransportLiveRoute = TransportLiveRouteImport.update({
+  id: '/transport-live',
+  path: '/transport-live',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportAttendanceRoute = TransportAttendanceRouteImport.update({
+  id: '/transport-attendance',
+  path: '/transport-attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransportAllocationsRoute = TransportAllocationsRouteImport.update({
+  id: '/transport-allocations',
+  path: '/transport-allocations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TimetableConfigRoute = TimetableConfigRouteImport.update({
   id: '/timetable-config',
   path: '/timetable-config',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimetableChangeRequestRoute = TimetableChangeRequestRouteImport.update({
+  id: '/timetable-change-request',
+  path: '/timetable-change-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimetableAuditLogRoute = TimetableAuditLogRouteImport.update({
+  id: '/timetable-audit-log',
+  path: '/timetable-audit-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimetableApprovalWorkflowRoute =
+  TimetableApprovalWorkflowRouteImport.update({
+    id: '/timetable-approval-workflow',
+    path: '/timetable-approval-workflow',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TimetableRoute = TimetableRouteImport.update({
   id: '/timetable',
   path: '/timetable',
@@ -112,6 +231,11 @@ const TenantsRoute = TenantsRouteImport.update({
 const TenantRoleMenuRoute = TenantRoleMenuRouteImport.update({
   id: '/tenant-role-menu',
   path: '/tenant-role-menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TenantMenuRoute = TenantMenuRouteImport.update({
+  id: '/tenant-menu',
+  path: '/tenant-menu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TenantFormRoute = TenantFormRouteImport.update({
@@ -132,6 +256,16 @@ const TeacherScheduleViewRoute = TeacherScheduleViewRouteImport.update({
 const SyllabusTrackerRoute = SyllabusTrackerRouteImport.update({
   id: '/syllabus-tracker',
   path: '/syllabus-tracker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportCenterRoute = SupportCenterRouteImport.update({
+  id: '/support-center',
+  path: '/support-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportAssistantRoute = SupportAssistantRouteImport.update({
+  id: '/support-assistant',
+  path: '/support-assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubstituteTeacherPoolRoute = SubstituteTeacherPoolRouteImport.update({
@@ -181,6 +315,21 @@ const StudentIdConfigRoute = StudentIdConfigRouteImport.update({
   path: '/student-id-config',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentFeeDetailsRoute = StudentFeeDetailsRouteImport.update({
+  id: '/student-fee-details',
+  path: '/student-fee-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentFeeAssignmentAddRoute = StudentFeeAssignmentAddRouteImport.update({
+  id: '/student-fee-assignment-add',
+  path: '/student-fee-assignment-add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentFeeAssignmentRoute = StudentFeeAssignmentRouteImport.update({
+  id: '/student-fee-assignment',
+  path: '/student-fee-assignment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentEditRoute = StudentEditRouteImport.update({
   id: '/student-edit',
   path: '/student-edit',
@@ -191,6 +340,12 @@ const StudentDetailRoute = StudentDetailRouteImport.update({
   path: '/student-detail',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentAttendanceCalendarRoute =
+  StudentAttendanceCalendarRouteImport.update({
+    id: '/student-attendance-calendar',
+    path: '/student-attendance-calendar',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const StudentAddRoute = StudentAddRouteImport.update({
   id: '/student-add',
   path: '/student-add',
@@ -201,6 +356,31 @@ const StaffSetupRoute = StaffSetupRouteImport.update({
   path: '/staff-setup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffLeaveRoute = StaffLeaveRouteImport.update({
+  id: '/staff-leave',
+  path: '/staff-leave',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffEditRoute = StaffEditRouteImport.update({
+  id: '/staff-edit',
+  path: '/staff-edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffDetailRoute = StaffDetailRouteImport.update({
+  id: '/staff-detail',
+  path: '/staff-detail',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAttendanceRoute = StaffAttendanceRouteImport.update({
+  id: '/staff-attendance',
+  path: '/staff-attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAddRoute = StaffAddRouteImport.update({
+  id: '/staff-add',
+  path: '/staff-add',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
   path: '/setup',
@@ -209,6 +389,11 @@ const SetupRoute = SetupRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionExpiredRoute = SessionExpiredRouteImport.update({
+  id: '/session-expired',
+  path: '/session-expired',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchoolsRoute = SchoolsRouteImport.update({
@@ -236,6 +421,16 @@ const RoleMenuRoute = RoleMenuRouteImport.update({
   path: '/role-menu',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResultPublishRoute = ResultPublishRouteImport.update({
+  id: '/result-publish',
+  path: '/result-publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResultProcessingRoute = ResultProcessingRouteImport.update({
+  id: '/result-processing',
+  path: '/result-processing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportsClassicRoute = ReportsClassicRouteImport.update({
   id: '/reports-classic',
   path: '/reports-classic',
@@ -244,6 +439,11 @@ const ReportsClassicRoute = ReportsClassicRouteImport.update({
 const ReportsRoute = ReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportingStructureRoute = ReportingStructureRouteImport.update({
+  id: '/reporting-structure',
+  path: '/reporting-structure',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportViewerRoute = ReportViewerRouteImport.update({
@@ -261,14 +461,90 @@ const ReportConfigRoute = ReportConfigRouteImport.update({
   path: '/report-config',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportCardGeneratorRoute = ReportCardGeneratorRouteImport.update({
+  id: '/report-card-generator',
+  path: '/report-card-generator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionBankEditRoute = QuestionBankEditRouteImport.update({
+  id: '/question-bank-edit',
+  path: '/question-bank-edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionBankAddRoute = QuestionBankAddRouteImport.update({
+  id: '/question-bank-add',
+  path: '/question-bank-add',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionBankRoute = QuestionBankRouteImport.update({
+  id: '/question-bank',
+  path: '/question-bank',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PromotionRulesRoute = PromotionRulesRouteImport.update({
   id: '/promotion-rules',
   path: '/promotion-rules',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PeriodStructureSetupRoute = PeriodStructureSetupRouteImport.update({
   id: '/period-structure-setup',
   path: '/period-structure-setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PeriodAttendanceRoute = PeriodAttendanceRouteImport.update({
+  id: '/period-attendance',
+  path: '/period-attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentTimetableRoute = ParentTimetableRouteImport.update({
+  id: '/parent-timetable',
+  path: '/parent-timetable',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentSubjectsRoute = ParentSubjectsRouteImport.update({
+  id: '/parent-subjects',
+  path: '/parent-subjects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentReportCardsRoute = ParentReportCardsRouteImport.update({
+  id: '/parent-report-cards',
+  path: '/parent-report-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentFeesRoute = ParentFeesRouteImport.update({
+  id: '/parent-fees',
+  path: '/parent-fees',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentDashboardRoute = ParentDashboardRouteImport.update({
+  id: '/parent-dashboard',
+  path: '/parent-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentAttendanceRoute = ParentAttendanceRouteImport.update({
+  id: '/parent-attendance',
+  path: '/parent-attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentAccountsRoute = ParentAccountsRouteImport.update({
+  id: '/parent-accounts',
+  path: '/parent-accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentAcademicPerformanceRoute =
+  ParentAcademicPerformanceRouteImport.update({
+    id: '/parent-academic-performance',
+    path: '/parent-academic-performance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const PaperBlueprintRoute = PaperBlueprintRouteImport.update({
+  id: '/paper-blueprint',
+  path: '/paper-blueprint',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationSettingsRoute = NotificationSettingsRouteImport.update({
@@ -279,6 +555,16 @@ const NotificationSettingsRoute = NotificationSettingsRouteImport.update({
 const MenuRoute = MenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarksVerificationRoute = MarksVerificationRouteImport.update({
+  id: '/marks-verification',
+  path: '/marks-verification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarksEntryRoute = MarksEntryRouteImport.update({
+  id: '/marks-entry',
+  path: '/marks-entry',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -296,9 +582,19 @@ const LearningOutcomesRoute = LearningOutcomesRouteImport.update({
   path: '/learning-outcomes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GradingScaleRoute = GradingScaleRouteImport.update({
-  id: '/grading-scale',
-  path: '/grading-scale',
+const LateEarlyLogRoute = LateEarlyLogRouteImport.update({
+  id: '/late-early-log',
+  path: '/late-early-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostelAttendanceRoute = HostelAttendanceRouteImport.update({
+  id: '/hostel-attendance',
+  path: '/hostel-attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GradingScaleSetupRoute = GradingScaleSetupRouteImport.update({
+  id: '/grading-scale-setup',
+  path: '/grading-scale-setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GovernanceDashboardRoute = GovernanceDashboardRouteImport.update({
@@ -306,19 +602,44 @@ const GovernanceDashboardRoute = GovernanceDashboardRouteImport.update({
   path: '/governance-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeesRoute = FeesRouteImport.update({
-  id: '/fees',
-  path: '/fees',
+const FeeStructureRoute = FeeStructureRouteImport.update({
+  id: '/fee-structure',
+  path: '/fee-structure',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeeConfigurationRoute = FeeConfigurationRouteImport.update({
-  id: '/fee-configuration',
-  path: '/fee-configuration',
+const FeeReportsRoute = FeeReportsRouteImport.update({
+  id: '/fee-reports',
+  path: '/fee-reports',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExaminationsRoute = ExaminationsRouteImport.update({
-  id: '/examinations',
-  path: '/examinations',
+const FeePaymentHistoryRoute = FeePaymentHistoryRouteImport.update({
+  id: '/fee-payment-history',
+  path: '/fee-payment-history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeePaymentDetailsRoute = FeePaymentDetailsRouteImport.update({
+  id: '/fee-payment-details',
+  path: '/fee-payment-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeeDashboardRoute = FeeDashboardRouteImport.update({
+  id: '/fee-dashboard',
+  path: '/fee-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeeCollectionCollectRoute = FeeCollectionCollectRouteImport.update({
+  id: '/fee-collection-collect',
+  path: '/fee-collection-collect',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeeCollectionRoute = FeeCollectionRouteImport.update({
+  id: '/fee-collection',
+  path: '/fee-collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamTypeMasterRoute = ExamTypeMasterRouteImport.update({
+  id: '/exam-type-master',
+  path: '/exam-type-master',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExamTimetableBuilderRoute = ExamTimetableBuilderRouteImport.update({
@@ -326,14 +647,19 @@ const ExamTimetableBuilderRoute = ExamTimetableBuilderRouteImport.update({
   path: '/exam-timetable-builder',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExamDetailRoute = ExamDetailRouteImport.update({
-  id: '/exam-detail',
-  path: '/exam-detail',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ExamCorrectionsRoute = ExamCorrectionsRouteImport.update({
   id: '/exam-corrections',
   path: '/exam-corrections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamConfigurationRoute = ExamConfigurationRouteImport.update({
+  id: '/exam-configuration',
+  path: '/exam-configuration',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmisExportRoute = EmisExportRouteImport.update({
+  id: '/emis-export',
+  path: '/emis-export',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailTemplatesRoute = EmailTemplatesRouteImport.update({
@@ -366,6 +692,11 @@ const CurriculumMappingRoute = CurriculumMappingRouteImport.update({
   path: '/curriculum-mapping',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConfigTypesRoute = ConfigTypesRouteImport.update({
+  id: '/config-types',
+  path: '/config-types',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsRoute = ComponentsRouteImport.update({
   id: '/components',
   path: '/components',
@@ -374,6 +705,11 @@ const ComponentsRoute = ComponentsRouteImport.update({
 const CommunicationSettingsRoute = CommunicationSettingsRouteImport.update({
   id: '/communication-settings',
   path: '/communication-settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommNoticeBoardRoute = CommNoticeBoardRouteImport.update({
+  id: '/comm-notice-board',
+  path: '/comm-notice-board',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClassroomUtilizationDashboardRoute =
@@ -390,6 +726,16 @@ const ClassesSectionsRoute = ClassesSectionsRouteImport.update({
 const ClassTeacherAllocationRoute = ClassTeacherAllocationRouteImport.update({
   id: '/class-teacher-allocation',
   path: '/class-teacher-allocation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClassAttendanceOverviewRoute = ClassAttendanceOverviewRouteImport.update({
+  id: '/class-attendance-overview',
+  path: '/class-attendance-overview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CampusSetupRoute = CampusSetupRouteImport.update({
@@ -420,6 +766,11 @@ const AttendanceRequestsRoute = AttendanceRequestsRouteImport.update({
 const AttendancePolicyRoute = AttendancePolicyRouteImport.update({
   id: '/attendance-policy',
   path: '/attendance-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AttendanceAnalyticsRoute = AttendanceAnalyticsRouteImport.update({
+  id: '/attendance-analytics',
+  path: '/attendance-analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AttendanceRoute = AttendanceRouteImport.update({
@@ -473,12 +824,6 @@ const AcademicHealthDashboardRoute = AcademicHealthDashboardRouteImport.update({
   path: '/academic-health-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AcademicCoordinatorDashboardRoute =
-  AcademicCoordinatorDashboardRouteImport.update({
-    id: '/academic-coordinator-dashboard',
-    path: '/academic-coordinator-dashboard',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const AcademicCalendarRoute = AcademicCalendarRouteImport.update({
   id: '/academic-calendar',
   path: '/academic-calendar',
@@ -493,7 +838,6 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/academic-calendar': typeof AcademicCalendarRoute
-  '/academic-coordinator-dashboard': typeof AcademicCoordinatorDashboardRoute
   '/academic-health-dashboard': typeof AcademicHealthDashboardRoute
   '/academic-policy-settings': typeof AcademicPolicySettingsRoute
   '/academics': typeof AcademicsRoute
@@ -504,54 +848,97 @@ export interface FileRoutesByFullPath {
   '/admissions-tests': typeof AdmissionsTestsRoute
   '/akira-user-list': typeof AkiraUserListRoute
   '/attendance': typeof AttendanceRoute
+  '/attendance-analytics': typeof AttendanceAnalyticsRoute
   '/attendance-policy': typeof AttendancePolicyRoute
   '/attendance-requests': typeof AttendanceRequestsRoute
   '/audit-logs': typeof AuditLogsRoute
   '/bell-schedule-manager': typeof BellScheduleManagerRoute
   '/calendar': typeof CalendarRoute
   '/campus-setup': typeof CampusSetupRoute
+  '/chat': typeof ChatRoute
+  '/class-attendance-overview': typeof ClassAttendanceOverviewRoute
   '/class-teacher-allocation': typeof ClassTeacherAllocationRoute
   '/classes-sections': typeof ClassesSectionsRoute
   '/classroom-utilization-dashboard': typeof ClassroomUtilizationDashboardRoute
+  '/comm-notice-board': typeof CommNoticeBoardRoute
   '/communication-settings': typeof CommunicationSettingsRoute
   '/components': typeof ComponentsRoute
+  '/config-types': typeof ConfigTypesRoute
   '/curriculum-mapping': typeof CurriculumMappingRoute
   '/dashboard': typeof DashboardRoute
   '/date-format': typeof DateFormatRoute
   '/departments': typeof DepartmentsRoute
   '/document-numbering': typeof DocumentNumberingRoute
   '/email-templates': typeof EmailTemplatesRoute
+  '/emis-export': typeof EmisExportRoute
+  '/exam-configuration': typeof ExamConfigurationRoute
   '/exam-corrections': typeof ExamCorrectionsRoute
-  '/exam-detail': typeof ExamDetailRoute
   '/exam-timetable-builder': typeof ExamTimetableBuilderRoute
-  '/examinations': typeof ExaminationsRoute
-  '/fee-configuration': typeof FeeConfigurationRoute
-  '/fees': typeof FeesRoute
+  '/exam-type-master': typeof ExamTypeMasterRoute
+  '/fee-collection': typeof FeeCollectionRoute
+  '/fee-collection-collect': typeof FeeCollectionCollectRoute
+  '/fee-dashboard': typeof FeeDashboardRoute
+  '/fee-payment-details': typeof FeePaymentDetailsRoute
+  '/fee-payment-history': typeof FeePaymentHistoryRoute
+  '/fee-reports': typeof FeeReportsRoute
+  '/fee-structure': typeof FeeStructureRoute
   '/governance-dashboard': typeof GovernanceDashboardRoute
-  '/grading-scale': typeof GradingScaleRoute
+  '/grading-scale-setup': typeof GradingScaleSetupRoute
+  '/hostel-attendance': typeof HostelAttendanceRoute
+  '/late-early-log': typeof LateEarlyLogRoute
   '/learning-outcomes': typeof LearningOutcomesRoute
   '/lesson-plans': typeof LessonPlansRoute
   '/login': typeof LoginRoute
+  '/marks-entry': typeof MarksEntryRoute
+  '/marks-verification': typeof MarksVerificationRoute
   '/menu': typeof MenuRoute
   '/notification-settings': typeof NotificationSettingsRoute
+  '/paper-blueprint': typeof PaperBlueprintRoute
+  '/parent-academic-performance': typeof ParentAcademicPerformanceRoute
+  '/parent-accounts': typeof ParentAccountsRoute
+  '/parent-attendance': typeof ParentAttendanceRoute
+  '/parent-dashboard': typeof ParentDashboardRoute
+  '/parent-fees': typeof ParentFeesRoute
+  '/parent-report-cards': typeof ParentReportCardsRoute
+  '/parent-subjects': typeof ParentSubjectsRoute
+  '/parent-timetable': typeof ParentTimetableRoute
+  '/period-attendance': typeof PeriodAttendanceRoute
   '/period-structure-setup': typeof PeriodStructureSetupRoute
+  '/profile': typeof ProfileRoute
   '/promotion-rules': typeof PromotionRulesRoute
+  '/question-bank': typeof QuestionBankRoute
+  '/question-bank-add': typeof QuestionBankAddRoute
+  '/question-bank-edit': typeof QuestionBankEditRoute
+  '/report-card-generator': typeof ReportCardGeneratorRoute
   '/report-config': typeof ReportConfigRoute
   '/report-config-edit': typeof ReportConfigEditRoute
   '/report-viewer': typeof ReportViewerRoute
+  '/reporting-structure': typeof ReportingStructureRoute
   '/reports': typeof ReportsRoute
   '/reports-classic': typeof ReportsClassicRoute
+  '/result-processing': typeof ResultProcessingRoute
+  '/result-publish': typeof ResultPublishRoute
   '/role-menu': typeof RoleMenuRoute
   '/role-permissions': typeof RolePermissionsRoute
   '/roles': typeof RolesRoute
   '/school-calendar': typeof SchoolCalendarRoute
   '/schools': typeof SchoolsRoute
+  '/session-expired': typeof SessionExpiredRoute
   '/settings': typeof SettingsRoute
   '/setup': typeof SetupRoute
+  '/staff-add': typeof StaffAddRoute
+  '/staff-attendance': typeof StaffAttendanceRoute
+  '/staff-detail': typeof StaffDetailRoute
+  '/staff-edit': typeof StaffEditRoute
+  '/staff-leave': typeof StaffLeaveRoute
   '/staff-setup': typeof StaffSetupRoute
   '/student-add': typeof StudentAddRoute
+  '/student-attendance-calendar': typeof StudentAttendanceCalendarRoute
   '/student-detail': typeof StudentDetailRoute
   '/student-edit': typeof StudentEditRoute
+  '/student-fee-assignment': typeof StudentFeeAssignmentRoute
+  '/student-fee-assignment-add': typeof StudentFeeAssignmentAddRoute
+  '/student-fee-details': typeof StudentFeeDetailsRoute
   '/student-id-config': typeof StudentIdConfigRoute
   '/student-life-development': typeof StudentLifeDevelopmentRoute
   '/students': typeof StudentsRoute
@@ -561,20 +948,34 @@ export interface FileRoutesByFullPath {
   '/subscriptions': typeof SubscriptionsRoute
   '/substitute-teacher-management': typeof SubstituteTeacherManagementRoute
   '/substitute-teacher-pool': typeof SubstituteTeacherPoolRoute
+  '/support-assistant': typeof SupportAssistantRoute
+  '/support-center': typeof SupportCenterRoute
   '/syllabus-tracker': typeof SyllabusTrackerRoute
   '/teacher-schedule-view': typeof TeacherScheduleViewRoute
   '/teacher-workload': typeof TeacherWorkloadRoute
   '/tenant-form': typeof TenantFormRoute
+  '/tenant-menu': typeof TenantMenuRoute
   '/tenant-role-menu': typeof TenantRoleMenuRoute
   '/tenants': typeof TenantsRoute
   '/timetable': typeof TimetableRoute
+  '/timetable-approval-workflow': typeof TimetableApprovalWorkflowRoute
+  '/timetable-audit-log': typeof TimetableAuditLogRoute
+  '/timetable-change-request': typeof TimetableChangeRequestRoute
   '/timetable-config': typeof TimetableConfigRoute
+  '/transport-allocations': typeof TransportAllocationsRoute
+  '/transport-attendance': typeof TransportAttendanceRoute
+  '/transport-live': typeof TransportLiveRoute
+  '/transport-route-assignments': typeof TransportRouteAssignmentsRoute
+  '/transport-routes': typeof TransportRoutesRoute
+  '/transport-staff': typeof TransportStaffRoute
+  '/transport-vehicles': typeof TransportVehiclesRoute
+  '/transport-zones': typeof TransportZonesRoute
+  '/user-manual': typeof UserManualRoute
   '/year-rollover': typeof YearRolloverRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/academic-calendar': typeof AcademicCalendarRoute
-  '/academic-coordinator-dashboard': typeof AcademicCoordinatorDashboardRoute
   '/academic-health-dashboard': typeof AcademicHealthDashboardRoute
   '/academic-policy-settings': typeof AcademicPolicySettingsRoute
   '/academics': typeof AcademicsRoute
@@ -585,54 +986,97 @@ export interface FileRoutesByTo {
   '/admissions-tests': typeof AdmissionsTestsRoute
   '/akira-user-list': typeof AkiraUserListRoute
   '/attendance': typeof AttendanceRoute
+  '/attendance-analytics': typeof AttendanceAnalyticsRoute
   '/attendance-policy': typeof AttendancePolicyRoute
   '/attendance-requests': typeof AttendanceRequestsRoute
   '/audit-logs': typeof AuditLogsRoute
   '/bell-schedule-manager': typeof BellScheduleManagerRoute
   '/calendar': typeof CalendarRoute
   '/campus-setup': typeof CampusSetupRoute
+  '/chat': typeof ChatRoute
+  '/class-attendance-overview': typeof ClassAttendanceOverviewRoute
   '/class-teacher-allocation': typeof ClassTeacherAllocationRoute
   '/classes-sections': typeof ClassesSectionsRoute
   '/classroom-utilization-dashboard': typeof ClassroomUtilizationDashboardRoute
+  '/comm-notice-board': typeof CommNoticeBoardRoute
   '/communication-settings': typeof CommunicationSettingsRoute
   '/components': typeof ComponentsRoute
+  '/config-types': typeof ConfigTypesRoute
   '/curriculum-mapping': typeof CurriculumMappingRoute
   '/dashboard': typeof DashboardRoute
   '/date-format': typeof DateFormatRoute
   '/departments': typeof DepartmentsRoute
   '/document-numbering': typeof DocumentNumberingRoute
   '/email-templates': typeof EmailTemplatesRoute
+  '/emis-export': typeof EmisExportRoute
+  '/exam-configuration': typeof ExamConfigurationRoute
   '/exam-corrections': typeof ExamCorrectionsRoute
-  '/exam-detail': typeof ExamDetailRoute
   '/exam-timetable-builder': typeof ExamTimetableBuilderRoute
-  '/examinations': typeof ExaminationsRoute
-  '/fee-configuration': typeof FeeConfigurationRoute
-  '/fees': typeof FeesRoute
+  '/exam-type-master': typeof ExamTypeMasterRoute
+  '/fee-collection': typeof FeeCollectionRoute
+  '/fee-collection-collect': typeof FeeCollectionCollectRoute
+  '/fee-dashboard': typeof FeeDashboardRoute
+  '/fee-payment-details': typeof FeePaymentDetailsRoute
+  '/fee-payment-history': typeof FeePaymentHistoryRoute
+  '/fee-reports': typeof FeeReportsRoute
+  '/fee-structure': typeof FeeStructureRoute
   '/governance-dashboard': typeof GovernanceDashboardRoute
-  '/grading-scale': typeof GradingScaleRoute
+  '/grading-scale-setup': typeof GradingScaleSetupRoute
+  '/hostel-attendance': typeof HostelAttendanceRoute
+  '/late-early-log': typeof LateEarlyLogRoute
   '/learning-outcomes': typeof LearningOutcomesRoute
   '/lesson-plans': typeof LessonPlansRoute
   '/login': typeof LoginRoute
+  '/marks-entry': typeof MarksEntryRoute
+  '/marks-verification': typeof MarksVerificationRoute
   '/menu': typeof MenuRoute
   '/notification-settings': typeof NotificationSettingsRoute
+  '/paper-blueprint': typeof PaperBlueprintRoute
+  '/parent-academic-performance': typeof ParentAcademicPerformanceRoute
+  '/parent-accounts': typeof ParentAccountsRoute
+  '/parent-attendance': typeof ParentAttendanceRoute
+  '/parent-dashboard': typeof ParentDashboardRoute
+  '/parent-fees': typeof ParentFeesRoute
+  '/parent-report-cards': typeof ParentReportCardsRoute
+  '/parent-subjects': typeof ParentSubjectsRoute
+  '/parent-timetable': typeof ParentTimetableRoute
+  '/period-attendance': typeof PeriodAttendanceRoute
   '/period-structure-setup': typeof PeriodStructureSetupRoute
+  '/profile': typeof ProfileRoute
   '/promotion-rules': typeof PromotionRulesRoute
+  '/question-bank': typeof QuestionBankRoute
+  '/question-bank-add': typeof QuestionBankAddRoute
+  '/question-bank-edit': typeof QuestionBankEditRoute
+  '/report-card-generator': typeof ReportCardGeneratorRoute
   '/report-config': typeof ReportConfigRoute
   '/report-config-edit': typeof ReportConfigEditRoute
   '/report-viewer': typeof ReportViewerRoute
+  '/reporting-structure': typeof ReportingStructureRoute
   '/reports': typeof ReportsRoute
   '/reports-classic': typeof ReportsClassicRoute
+  '/result-processing': typeof ResultProcessingRoute
+  '/result-publish': typeof ResultPublishRoute
   '/role-menu': typeof RoleMenuRoute
   '/role-permissions': typeof RolePermissionsRoute
   '/roles': typeof RolesRoute
   '/school-calendar': typeof SchoolCalendarRoute
   '/schools': typeof SchoolsRoute
+  '/session-expired': typeof SessionExpiredRoute
   '/settings': typeof SettingsRoute
   '/setup': typeof SetupRoute
+  '/staff-add': typeof StaffAddRoute
+  '/staff-attendance': typeof StaffAttendanceRoute
+  '/staff-detail': typeof StaffDetailRoute
+  '/staff-edit': typeof StaffEditRoute
+  '/staff-leave': typeof StaffLeaveRoute
   '/staff-setup': typeof StaffSetupRoute
   '/student-add': typeof StudentAddRoute
+  '/student-attendance-calendar': typeof StudentAttendanceCalendarRoute
   '/student-detail': typeof StudentDetailRoute
   '/student-edit': typeof StudentEditRoute
+  '/student-fee-assignment': typeof StudentFeeAssignmentRoute
+  '/student-fee-assignment-add': typeof StudentFeeAssignmentAddRoute
+  '/student-fee-details': typeof StudentFeeDetailsRoute
   '/student-id-config': typeof StudentIdConfigRoute
   '/student-life-development': typeof StudentLifeDevelopmentRoute
   '/students': typeof StudentsRoute
@@ -642,21 +1086,35 @@ export interface FileRoutesByTo {
   '/subscriptions': typeof SubscriptionsRoute
   '/substitute-teacher-management': typeof SubstituteTeacherManagementRoute
   '/substitute-teacher-pool': typeof SubstituteTeacherPoolRoute
+  '/support-assistant': typeof SupportAssistantRoute
+  '/support-center': typeof SupportCenterRoute
   '/syllabus-tracker': typeof SyllabusTrackerRoute
   '/teacher-schedule-view': typeof TeacherScheduleViewRoute
   '/teacher-workload': typeof TeacherWorkloadRoute
   '/tenant-form': typeof TenantFormRoute
+  '/tenant-menu': typeof TenantMenuRoute
   '/tenant-role-menu': typeof TenantRoleMenuRoute
   '/tenants': typeof TenantsRoute
   '/timetable': typeof TimetableRoute
+  '/timetable-approval-workflow': typeof TimetableApprovalWorkflowRoute
+  '/timetable-audit-log': typeof TimetableAuditLogRoute
+  '/timetable-change-request': typeof TimetableChangeRequestRoute
   '/timetable-config': typeof TimetableConfigRoute
+  '/transport-allocations': typeof TransportAllocationsRoute
+  '/transport-attendance': typeof TransportAttendanceRoute
+  '/transport-live': typeof TransportLiveRoute
+  '/transport-route-assignments': typeof TransportRouteAssignmentsRoute
+  '/transport-routes': typeof TransportRoutesRoute
+  '/transport-staff': typeof TransportStaffRoute
+  '/transport-vehicles': typeof TransportVehiclesRoute
+  '/transport-zones': typeof TransportZonesRoute
+  '/user-manual': typeof UserManualRoute
   '/year-rollover': typeof YearRolloverRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/academic-calendar': typeof AcademicCalendarRoute
-  '/academic-coordinator-dashboard': typeof AcademicCoordinatorDashboardRoute
   '/academic-health-dashboard': typeof AcademicHealthDashboardRoute
   '/academic-policy-settings': typeof AcademicPolicySettingsRoute
   '/academics': typeof AcademicsRoute
@@ -667,54 +1125,97 @@ export interface FileRoutesById {
   '/admissions-tests': typeof AdmissionsTestsRoute
   '/akira-user-list': typeof AkiraUserListRoute
   '/attendance': typeof AttendanceRoute
+  '/attendance-analytics': typeof AttendanceAnalyticsRoute
   '/attendance-policy': typeof AttendancePolicyRoute
   '/attendance-requests': typeof AttendanceRequestsRoute
   '/audit-logs': typeof AuditLogsRoute
   '/bell-schedule-manager': typeof BellScheduleManagerRoute
   '/calendar': typeof CalendarRoute
   '/campus-setup': typeof CampusSetupRoute
+  '/chat': typeof ChatRoute
+  '/class-attendance-overview': typeof ClassAttendanceOverviewRoute
   '/class-teacher-allocation': typeof ClassTeacherAllocationRoute
   '/classes-sections': typeof ClassesSectionsRoute
   '/classroom-utilization-dashboard': typeof ClassroomUtilizationDashboardRoute
+  '/comm-notice-board': typeof CommNoticeBoardRoute
   '/communication-settings': typeof CommunicationSettingsRoute
   '/components': typeof ComponentsRoute
+  '/config-types': typeof ConfigTypesRoute
   '/curriculum-mapping': typeof CurriculumMappingRoute
   '/dashboard': typeof DashboardRoute
   '/date-format': typeof DateFormatRoute
   '/departments': typeof DepartmentsRoute
   '/document-numbering': typeof DocumentNumberingRoute
   '/email-templates': typeof EmailTemplatesRoute
+  '/emis-export': typeof EmisExportRoute
+  '/exam-configuration': typeof ExamConfigurationRoute
   '/exam-corrections': typeof ExamCorrectionsRoute
-  '/exam-detail': typeof ExamDetailRoute
   '/exam-timetable-builder': typeof ExamTimetableBuilderRoute
-  '/examinations': typeof ExaminationsRoute
-  '/fee-configuration': typeof FeeConfigurationRoute
-  '/fees': typeof FeesRoute
+  '/exam-type-master': typeof ExamTypeMasterRoute
+  '/fee-collection': typeof FeeCollectionRoute
+  '/fee-collection-collect': typeof FeeCollectionCollectRoute
+  '/fee-dashboard': typeof FeeDashboardRoute
+  '/fee-payment-details': typeof FeePaymentDetailsRoute
+  '/fee-payment-history': typeof FeePaymentHistoryRoute
+  '/fee-reports': typeof FeeReportsRoute
+  '/fee-structure': typeof FeeStructureRoute
   '/governance-dashboard': typeof GovernanceDashboardRoute
-  '/grading-scale': typeof GradingScaleRoute
+  '/grading-scale-setup': typeof GradingScaleSetupRoute
+  '/hostel-attendance': typeof HostelAttendanceRoute
+  '/late-early-log': typeof LateEarlyLogRoute
   '/learning-outcomes': typeof LearningOutcomesRoute
   '/lesson-plans': typeof LessonPlansRoute
   '/login': typeof LoginRoute
+  '/marks-entry': typeof MarksEntryRoute
+  '/marks-verification': typeof MarksVerificationRoute
   '/menu': typeof MenuRoute
   '/notification-settings': typeof NotificationSettingsRoute
+  '/paper-blueprint': typeof PaperBlueprintRoute
+  '/parent-academic-performance': typeof ParentAcademicPerformanceRoute
+  '/parent-accounts': typeof ParentAccountsRoute
+  '/parent-attendance': typeof ParentAttendanceRoute
+  '/parent-dashboard': typeof ParentDashboardRoute
+  '/parent-fees': typeof ParentFeesRoute
+  '/parent-report-cards': typeof ParentReportCardsRoute
+  '/parent-subjects': typeof ParentSubjectsRoute
+  '/parent-timetable': typeof ParentTimetableRoute
+  '/period-attendance': typeof PeriodAttendanceRoute
   '/period-structure-setup': typeof PeriodStructureSetupRoute
+  '/profile': typeof ProfileRoute
   '/promotion-rules': typeof PromotionRulesRoute
+  '/question-bank': typeof QuestionBankRoute
+  '/question-bank-add': typeof QuestionBankAddRoute
+  '/question-bank-edit': typeof QuestionBankEditRoute
+  '/report-card-generator': typeof ReportCardGeneratorRoute
   '/report-config': typeof ReportConfigRoute
   '/report-config-edit': typeof ReportConfigEditRoute
   '/report-viewer': typeof ReportViewerRoute
+  '/reporting-structure': typeof ReportingStructureRoute
   '/reports': typeof ReportsRoute
   '/reports-classic': typeof ReportsClassicRoute
+  '/result-processing': typeof ResultProcessingRoute
+  '/result-publish': typeof ResultPublishRoute
   '/role-menu': typeof RoleMenuRoute
   '/role-permissions': typeof RolePermissionsRoute
   '/roles': typeof RolesRoute
   '/school-calendar': typeof SchoolCalendarRoute
   '/schools': typeof SchoolsRoute
+  '/session-expired': typeof SessionExpiredRoute
   '/settings': typeof SettingsRoute
   '/setup': typeof SetupRoute
+  '/staff-add': typeof StaffAddRoute
+  '/staff-attendance': typeof StaffAttendanceRoute
+  '/staff-detail': typeof StaffDetailRoute
+  '/staff-edit': typeof StaffEditRoute
+  '/staff-leave': typeof StaffLeaveRoute
   '/staff-setup': typeof StaffSetupRoute
   '/student-add': typeof StudentAddRoute
+  '/student-attendance-calendar': typeof StudentAttendanceCalendarRoute
   '/student-detail': typeof StudentDetailRoute
   '/student-edit': typeof StudentEditRoute
+  '/student-fee-assignment': typeof StudentFeeAssignmentRoute
+  '/student-fee-assignment-add': typeof StudentFeeAssignmentAddRoute
+  '/student-fee-details': typeof StudentFeeDetailsRoute
   '/student-id-config': typeof StudentIdConfigRoute
   '/student-life-development': typeof StudentLifeDevelopmentRoute
   '/students': typeof StudentsRoute
@@ -724,14 +1225,29 @@ export interface FileRoutesById {
   '/subscriptions': typeof SubscriptionsRoute
   '/substitute-teacher-management': typeof SubstituteTeacherManagementRoute
   '/substitute-teacher-pool': typeof SubstituteTeacherPoolRoute
+  '/support-assistant': typeof SupportAssistantRoute
+  '/support-center': typeof SupportCenterRoute
   '/syllabus-tracker': typeof SyllabusTrackerRoute
   '/teacher-schedule-view': typeof TeacherScheduleViewRoute
   '/teacher-workload': typeof TeacherWorkloadRoute
   '/tenant-form': typeof TenantFormRoute
+  '/tenant-menu': typeof TenantMenuRoute
   '/tenant-role-menu': typeof TenantRoleMenuRoute
   '/tenants': typeof TenantsRoute
   '/timetable': typeof TimetableRoute
+  '/timetable-approval-workflow': typeof TimetableApprovalWorkflowRoute
+  '/timetable-audit-log': typeof TimetableAuditLogRoute
+  '/timetable-change-request': typeof TimetableChangeRequestRoute
   '/timetable-config': typeof TimetableConfigRoute
+  '/transport-allocations': typeof TransportAllocationsRoute
+  '/transport-attendance': typeof TransportAttendanceRoute
+  '/transport-live': typeof TransportLiveRoute
+  '/transport-route-assignments': typeof TransportRouteAssignmentsRoute
+  '/transport-routes': typeof TransportRoutesRoute
+  '/transport-staff': typeof TransportStaffRoute
+  '/transport-vehicles': typeof TransportVehiclesRoute
+  '/transport-zones': typeof TransportZonesRoute
+  '/user-manual': typeof UserManualRoute
   '/year-rollover': typeof YearRolloverRoute
 }
 export interface FileRouteTypes {
@@ -739,7 +1255,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/academic-calendar'
-    | '/academic-coordinator-dashboard'
     | '/academic-health-dashboard'
     | '/academic-policy-settings'
     | '/academics'
@@ -750,54 +1265,97 @@ export interface FileRouteTypes {
     | '/admissions-tests'
     | '/akira-user-list'
     | '/attendance'
+    | '/attendance-analytics'
     | '/attendance-policy'
     | '/attendance-requests'
     | '/audit-logs'
     | '/bell-schedule-manager'
     | '/calendar'
     | '/campus-setup'
+    | '/chat'
+    | '/class-attendance-overview'
     | '/class-teacher-allocation'
     | '/classes-sections'
     | '/classroom-utilization-dashboard'
+    | '/comm-notice-board'
     | '/communication-settings'
     | '/components'
+    | '/config-types'
     | '/curriculum-mapping'
     | '/dashboard'
     | '/date-format'
     | '/departments'
     | '/document-numbering'
     | '/email-templates'
+    | '/emis-export'
+    | '/exam-configuration'
     | '/exam-corrections'
-    | '/exam-detail'
     | '/exam-timetable-builder'
-    | '/examinations'
-    | '/fee-configuration'
-    | '/fees'
+    | '/exam-type-master'
+    | '/fee-collection'
+    | '/fee-collection-collect'
+    | '/fee-dashboard'
+    | '/fee-payment-details'
+    | '/fee-payment-history'
+    | '/fee-reports'
+    | '/fee-structure'
     | '/governance-dashboard'
-    | '/grading-scale'
+    | '/grading-scale-setup'
+    | '/hostel-attendance'
+    | '/late-early-log'
     | '/learning-outcomes'
     | '/lesson-plans'
     | '/login'
+    | '/marks-entry'
+    | '/marks-verification'
     | '/menu'
     | '/notification-settings'
+    | '/paper-blueprint'
+    | '/parent-academic-performance'
+    | '/parent-accounts'
+    | '/parent-attendance'
+    | '/parent-dashboard'
+    | '/parent-fees'
+    | '/parent-report-cards'
+    | '/parent-subjects'
+    | '/parent-timetable'
+    | '/period-attendance'
     | '/period-structure-setup'
+    | '/profile'
     | '/promotion-rules'
+    | '/question-bank'
+    | '/question-bank-add'
+    | '/question-bank-edit'
+    | '/report-card-generator'
     | '/report-config'
     | '/report-config-edit'
     | '/report-viewer'
+    | '/reporting-structure'
     | '/reports'
     | '/reports-classic'
+    | '/result-processing'
+    | '/result-publish'
     | '/role-menu'
     | '/role-permissions'
     | '/roles'
     | '/school-calendar'
     | '/schools'
+    | '/session-expired'
     | '/settings'
     | '/setup'
+    | '/staff-add'
+    | '/staff-attendance'
+    | '/staff-detail'
+    | '/staff-edit'
+    | '/staff-leave'
     | '/staff-setup'
     | '/student-add'
+    | '/student-attendance-calendar'
     | '/student-detail'
     | '/student-edit'
+    | '/student-fee-assignment'
+    | '/student-fee-assignment-add'
+    | '/student-fee-details'
     | '/student-id-config'
     | '/student-life-development'
     | '/students'
@@ -807,20 +1365,34 @@ export interface FileRouteTypes {
     | '/subscriptions'
     | '/substitute-teacher-management'
     | '/substitute-teacher-pool'
+    | '/support-assistant'
+    | '/support-center'
     | '/syllabus-tracker'
     | '/teacher-schedule-view'
     | '/teacher-workload'
     | '/tenant-form'
+    | '/tenant-menu'
     | '/tenant-role-menu'
     | '/tenants'
     | '/timetable'
+    | '/timetable-approval-workflow'
+    | '/timetable-audit-log'
+    | '/timetable-change-request'
     | '/timetable-config'
+    | '/transport-allocations'
+    | '/transport-attendance'
+    | '/transport-live'
+    | '/transport-route-assignments'
+    | '/transport-routes'
+    | '/transport-staff'
+    | '/transport-vehicles'
+    | '/transport-zones'
+    | '/user-manual'
     | '/year-rollover'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/academic-calendar'
-    | '/academic-coordinator-dashboard'
     | '/academic-health-dashboard'
     | '/academic-policy-settings'
     | '/academics'
@@ -831,54 +1403,97 @@ export interface FileRouteTypes {
     | '/admissions-tests'
     | '/akira-user-list'
     | '/attendance'
+    | '/attendance-analytics'
     | '/attendance-policy'
     | '/attendance-requests'
     | '/audit-logs'
     | '/bell-schedule-manager'
     | '/calendar'
     | '/campus-setup'
+    | '/chat'
+    | '/class-attendance-overview'
     | '/class-teacher-allocation'
     | '/classes-sections'
     | '/classroom-utilization-dashboard'
+    | '/comm-notice-board'
     | '/communication-settings'
     | '/components'
+    | '/config-types'
     | '/curriculum-mapping'
     | '/dashboard'
     | '/date-format'
     | '/departments'
     | '/document-numbering'
     | '/email-templates'
+    | '/emis-export'
+    | '/exam-configuration'
     | '/exam-corrections'
-    | '/exam-detail'
     | '/exam-timetable-builder'
-    | '/examinations'
-    | '/fee-configuration'
-    | '/fees'
+    | '/exam-type-master'
+    | '/fee-collection'
+    | '/fee-collection-collect'
+    | '/fee-dashboard'
+    | '/fee-payment-details'
+    | '/fee-payment-history'
+    | '/fee-reports'
+    | '/fee-structure'
     | '/governance-dashboard'
-    | '/grading-scale'
+    | '/grading-scale-setup'
+    | '/hostel-attendance'
+    | '/late-early-log'
     | '/learning-outcomes'
     | '/lesson-plans'
     | '/login'
+    | '/marks-entry'
+    | '/marks-verification'
     | '/menu'
     | '/notification-settings'
+    | '/paper-blueprint'
+    | '/parent-academic-performance'
+    | '/parent-accounts'
+    | '/parent-attendance'
+    | '/parent-dashboard'
+    | '/parent-fees'
+    | '/parent-report-cards'
+    | '/parent-subjects'
+    | '/parent-timetable'
+    | '/period-attendance'
     | '/period-structure-setup'
+    | '/profile'
     | '/promotion-rules'
+    | '/question-bank'
+    | '/question-bank-add'
+    | '/question-bank-edit'
+    | '/report-card-generator'
     | '/report-config'
     | '/report-config-edit'
     | '/report-viewer'
+    | '/reporting-structure'
     | '/reports'
     | '/reports-classic'
+    | '/result-processing'
+    | '/result-publish'
     | '/role-menu'
     | '/role-permissions'
     | '/roles'
     | '/school-calendar'
     | '/schools'
+    | '/session-expired'
     | '/settings'
     | '/setup'
+    | '/staff-add'
+    | '/staff-attendance'
+    | '/staff-detail'
+    | '/staff-edit'
+    | '/staff-leave'
     | '/staff-setup'
     | '/student-add'
+    | '/student-attendance-calendar'
     | '/student-detail'
     | '/student-edit'
+    | '/student-fee-assignment'
+    | '/student-fee-assignment-add'
+    | '/student-fee-details'
     | '/student-id-config'
     | '/student-life-development'
     | '/students'
@@ -888,20 +1503,34 @@ export interface FileRouteTypes {
     | '/subscriptions'
     | '/substitute-teacher-management'
     | '/substitute-teacher-pool'
+    | '/support-assistant'
+    | '/support-center'
     | '/syllabus-tracker'
     | '/teacher-schedule-view'
     | '/teacher-workload'
     | '/tenant-form'
+    | '/tenant-menu'
     | '/tenant-role-menu'
     | '/tenants'
     | '/timetable'
+    | '/timetable-approval-workflow'
+    | '/timetable-audit-log'
+    | '/timetable-change-request'
     | '/timetable-config'
+    | '/transport-allocations'
+    | '/transport-attendance'
+    | '/transport-live'
+    | '/transport-route-assignments'
+    | '/transport-routes'
+    | '/transport-staff'
+    | '/transport-vehicles'
+    | '/transport-zones'
+    | '/user-manual'
     | '/year-rollover'
   id:
     | '__root__'
     | '/'
     | '/academic-calendar'
-    | '/academic-coordinator-dashboard'
     | '/academic-health-dashboard'
     | '/academic-policy-settings'
     | '/academics'
@@ -912,54 +1541,97 @@ export interface FileRouteTypes {
     | '/admissions-tests'
     | '/akira-user-list'
     | '/attendance'
+    | '/attendance-analytics'
     | '/attendance-policy'
     | '/attendance-requests'
     | '/audit-logs'
     | '/bell-schedule-manager'
     | '/calendar'
     | '/campus-setup'
+    | '/chat'
+    | '/class-attendance-overview'
     | '/class-teacher-allocation'
     | '/classes-sections'
     | '/classroom-utilization-dashboard'
+    | '/comm-notice-board'
     | '/communication-settings'
     | '/components'
+    | '/config-types'
     | '/curriculum-mapping'
     | '/dashboard'
     | '/date-format'
     | '/departments'
     | '/document-numbering'
     | '/email-templates'
+    | '/emis-export'
+    | '/exam-configuration'
     | '/exam-corrections'
-    | '/exam-detail'
     | '/exam-timetable-builder'
-    | '/examinations'
-    | '/fee-configuration'
-    | '/fees'
+    | '/exam-type-master'
+    | '/fee-collection'
+    | '/fee-collection-collect'
+    | '/fee-dashboard'
+    | '/fee-payment-details'
+    | '/fee-payment-history'
+    | '/fee-reports'
+    | '/fee-structure'
     | '/governance-dashboard'
-    | '/grading-scale'
+    | '/grading-scale-setup'
+    | '/hostel-attendance'
+    | '/late-early-log'
     | '/learning-outcomes'
     | '/lesson-plans'
     | '/login'
+    | '/marks-entry'
+    | '/marks-verification'
     | '/menu'
     | '/notification-settings'
+    | '/paper-blueprint'
+    | '/parent-academic-performance'
+    | '/parent-accounts'
+    | '/parent-attendance'
+    | '/parent-dashboard'
+    | '/parent-fees'
+    | '/parent-report-cards'
+    | '/parent-subjects'
+    | '/parent-timetable'
+    | '/period-attendance'
     | '/period-structure-setup'
+    | '/profile'
     | '/promotion-rules'
+    | '/question-bank'
+    | '/question-bank-add'
+    | '/question-bank-edit'
+    | '/report-card-generator'
     | '/report-config'
     | '/report-config-edit'
     | '/report-viewer'
+    | '/reporting-structure'
     | '/reports'
     | '/reports-classic'
+    | '/result-processing'
+    | '/result-publish'
     | '/role-menu'
     | '/role-permissions'
     | '/roles'
     | '/school-calendar'
     | '/schools'
+    | '/session-expired'
     | '/settings'
     | '/setup'
+    | '/staff-add'
+    | '/staff-attendance'
+    | '/staff-detail'
+    | '/staff-edit'
+    | '/staff-leave'
     | '/staff-setup'
     | '/student-add'
+    | '/student-attendance-calendar'
     | '/student-detail'
     | '/student-edit'
+    | '/student-fee-assignment'
+    | '/student-fee-assignment-add'
+    | '/student-fee-details'
     | '/student-id-config'
     | '/student-life-development'
     | '/students'
@@ -969,21 +1641,35 @@ export interface FileRouteTypes {
     | '/subscriptions'
     | '/substitute-teacher-management'
     | '/substitute-teacher-pool'
+    | '/support-assistant'
+    | '/support-center'
     | '/syllabus-tracker'
     | '/teacher-schedule-view'
     | '/teacher-workload'
     | '/tenant-form'
+    | '/tenant-menu'
     | '/tenant-role-menu'
     | '/tenants'
     | '/timetable'
+    | '/timetable-approval-workflow'
+    | '/timetable-audit-log'
+    | '/timetable-change-request'
     | '/timetable-config'
+    | '/transport-allocations'
+    | '/transport-attendance'
+    | '/transport-live'
+    | '/transport-route-assignments'
+    | '/transport-routes'
+    | '/transport-staff'
+    | '/transport-vehicles'
+    | '/transport-zones'
+    | '/user-manual'
     | '/year-rollover'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AcademicCalendarRoute: typeof AcademicCalendarRoute
-  AcademicCoordinatorDashboardRoute: typeof AcademicCoordinatorDashboardRoute
   AcademicHealthDashboardRoute: typeof AcademicHealthDashboardRoute
   AcademicPolicySettingsRoute: typeof AcademicPolicySettingsRoute
   AcademicsRoute: typeof AcademicsRoute
@@ -994,54 +1680,97 @@ export interface RootRouteChildren {
   AdmissionsTestsRoute: typeof AdmissionsTestsRoute
   AkiraUserListRoute: typeof AkiraUserListRoute
   AttendanceRoute: typeof AttendanceRoute
+  AttendanceAnalyticsRoute: typeof AttendanceAnalyticsRoute
   AttendancePolicyRoute: typeof AttendancePolicyRoute
   AttendanceRequestsRoute: typeof AttendanceRequestsRoute
   AuditLogsRoute: typeof AuditLogsRoute
   BellScheduleManagerRoute: typeof BellScheduleManagerRoute
   CalendarRoute: typeof CalendarRoute
   CampusSetupRoute: typeof CampusSetupRoute
+  ChatRoute: typeof ChatRoute
+  ClassAttendanceOverviewRoute: typeof ClassAttendanceOverviewRoute
   ClassTeacherAllocationRoute: typeof ClassTeacherAllocationRoute
   ClassesSectionsRoute: typeof ClassesSectionsRoute
   ClassroomUtilizationDashboardRoute: typeof ClassroomUtilizationDashboardRoute
+  CommNoticeBoardRoute: typeof CommNoticeBoardRoute
   CommunicationSettingsRoute: typeof CommunicationSettingsRoute
   ComponentsRoute: typeof ComponentsRoute
+  ConfigTypesRoute: typeof ConfigTypesRoute
   CurriculumMappingRoute: typeof CurriculumMappingRoute
   DashboardRoute: typeof DashboardRoute
   DateFormatRoute: typeof DateFormatRoute
   DepartmentsRoute: typeof DepartmentsRoute
   DocumentNumberingRoute: typeof DocumentNumberingRoute
   EmailTemplatesRoute: typeof EmailTemplatesRoute
+  EmisExportRoute: typeof EmisExportRoute
+  ExamConfigurationRoute: typeof ExamConfigurationRoute
   ExamCorrectionsRoute: typeof ExamCorrectionsRoute
-  ExamDetailRoute: typeof ExamDetailRoute
   ExamTimetableBuilderRoute: typeof ExamTimetableBuilderRoute
-  ExaminationsRoute: typeof ExaminationsRoute
-  FeeConfigurationRoute: typeof FeeConfigurationRoute
-  FeesRoute: typeof FeesRoute
+  ExamTypeMasterRoute: typeof ExamTypeMasterRoute
+  FeeCollectionRoute: typeof FeeCollectionRoute
+  FeeCollectionCollectRoute: typeof FeeCollectionCollectRoute
+  FeeDashboardRoute: typeof FeeDashboardRoute
+  FeePaymentDetailsRoute: typeof FeePaymentDetailsRoute
+  FeePaymentHistoryRoute: typeof FeePaymentHistoryRoute
+  FeeReportsRoute: typeof FeeReportsRoute
+  FeeStructureRoute: typeof FeeStructureRoute
   GovernanceDashboardRoute: typeof GovernanceDashboardRoute
-  GradingScaleRoute: typeof GradingScaleRoute
+  GradingScaleSetupRoute: typeof GradingScaleSetupRoute
+  HostelAttendanceRoute: typeof HostelAttendanceRoute
+  LateEarlyLogRoute: typeof LateEarlyLogRoute
   LearningOutcomesRoute: typeof LearningOutcomesRoute
   LessonPlansRoute: typeof LessonPlansRoute
   LoginRoute: typeof LoginRoute
+  MarksEntryRoute: typeof MarksEntryRoute
+  MarksVerificationRoute: typeof MarksVerificationRoute
   MenuRoute: typeof MenuRoute
   NotificationSettingsRoute: typeof NotificationSettingsRoute
+  PaperBlueprintRoute: typeof PaperBlueprintRoute
+  ParentAcademicPerformanceRoute: typeof ParentAcademicPerformanceRoute
+  ParentAccountsRoute: typeof ParentAccountsRoute
+  ParentAttendanceRoute: typeof ParentAttendanceRoute
+  ParentDashboardRoute: typeof ParentDashboardRoute
+  ParentFeesRoute: typeof ParentFeesRoute
+  ParentReportCardsRoute: typeof ParentReportCardsRoute
+  ParentSubjectsRoute: typeof ParentSubjectsRoute
+  ParentTimetableRoute: typeof ParentTimetableRoute
+  PeriodAttendanceRoute: typeof PeriodAttendanceRoute
   PeriodStructureSetupRoute: typeof PeriodStructureSetupRoute
+  ProfileRoute: typeof ProfileRoute
   PromotionRulesRoute: typeof PromotionRulesRoute
+  QuestionBankRoute: typeof QuestionBankRoute
+  QuestionBankAddRoute: typeof QuestionBankAddRoute
+  QuestionBankEditRoute: typeof QuestionBankEditRoute
+  ReportCardGeneratorRoute: typeof ReportCardGeneratorRoute
   ReportConfigRoute: typeof ReportConfigRoute
   ReportConfigEditRoute: typeof ReportConfigEditRoute
   ReportViewerRoute: typeof ReportViewerRoute
+  ReportingStructureRoute: typeof ReportingStructureRoute
   ReportsRoute: typeof ReportsRoute
   ReportsClassicRoute: typeof ReportsClassicRoute
+  ResultProcessingRoute: typeof ResultProcessingRoute
+  ResultPublishRoute: typeof ResultPublishRoute
   RoleMenuRoute: typeof RoleMenuRoute
   RolePermissionsRoute: typeof RolePermissionsRoute
   RolesRoute: typeof RolesRoute
   SchoolCalendarRoute: typeof SchoolCalendarRoute
   SchoolsRoute: typeof SchoolsRoute
+  SessionExpiredRoute: typeof SessionExpiredRoute
   SettingsRoute: typeof SettingsRoute
   SetupRoute: typeof SetupRoute
+  StaffAddRoute: typeof StaffAddRoute
+  StaffAttendanceRoute: typeof StaffAttendanceRoute
+  StaffDetailRoute: typeof StaffDetailRoute
+  StaffEditRoute: typeof StaffEditRoute
+  StaffLeaveRoute: typeof StaffLeaveRoute
   StaffSetupRoute: typeof StaffSetupRoute
   StudentAddRoute: typeof StudentAddRoute
+  StudentAttendanceCalendarRoute: typeof StudentAttendanceCalendarRoute
   StudentDetailRoute: typeof StudentDetailRoute
   StudentEditRoute: typeof StudentEditRoute
+  StudentFeeAssignmentRoute: typeof StudentFeeAssignmentRoute
+  StudentFeeAssignmentAddRoute: typeof StudentFeeAssignmentAddRoute
+  StudentFeeDetailsRoute: typeof StudentFeeDetailsRoute
   StudentIdConfigRoute: typeof StudentIdConfigRoute
   StudentLifeDevelopmentRoute: typeof StudentLifeDevelopmentRoute
   StudentsRoute: typeof StudentsRoute
@@ -1051,14 +1780,29 @@ export interface RootRouteChildren {
   SubscriptionsRoute: typeof SubscriptionsRoute
   SubstituteTeacherManagementRoute: typeof SubstituteTeacherManagementRoute
   SubstituteTeacherPoolRoute: typeof SubstituteTeacherPoolRoute
+  SupportAssistantRoute: typeof SupportAssistantRoute
+  SupportCenterRoute: typeof SupportCenterRoute
   SyllabusTrackerRoute: typeof SyllabusTrackerRoute
   TeacherScheduleViewRoute: typeof TeacherScheduleViewRoute
   TeacherWorkloadRoute: typeof TeacherWorkloadRoute
   TenantFormRoute: typeof TenantFormRoute
+  TenantMenuRoute: typeof TenantMenuRoute
   TenantRoleMenuRoute: typeof TenantRoleMenuRoute
   TenantsRoute: typeof TenantsRoute
   TimetableRoute: typeof TimetableRoute
+  TimetableApprovalWorkflowRoute: typeof TimetableApprovalWorkflowRoute
+  TimetableAuditLogRoute: typeof TimetableAuditLogRoute
+  TimetableChangeRequestRoute: typeof TimetableChangeRequestRoute
   TimetableConfigRoute: typeof TimetableConfigRoute
+  TransportAllocationsRoute: typeof TransportAllocationsRoute
+  TransportAttendanceRoute: typeof TransportAttendanceRoute
+  TransportLiveRoute: typeof TransportLiveRoute
+  TransportRouteAssignmentsRoute: typeof TransportRouteAssignmentsRoute
+  TransportRoutesRoute: typeof TransportRoutesRoute
+  TransportStaffRoute: typeof TransportStaffRoute
+  TransportVehiclesRoute: typeof TransportVehiclesRoute
+  TransportZonesRoute: typeof TransportZonesRoute
+  UserManualRoute: typeof UserManualRoute
   YearRolloverRoute: typeof YearRolloverRoute
 }
 
@@ -1071,11 +1815,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof YearRolloverRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/user-manual': {
+      id: '/user-manual'
+      path: '/user-manual'
+      fullPath: '/user-manual'
+      preLoaderRoute: typeof UserManualRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-zones': {
+      id: '/transport-zones'
+      path: '/transport-zones'
+      fullPath: '/transport-zones'
+      preLoaderRoute: typeof TransportZonesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-vehicles': {
+      id: '/transport-vehicles'
+      path: '/transport-vehicles'
+      fullPath: '/transport-vehicles'
+      preLoaderRoute: typeof TransportVehiclesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-staff': {
+      id: '/transport-staff'
+      path: '/transport-staff'
+      fullPath: '/transport-staff'
+      preLoaderRoute: typeof TransportStaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-routes': {
+      id: '/transport-routes'
+      path: '/transport-routes'
+      fullPath: '/transport-routes'
+      preLoaderRoute: typeof TransportRoutesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-route-assignments': {
+      id: '/transport-route-assignments'
+      path: '/transport-route-assignments'
+      fullPath: '/transport-route-assignments'
+      preLoaderRoute: typeof TransportRouteAssignmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-live': {
+      id: '/transport-live'
+      path: '/transport-live'
+      fullPath: '/transport-live'
+      preLoaderRoute: typeof TransportLiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-attendance': {
+      id: '/transport-attendance'
+      path: '/transport-attendance'
+      fullPath: '/transport-attendance'
+      preLoaderRoute: typeof TransportAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transport-allocations': {
+      id: '/transport-allocations'
+      path: '/transport-allocations'
+      fullPath: '/transport-allocations'
+      preLoaderRoute: typeof TransportAllocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/timetable-config': {
       id: '/timetable-config'
       path: '/timetable-config'
       fullPath: '/timetable-config'
       preLoaderRoute: typeof TimetableConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timetable-change-request': {
+      id: '/timetable-change-request'
+      path: '/timetable-change-request'
+      fullPath: '/timetable-change-request'
+      preLoaderRoute: typeof TimetableChangeRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timetable-audit-log': {
+      id: '/timetable-audit-log'
+      path: '/timetable-audit-log'
+      fullPath: '/timetable-audit-log'
+      preLoaderRoute: typeof TimetableAuditLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timetable-approval-workflow': {
+      id: '/timetable-approval-workflow'
+      path: '/timetable-approval-workflow'
+      fullPath: '/timetable-approval-workflow'
+      preLoaderRoute: typeof TimetableApprovalWorkflowRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/timetable': {
@@ -1097,6 +1925,13 @@ declare module '@tanstack/react-router' {
       path: '/tenant-role-menu'
       fullPath: '/tenant-role-menu'
       preLoaderRoute: typeof TenantRoleMenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tenant-menu': {
+      id: '/tenant-menu'
+      path: '/tenant-menu'
+      fullPath: '/tenant-menu'
+      preLoaderRoute: typeof TenantMenuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tenant-form': {
@@ -1125,6 +1960,20 @@ declare module '@tanstack/react-router' {
       path: '/syllabus-tracker'
       fullPath: '/syllabus-tracker'
       preLoaderRoute: typeof SyllabusTrackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support-center': {
+      id: '/support-center'
+      path: '/support-center'
+      fullPath: '/support-center'
+      preLoaderRoute: typeof SupportCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support-assistant': {
+      id: '/support-assistant'
+      path: '/support-assistant'
+      fullPath: '/support-assistant'
+      preLoaderRoute: typeof SupportAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/substitute-teacher-pool': {
@@ -1190,6 +2039,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentIdConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student-fee-details': {
+      id: '/student-fee-details'
+      path: '/student-fee-details'
+      fullPath: '/student-fee-details'
+      preLoaderRoute: typeof StudentFeeDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student-fee-assignment-add': {
+      id: '/student-fee-assignment-add'
+      path: '/student-fee-assignment-add'
+      fullPath: '/student-fee-assignment-add'
+      preLoaderRoute: typeof StudentFeeAssignmentAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student-fee-assignment': {
+      id: '/student-fee-assignment'
+      path: '/student-fee-assignment'
+      fullPath: '/student-fee-assignment'
+      preLoaderRoute: typeof StudentFeeAssignmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student-edit': {
       id: '/student-edit'
       path: '/student-edit'
@@ -1202,6 +2072,13 @@ declare module '@tanstack/react-router' {
       path: '/student-detail'
       fullPath: '/student-detail'
       preLoaderRoute: typeof StudentDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student-attendance-calendar': {
+      id: '/student-attendance-calendar'
+      path: '/student-attendance-calendar'
+      fullPath: '/student-attendance-calendar'
+      preLoaderRoute: typeof StudentAttendanceCalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/student-add': {
@@ -1218,6 +2095,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff-leave': {
+      id: '/staff-leave'
+      path: '/staff-leave'
+      fullPath: '/staff-leave'
+      preLoaderRoute: typeof StaffLeaveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-edit': {
+      id: '/staff-edit'
+      path: '/staff-edit'
+      fullPath: '/staff-edit'
+      preLoaderRoute: typeof StaffEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-detail': {
+      id: '/staff-detail'
+      path: '/staff-detail'
+      fullPath: '/staff-detail'
+      preLoaderRoute: typeof StaffDetailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-attendance': {
+      id: '/staff-attendance'
+      path: '/staff-attendance'
+      fullPath: '/staff-attendance'
+      preLoaderRoute: typeof StaffAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff-add': {
+      id: '/staff-add'
+      path: '/staff-add'
+      fullPath: '/staff-add'
+      preLoaderRoute: typeof StaffAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/setup': {
       id: '/setup'
       path: '/setup'
@@ -1230,6 +2142,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/session-expired': {
+      id: '/session-expired'
+      path: '/session-expired'
+      fullPath: '/session-expired'
+      preLoaderRoute: typeof SessionExpiredRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schools': {
@@ -1267,6 +2186,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoleMenuRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/result-publish': {
+      id: '/result-publish'
+      path: '/result-publish'
+      fullPath: '/result-publish'
+      preLoaderRoute: typeof ResultPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/result-processing': {
+      id: '/result-processing'
+      path: '/result-processing'
+      fullPath: '/result-processing'
+      preLoaderRoute: typeof ResultProcessingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reports-classic': {
       id: '/reports-classic'
       path: '/reports-classic'
@@ -1279,6 +2212,13 @@ declare module '@tanstack/react-router' {
       path: '/reports'
       fullPath: '/reports'
       preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reporting-structure': {
+      id: '/reporting-structure'
+      path: '/reporting-structure'
+      fullPath: '/reporting-structure'
+      preLoaderRoute: typeof ReportingStructureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report-viewer': {
@@ -1302,6 +2242,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report-card-generator': {
+      id: '/report-card-generator'
+      path: '/report-card-generator'
+      fullPath: '/report-card-generator'
+      preLoaderRoute: typeof ReportCardGeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/question-bank-edit': {
+      id: '/question-bank-edit'
+      path: '/question-bank-edit'
+      fullPath: '/question-bank-edit'
+      preLoaderRoute: typeof QuestionBankEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/question-bank-add': {
+      id: '/question-bank-add'
+      path: '/question-bank-add'
+      fullPath: '/question-bank-add'
+      preLoaderRoute: typeof QuestionBankAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/question-bank': {
+      id: '/question-bank'
+      path: '/question-bank'
+      fullPath: '/question-bank'
+      preLoaderRoute: typeof QuestionBankRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/promotion-rules': {
       id: '/promotion-rules'
       path: '/promotion-rules'
@@ -1309,11 +2277,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PromotionRulesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/period-structure-setup': {
       id: '/period-structure-setup'
       path: '/period-structure-setup'
       fullPath: '/period-structure-setup'
       preLoaderRoute: typeof PeriodStructureSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/period-attendance': {
+      id: '/period-attendance'
+      path: '/period-attendance'
+      fullPath: '/period-attendance'
+      preLoaderRoute: typeof PeriodAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-timetable': {
+      id: '/parent-timetable'
+      path: '/parent-timetable'
+      fullPath: '/parent-timetable'
+      preLoaderRoute: typeof ParentTimetableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-subjects': {
+      id: '/parent-subjects'
+      path: '/parent-subjects'
+      fullPath: '/parent-subjects'
+      preLoaderRoute: typeof ParentSubjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-report-cards': {
+      id: '/parent-report-cards'
+      path: '/parent-report-cards'
+      fullPath: '/parent-report-cards'
+      preLoaderRoute: typeof ParentReportCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-fees': {
+      id: '/parent-fees'
+      path: '/parent-fees'
+      fullPath: '/parent-fees'
+      preLoaderRoute: typeof ParentFeesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-dashboard': {
+      id: '/parent-dashboard'
+      path: '/parent-dashboard'
+      fullPath: '/parent-dashboard'
+      preLoaderRoute: typeof ParentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-attendance': {
+      id: '/parent-attendance'
+      path: '/parent-attendance'
+      fullPath: '/parent-attendance'
+      preLoaderRoute: typeof ParentAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-accounts': {
+      id: '/parent-accounts'
+      path: '/parent-accounts'
+      fullPath: '/parent-accounts'
+      preLoaderRoute: typeof ParentAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-academic-performance': {
+      id: '/parent-academic-performance'
+      path: '/parent-academic-performance'
+      fullPath: '/parent-academic-performance'
+      preLoaderRoute: typeof ParentAcademicPerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/paper-blueprint': {
+      id: '/paper-blueprint'
+      path: '/paper-blueprint'
+      fullPath: '/paper-blueprint'
+      preLoaderRoute: typeof PaperBlueprintRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notification-settings': {
@@ -1328,6 +2373,20 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/menu'
       preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marks-verification': {
+      id: '/marks-verification'
+      path: '/marks-verification'
+      fullPath: '/marks-verification'
+      preLoaderRoute: typeof MarksVerificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marks-entry': {
+      id: '/marks-entry'
+      path: '/marks-entry'
+      fullPath: '/marks-entry'
+      preLoaderRoute: typeof MarksEntryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1351,11 +2410,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearningOutcomesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/grading-scale': {
-      id: '/grading-scale'
-      path: '/grading-scale'
-      fullPath: '/grading-scale'
-      preLoaderRoute: typeof GradingScaleRouteImport
+    '/late-early-log': {
+      id: '/late-early-log'
+      path: '/late-early-log'
+      fullPath: '/late-early-log'
+      preLoaderRoute: typeof LateEarlyLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hostel-attendance': {
+      id: '/hostel-attendance'
+      path: '/hostel-attendance'
+      fullPath: '/hostel-attendance'
+      preLoaderRoute: typeof HostelAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grading-scale-setup': {
+      id: '/grading-scale-setup'
+      path: '/grading-scale-setup'
+      fullPath: '/grading-scale-setup'
+      preLoaderRoute: typeof GradingScaleSetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/governance-dashboard': {
@@ -1365,25 +2438,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GovernanceDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/fees': {
-      id: '/fees'
-      path: '/fees'
-      fullPath: '/fees'
-      preLoaderRoute: typeof FeesRouteImport
+    '/fee-structure': {
+      id: '/fee-structure'
+      path: '/fee-structure'
+      fullPath: '/fee-structure'
+      preLoaderRoute: typeof FeeStructureRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/fee-configuration': {
-      id: '/fee-configuration'
-      path: '/fee-configuration'
-      fullPath: '/fee-configuration'
-      preLoaderRoute: typeof FeeConfigurationRouteImport
+    '/fee-reports': {
+      id: '/fee-reports'
+      path: '/fee-reports'
+      fullPath: '/fee-reports'
+      preLoaderRoute: typeof FeeReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/examinations': {
-      id: '/examinations'
-      path: '/examinations'
-      fullPath: '/examinations'
-      preLoaderRoute: typeof ExaminationsRouteImport
+    '/fee-payment-history': {
+      id: '/fee-payment-history'
+      path: '/fee-payment-history'
+      fullPath: '/fee-payment-history'
+      preLoaderRoute: typeof FeePaymentHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fee-payment-details': {
+      id: '/fee-payment-details'
+      path: '/fee-payment-details'
+      fullPath: '/fee-payment-details'
+      preLoaderRoute: typeof FeePaymentDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fee-dashboard': {
+      id: '/fee-dashboard'
+      path: '/fee-dashboard'
+      fullPath: '/fee-dashboard'
+      preLoaderRoute: typeof FeeDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fee-collection-collect': {
+      id: '/fee-collection-collect'
+      path: '/fee-collection-collect'
+      fullPath: '/fee-collection-collect'
+      preLoaderRoute: typeof FeeCollectionCollectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fee-collection': {
+      id: '/fee-collection'
+      path: '/fee-collection'
+      fullPath: '/fee-collection'
+      preLoaderRoute: typeof FeeCollectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exam-type-master': {
+      id: '/exam-type-master'
+      path: '/exam-type-master'
+      fullPath: '/exam-type-master'
+      preLoaderRoute: typeof ExamTypeMasterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exam-timetable-builder': {
@@ -1393,18 +2501,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExamTimetableBuilderRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/exam-detail': {
-      id: '/exam-detail'
-      path: '/exam-detail'
-      fullPath: '/exam-detail'
-      preLoaderRoute: typeof ExamDetailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/exam-corrections': {
       id: '/exam-corrections'
       path: '/exam-corrections'
       fullPath: '/exam-corrections'
       preLoaderRoute: typeof ExamCorrectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exam-configuration': {
+      id: '/exam-configuration'
+      path: '/exam-configuration'
+      fullPath: '/exam-configuration'
+      preLoaderRoute: typeof ExamConfigurationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emis-export': {
+      id: '/emis-export'
+      path: '/emis-export'
+      fullPath: '/emis-export'
+      preLoaderRoute: typeof EmisExportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email-templates': {
@@ -1449,6 +2564,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CurriculumMappingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/config-types': {
+      id: '/config-types'
+      path: '/config-types'
+      fullPath: '/config-types'
+      preLoaderRoute: typeof ConfigTypesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components': {
       id: '/components'
       path: '/components'
@@ -1461,6 +2583,13 @@ declare module '@tanstack/react-router' {
       path: '/communication-settings'
       fullPath: '/communication-settings'
       preLoaderRoute: typeof CommunicationSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comm-notice-board': {
+      id: '/comm-notice-board'
+      path: '/comm-notice-board'
+      fullPath: '/comm-notice-board'
+      preLoaderRoute: typeof CommNoticeBoardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/classroom-utilization-dashboard': {
@@ -1482,6 +2611,20 @@ declare module '@tanstack/react-router' {
       path: '/class-teacher-allocation'
       fullPath: '/class-teacher-allocation'
       preLoaderRoute: typeof ClassTeacherAllocationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/class-attendance-overview': {
+      id: '/class-attendance-overview'
+      path: '/class-attendance-overview'
+      fullPath: '/class-attendance-overview'
+      preLoaderRoute: typeof ClassAttendanceOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/campus-setup': {
@@ -1524,6 +2667,13 @@ declare module '@tanstack/react-router' {
       path: '/attendance-policy'
       fullPath: '/attendance-policy'
       preLoaderRoute: typeof AttendancePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/attendance-analytics': {
+      id: '/attendance-analytics'
+      path: '/attendance-analytics'
+      fullPath: '/attendance-analytics'
+      preLoaderRoute: typeof AttendanceAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/attendance': {
@@ -1596,13 +2746,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcademicHealthDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/academic-coordinator-dashboard': {
-      id: '/academic-coordinator-dashboard'
-      path: '/academic-coordinator-dashboard'
-      fullPath: '/academic-coordinator-dashboard'
-      preLoaderRoute: typeof AcademicCoordinatorDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/academic-calendar': {
       id: '/academic-calendar'
       path: '/academic-calendar'
@@ -1623,7 +2766,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AcademicCalendarRoute: AcademicCalendarRoute,
-  AcademicCoordinatorDashboardRoute: AcademicCoordinatorDashboardRoute,
   AcademicHealthDashboardRoute: AcademicHealthDashboardRoute,
   AcademicPolicySettingsRoute: AcademicPolicySettingsRoute,
   AcademicsRoute: AcademicsRoute,
@@ -1634,54 +2776,97 @@ const rootRouteChildren: RootRouteChildren = {
   AdmissionsTestsRoute: AdmissionsTestsRoute,
   AkiraUserListRoute: AkiraUserListRoute,
   AttendanceRoute: AttendanceRoute,
+  AttendanceAnalyticsRoute: AttendanceAnalyticsRoute,
   AttendancePolicyRoute: AttendancePolicyRoute,
   AttendanceRequestsRoute: AttendanceRequestsRoute,
   AuditLogsRoute: AuditLogsRoute,
   BellScheduleManagerRoute: BellScheduleManagerRoute,
   CalendarRoute: CalendarRoute,
   CampusSetupRoute: CampusSetupRoute,
+  ChatRoute: ChatRoute,
+  ClassAttendanceOverviewRoute: ClassAttendanceOverviewRoute,
   ClassTeacherAllocationRoute: ClassTeacherAllocationRoute,
   ClassesSectionsRoute: ClassesSectionsRoute,
   ClassroomUtilizationDashboardRoute: ClassroomUtilizationDashboardRoute,
+  CommNoticeBoardRoute: CommNoticeBoardRoute,
   CommunicationSettingsRoute: CommunicationSettingsRoute,
   ComponentsRoute: ComponentsRoute,
+  ConfigTypesRoute: ConfigTypesRoute,
   CurriculumMappingRoute: CurriculumMappingRoute,
   DashboardRoute: DashboardRoute,
   DateFormatRoute: DateFormatRoute,
   DepartmentsRoute: DepartmentsRoute,
   DocumentNumberingRoute: DocumentNumberingRoute,
   EmailTemplatesRoute: EmailTemplatesRoute,
+  EmisExportRoute: EmisExportRoute,
+  ExamConfigurationRoute: ExamConfigurationRoute,
   ExamCorrectionsRoute: ExamCorrectionsRoute,
-  ExamDetailRoute: ExamDetailRoute,
   ExamTimetableBuilderRoute: ExamTimetableBuilderRoute,
-  ExaminationsRoute: ExaminationsRoute,
-  FeeConfigurationRoute: FeeConfigurationRoute,
-  FeesRoute: FeesRoute,
+  ExamTypeMasterRoute: ExamTypeMasterRoute,
+  FeeCollectionRoute: FeeCollectionRoute,
+  FeeCollectionCollectRoute: FeeCollectionCollectRoute,
+  FeeDashboardRoute: FeeDashboardRoute,
+  FeePaymentDetailsRoute: FeePaymentDetailsRoute,
+  FeePaymentHistoryRoute: FeePaymentHistoryRoute,
+  FeeReportsRoute: FeeReportsRoute,
+  FeeStructureRoute: FeeStructureRoute,
   GovernanceDashboardRoute: GovernanceDashboardRoute,
-  GradingScaleRoute: GradingScaleRoute,
+  GradingScaleSetupRoute: GradingScaleSetupRoute,
+  HostelAttendanceRoute: HostelAttendanceRoute,
+  LateEarlyLogRoute: LateEarlyLogRoute,
   LearningOutcomesRoute: LearningOutcomesRoute,
   LessonPlansRoute: LessonPlansRoute,
   LoginRoute: LoginRoute,
+  MarksEntryRoute: MarksEntryRoute,
+  MarksVerificationRoute: MarksVerificationRoute,
   MenuRoute: MenuRoute,
   NotificationSettingsRoute: NotificationSettingsRoute,
+  PaperBlueprintRoute: PaperBlueprintRoute,
+  ParentAcademicPerformanceRoute: ParentAcademicPerformanceRoute,
+  ParentAccountsRoute: ParentAccountsRoute,
+  ParentAttendanceRoute: ParentAttendanceRoute,
+  ParentDashboardRoute: ParentDashboardRoute,
+  ParentFeesRoute: ParentFeesRoute,
+  ParentReportCardsRoute: ParentReportCardsRoute,
+  ParentSubjectsRoute: ParentSubjectsRoute,
+  ParentTimetableRoute: ParentTimetableRoute,
+  PeriodAttendanceRoute: PeriodAttendanceRoute,
   PeriodStructureSetupRoute: PeriodStructureSetupRoute,
+  ProfileRoute: ProfileRoute,
   PromotionRulesRoute: PromotionRulesRoute,
+  QuestionBankRoute: QuestionBankRoute,
+  QuestionBankAddRoute: QuestionBankAddRoute,
+  QuestionBankEditRoute: QuestionBankEditRoute,
+  ReportCardGeneratorRoute: ReportCardGeneratorRoute,
   ReportConfigRoute: ReportConfigRoute,
   ReportConfigEditRoute: ReportConfigEditRoute,
   ReportViewerRoute: ReportViewerRoute,
+  ReportingStructureRoute: ReportingStructureRoute,
   ReportsRoute: ReportsRoute,
   ReportsClassicRoute: ReportsClassicRoute,
+  ResultProcessingRoute: ResultProcessingRoute,
+  ResultPublishRoute: ResultPublishRoute,
   RoleMenuRoute: RoleMenuRoute,
   RolePermissionsRoute: RolePermissionsRoute,
   RolesRoute: RolesRoute,
   SchoolCalendarRoute: SchoolCalendarRoute,
   SchoolsRoute: SchoolsRoute,
+  SessionExpiredRoute: SessionExpiredRoute,
   SettingsRoute: SettingsRoute,
   SetupRoute: SetupRoute,
+  StaffAddRoute: StaffAddRoute,
+  StaffAttendanceRoute: StaffAttendanceRoute,
+  StaffDetailRoute: StaffDetailRoute,
+  StaffEditRoute: StaffEditRoute,
+  StaffLeaveRoute: StaffLeaveRoute,
   StaffSetupRoute: StaffSetupRoute,
   StudentAddRoute: StudentAddRoute,
+  StudentAttendanceCalendarRoute: StudentAttendanceCalendarRoute,
   StudentDetailRoute: StudentDetailRoute,
   StudentEditRoute: StudentEditRoute,
+  StudentFeeAssignmentRoute: StudentFeeAssignmentRoute,
+  StudentFeeAssignmentAddRoute: StudentFeeAssignmentAddRoute,
+  StudentFeeDetailsRoute: StudentFeeDetailsRoute,
   StudentIdConfigRoute: StudentIdConfigRoute,
   StudentLifeDevelopmentRoute: StudentLifeDevelopmentRoute,
   StudentsRoute: StudentsRoute,
@@ -1691,14 +2876,29 @@ const rootRouteChildren: RootRouteChildren = {
   SubscriptionsRoute: SubscriptionsRoute,
   SubstituteTeacherManagementRoute: SubstituteTeacherManagementRoute,
   SubstituteTeacherPoolRoute: SubstituteTeacherPoolRoute,
+  SupportAssistantRoute: SupportAssistantRoute,
+  SupportCenterRoute: SupportCenterRoute,
   SyllabusTrackerRoute: SyllabusTrackerRoute,
   TeacherScheduleViewRoute: TeacherScheduleViewRoute,
   TeacherWorkloadRoute: TeacherWorkloadRoute,
   TenantFormRoute: TenantFormRoute,
+  TenantMenuRoute: TenantMenuRoute,
   TenantRoleMenuRoute: TenantRoleMenuRoute,
   TenantsRoute: TenantsRoute,
   TimetableRoute: TimetableRoute,
+  TimetableApprovalWorkflowRoute: TimetableApprovalWorkflowRoute,
+  TimetableAuditLogRoute: TimetableAuditLogRoute,
+  TimetableChangeRequestRoute: TimetableChangeRequestRoute,
   TimetableConfigRoute: TimetableConfigRoute,
+  TransportAllocationsRoute: TransportAllocationsRoute,
+  TransportAttendanceRoute: TransportAttendanceRoute,
+  TransportLiveRoute: TransportLiveRoute,
+  TransportRouteAssignmentsRoute: TransportRouteAssignmentsRoute,
+  TransportRoutesRoute: TransportRoutesRoute,
+  TransportStaffRoute: TransportStaffRoute,
+  TransportVehiclesRoute: TransportVehiclesRoute,
+  TransportZonesRoute: TransportZonesRoute,
+  UserManualRoute: UserManualRoute,
   YearRolloverRoute: YearRolloverRoute,
 }
 export const routeTree = rootRouteImport

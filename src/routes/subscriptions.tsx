@@ -319,6 +319,7 @@ function SubscriptionsPage() {
                         {isEditing ? (
                           <div className="flex items-center gap-1">
                             <Button
+                              variant="success"
                               size="icon"
                               className="h-8 w-8 rounded-md"
                               onClick={savePlan}
@@ -340,7 +341,7 @@ function SubscriptionsPage() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 rounded-md"
+                            className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                             onClick={() => openEditPlan(p)}
                           >
                             <Pencil className="h-3.5 w-3.5" />

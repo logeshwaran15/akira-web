@@ -125,7 +125,7 @@ function SetupPage() {
               <div className="text-xs text-muted-foreground">{current.group} · Step {currentIndex + 1} of {SECTIONS.length}</div>
             </div>
             <div className="ml-auto hidden gap-2 sm:flex">
-              <Button variant="outline" className="rounded-md" onClick={markDone}>
+              <Button variant="success" className="rounded-md" onClick={markDone}>
                 <Save className="mr-2 h-4 w-4" /> Save
               </Button>
               <Button className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90" onClick={gotoNext}>
@@ -257,8 +257,8 @@ function MiniTable({ head, rows }: { head: string[]; rows: (string | ReactNode)[
 function FooterActions({ onSave, onNext }: { onSave: () => void; onNext: () => void }) {
   return (
     <div className="mt-6 flex flex-wrap justify-end gap-2">
-      <Button variant="outline" className="rounded-md">Cancel</Button>
-      <Button variant="outline" className="rounded-md" onClick={onSave}>
+      <Button variant="outline" className="rounded-md border-destructive text-destructive hover:bg-background hover:text-destructive">Cancel</Button>
+      <Button variant="success" className="rounded-md" onClick={onSave}>
         <Save className="mr-2 h-4 w-4" /> Save changes
       </Button>
       <Button className="rounded-md bg-primary text-primary-foreground hover:bg-primary/90" onClick={onNext}>

@@ -467,7 +467,7 @@ function CurriculumMappingPage() {
                                   <span className="text-sm font-medium">{u.unitName}</span>
                                   {u.estimatedPeriods != null && <span className="text-xs text-muted-foreground">({u.estimatedPeriods} periods)</span>}
                                 </button>
-                                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md" onClick={() => openEditUnit(c.curriculumKey, u)}>
+                                <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEditUnit(c.curriculumKey, u)}>
                                   <Pencil className="h-3 w-3" />
                                 </Button>
                                 <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md text-destructive" onClick={() => setDeleteUnitTarget({ curriculumKey: c.curriculumKey, unit: u })}>
@@ -500,7 +500,7 @@ function CurriculumMappingPage() {
                                                 <ChevronRight className={cn("h-3 w-3 shrink-0 text-muted-foreground transition-transform", chapterOpen && "rotate-90")} />
                                                 <span className="text-xs font-medium">{ch.chapterName}</span>
                                               </button>
-                                              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-md" onClick={() => openEditChapter(u.curriculumUnitKey, ch)}>
+                                              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEditChapter(u.curriculumUnitKey, ch)}>
                                                 <Pencil className="h-2.5 w-2.5" />
                                               </Button>
                                               <Button variant="ghost" size="icon" className="h-6 w-6 rounded-md text-destructive" onClick={() => setDeleteChapterTarget({ curriculumUnitKey: u.curriculumUnitKey, chapter: ch })}>
@@ -526,7 +526,7 @@ function CurriculumMappingPage() {
                                                       <li key={o.curriculumLearningOutcomeKey} className="flex items-center justify-between gap-2 rounded-md bg-card px-2.5 py-1.5 text-xs">
                                                         <span>{o.outcomeText}</span>
                                                         <div className="flex shrink-0 items-center gap-1">
-                                                          <Button variant="ghost" size="icon" className="h-6 w-6 rounded-md" onClick={() => openEditOutcome(ch.curriculumChapterKey, o)}>
+                                                          <Button variant="ghost" size="icon" className="h-6 w-6 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEditOutcome(ch.curriculumChapterKey, o)}>
                                                             <Pencil className="h-2.5 w-2.5" />
                                                           </Button>
                                                           <Button variant="ghost" size="icon" className="h-6 w-6 rounded-md text-destructive" onClick={() => setDeleteOutcomeTarget({ curriculumChapterKey: ch.curriculumChapterKey, outcome: o })}>

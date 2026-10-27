@@ -237,9 +237,9 @@ function ComponentsPage() {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" className="border-destructive text-destructive hover:bg-background hover:text-destructive">Cancel</Button>
               </DialogClose>
-              <Button>Save</Button>
+              <Button variant="success">Save</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

@@ -6,6 +6,7 @@ import { InfoAlert } from "@/components/erp/InfoAlert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -22,7 +23,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { CalendarCheck, CheckCheck, Lock, Save, Users2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  CalendarCheck,
+  Check,
+  CheckCheck,
+  Lock,
+  MessageSquare,
+  MoreVertical,
+  Send,
+  Users2,
+  X,
+} from "lucide-react";
 import { apiFetch, API_BASE_URL } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -65,6 +84,7 @@ type DailySummaryRow = {
   absentCount: number;
 };
 
+// Kept intact — also used to populate the correction dialog's status list.
 const STATUS_OPTIONS = [
   "PRESENT",
   "ABSENT",
@@ -76,6 +96,12 @@ const STATUS_OPTIONS = [
   "HOLIDAY",
   "SUSPENDED",
 ];
+// The two one-tap actions shown directly on every row.
+const PRIMARY_STATUS_OPTIONS = ["PRESENT", "ABSENT"];
+// Everything else lives behind the row's "more" menu.
+const SECONDARY_STATUS_OPTIONS = STATUS_OPTIONS.filter(
+  (s) => !PRIMARY_STATUS_OPTIONS.includes(s),
+);
 const LEAVE_LINKED_STATUSES = ["ON_DUTY", "MEDICAL_LEAVE", "APPROVED_LEAVE"];
 const STATUS_STYLES: Record<string, string> = {
   PRESENT: "bg-success/15 text-success",
@@ -105,12 +131,18 @@ function AttendancePage() {
   const [rows, setRows] = useState<RegisterRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const [dailySummary, setDailySummary] = useState<DailySummaryRow[]>([]);
 
   const [correctionTarget, setCorrectionTarget] = useState<RegisterRow | null>(null);
   const [correctionDraft, setCorrectionDraft] = useState({ requestedStatus: "", reason: "" });
   const [correctionSaving, setCorrectionSaving] = useState(false);
+
+  const [remarksTarget, setRemarksTarget] = useState<string | null>(null);
+  const [remarksDraft, setRemarksDraft] = useState("");
+
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const isPastDate = date < todayIso();
 
@@ -147,6 +179,7 @@ function AttendancePage() {
   }, [yearFilter, date]);
 
   const loadRegister = () => {
+    setSubmitted(false);
     if (!sectionFilter || !yearFilter || !date) return;
     setLoading(true);
     apiFetch(
@@ -159,7 +192,12 @@ function AttendancePage() {
 
   useEffect(loadRegister, [sectionFilter, yearFilter, date]);
 
-  const isLocked = (r: RegisterRow) => isPastDate && !!r.studentAttendanceKey;
+  // Locking must survive a page reload: `submitted` is only in-memory session
+  // state, but `studentAttendanceKey` reflects a real persisted record, so a
+  // row that was already submitted (today or any past date) stays locked --
+  // and keeps its colored status badge -- even after a refresh.
+  const isLocked = (r: RegisterRow) => submitted || !!r.studentAttendanceKey;
+  const allMarked = rows.length > 0 && rows.every((r) => isLocked(r) || !!r.status);
 
   const updateRow = (studentKey: string, patch: Partial<RegisterRow>) => {
     setRows((rs) => rs.map((r) => (r.studentKey === studentKey ? { ...r, ...patch } : r)));
@@ -169,8 +207,12 @@ function AttendancePage() {
     setRows((rs) => rs.map((r) => (isLocked(r) ? r : { ...r, status: "PRESENT" })));
   };
 
-  const save = async () => {
+  const submit = async () => {
     if (!sectionFilter || !yearFilter) return;
+    if (!allMarked) {
+      toast.error("Every student must have a status before you can submit.");
+      return;
+    }
     setSaving(true);
     try {
       const entries = rows
@@ -182,10 +224,6 @@ function AttendancePage() {
             r.status && LEAVE_LINKED_STATUSES.includes(r.status) ? r.leaveTypeKey || null : null,
           remarks: r.remarks || null,
         }));
-      if (entries.length === 0) {
-        toast.error("Mark at least one editable student before saving.");
-        return;
-      }
       const res: { studentsMarked: number; requiresCorrectionCount: number } = await apiFetch(
         "/api/StudentAttendance/mark",
         {
@@ -198,16 +236,30 @@ function AttendancePage() {
           }),
         },
       );
-      toast.success(`Attendance saved for ${res.studentsMarked} student(s)`);
-      loadRegister();
+      toast.success(`Attendance submitted for ${res.studentsMarked} student(s)`);
+      setSubmitted(true);
+      setShowConfirm(false);
+      loadRegisterKeepSubmitted();
       apiFetch(`/api/StudentAttendance/daily-summary?academicYearId=${yearFilter}&date=${date}`)
         .then((d: DailySummaryRow[]) => setDailySummary(d))
         .catch(() => {});
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save attendance");
+      toast.error(err instanceof Error ? err.message : "Failed to submit attendance");
     } finally {
       setSaving(false);
     }
+  };
+
+  // Re-fetches the register after a successful submit without clearing the
+  // just-set `submitted` lock (loadRegister() resets it as a side effect of
+  // normal filter/date changes).
+  const loadRegisterKeepSubmitted = () => {
+    if (!sectionFilter || !yearFilter || !date) return;
+    apiFetch(
+      `/api/StudentAttendance/register?sectionId=${sectionFilter}&academicYearId=${yearFilter}&date=${date}`,
+    )
+      .then((d: RegisterRow[]) => setRows(d))
+      .catch(() => {});
   };
 
   const openCorrection = (r: RegisterRow) => {
@@ -240,11 +292,22 @@ function AttendancePage() {
     }
   };
 
+  const openRemarks = (r: RegisterRow) => {
+    setRemarksTarget(r.studentKey);
+    setRemarksDraft(r.remarks ?? "");
+  };
+
+  const saveRemarks = () => {
+    if (remarksTarget) updateRow(remarksTarget, { remarks: remarksDraft || null });
+    setRemarksTarget(null);
+  };
+
   const holiday = rows.find((r) => r.holidayName)?.holidayName;
-  const totalSections = dailySummary.length;
-  const markedSections = dailySummary.filter(
-    (s) => s.totalStudents > 0 && s.markedCount === s.totalStudents,
-  ).length;
+
+  const presentCount = rows.filter((r) => r.status === "PRESENT").length;
+  const absentCount = rows.filter((r) => r.status === "ABSENT").length;
+  const unmarkedCount = rows.filter((r) => !r.status).length;
+  const totalCount = rows.length;
 
   return (
     <div>
@@ -252,12 +315,11 @@ function AttendancePage() {
         title="Attendance"
         breadcrumbs={[{ label: "Attendance" }]}
         actions={
-          <div className="flex items-center gap-2">
-            <Input
-              type="date"
-              className="h-10 w-40 rounded-md"
+          <div className="flex flex-wrap items-center gap-2">
+            <DatePicker
+              className="h-10 w-40"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={(v) => setDate(v)}
               max={todayIso()}
             />
             <Select value={yearFilter} onValueChange={setYearFilter}>
@@ -300,15 +362,46 @@ function AttendancePage() {
         }
       />
 
-      <div className="mb-5 flex items-center gap-3 rounded-lg border border-border bg-card p-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary">
-          <Users2 className="h-5 w-5" />
+      {sectionFilter && rows.length > 0 && (
+        <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="flex items-center gap-3 rounded-lg border border-success/20 bg-success/5 p-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
+              <Check className="h-4.5 w-4.5" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold leading-none">{presentCount}</div>
+              <div className="text-xs text-muted-foreground">Present</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 rounded-lg border border-destructive/20 bg-destructive/5 p-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive/15 text-destructive">
+              <X className="h-4.5 w-4.5" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold leading-none">{absentCount}</div>
+              <div className="text-xs text-muted-foreground">Absent</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/40 p-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted-foreground/15 text-muted-foreground">
+              <Users2 className="h-4.5 w-4.5" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold leading-none">{unmarkedCount}</div>
+              <div className="text-xs text-muted-foreground">Unmarked</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 rounded-lg border border-warning/30 bg-warning/10 p-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-warning/20 text-[oklch(0.45_0.12_65)]">
+              <CalendarCheck className="h-4.5 w-4.5" />
+            </div>
+            <div>
+              <div className="text-lg font-semibold leading-none">{totalCount}</div>
+              <div className="text-xs text-muted-foreground">Total</div>
+            </div>
+          </div>
         </div>
-        <div className="text-sm">
-          <span className="font-semibold">{markedSections}</span> of{" "}
-          <span className="font-semibold">{totalSections}</span> sections fully marked for {date}
-        </div>
-      </div>
+      )}
 
       {!sectionFilter && (
         <InfoAlert tone="info" title="Select a class and section">
@@ -326,11 +419,19 @@ function AttendancePage() {
               </InfoAlert>
             </div>
           )}
-          {isPastDate && (
+          {isPastDate && !submitted && (
             <div className="mb-4">
               <InfoAlert tone="info" title="Past date — already-marked students are locked">
                 Students already marked for this date can only be changed through a reviewed
                 correction request. Unmarked students can still be backfilled directly.
+              </InfoAlert>
+            </div>
+          )}
+          {submitted && (
+            <div className="mb-4">
+              <InfoAlert tone="success" title="Attendance submitted and locked">
+                This register has been submitted. Any further change now requires a Correction
+                Request.
               </InfoAlert>
             </div>
           )}
@@ -345,124 +446,184 @@ function AttendancePage() {
                 variant="outline"
                 className="h-9 gap-1.5 rounded-md"
                 onClick={markAllPresent}
-                disabled={loading || rows.length === 0}
+                disabled={loading || submitted || rows.length === 0}
               >
                 <CheckCheck className="h-3.5 w-3.5" /> Mark All Present
               </Button>
               <Button
                 size="sm"
                 className="h-9 gap-1.5 rounded-md"
-                onClick={save}
-                disabled={saving || loading || rows.length === 0}
+                onClick={() => setShowConfirm(true)}
+                disabled={saving || loading || submitted || !allMarked}
+                title={!allMarked ? "Every student needs a status before you can submit" : undefined}
               >
-                <Save className="h-3.5 w-3.5" /> {saving ? "Saving..." : "Save Attendance"}
+                <Send className="h-3.5 w-3.5" />{" "}
+                {saving ? "Submitting..." : submitted ? "Submitted" : "Submit Attendance"}
               </Button>
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            {rows.map((r) => {
+          <div className="overflow-hidden rounded-xl border border-border bg-card">
+            {rows.map((r, idx) => {
               const locked = isLocked(r);
+              const isPresent = r.status === "PRESENT";
+              const isAbsent = r.status === "ABSENT";
+              const secondaryStatus =
+                r.status && SECONDARY_STATUS_OPTIONS.includes(r.status) ? r.status : null;
+
               return (
                 <div
                   key={r.studentKey}
-                  className="flex flex-wrap items-center gap-3 rounded-lg border border-border p-3"
+                  className={cn(
+                    "flex flex-col gap-3 border-b border-border p-4 transition-colors last:border-b-0 hover:bg-muted/30 sm:flex-row sm:items-center sm:justify-between",
+                  )}
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/15 text-xs font-semibold text-primary">
-                    {r.photoUrl ? (
-                      <img
-                        src={`${API_BASE_URL}${r.photoUrl}`}
-                        alt={r.studentName}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      r.studentName
-                        .split(" ")
-                        .map((n) => n[0])
-                        .slice(0, 2)
-                        .join("")
-                    )}
-                  </div>
-                  <div className="min-w-[10rem] flex-1">
-                    <div className="text-sm font-medium">{r.studentName}</div>
-                    <div className="font-mono text-xs text-muted-foreground">
-                      {r.admissionNumber}
-                      {r.rollNumber ? ` · Roll ${r.rollNumber}` : ""}
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="w-5 shrink-0 text-xs text-muted-foreground">{idx + 1}</span>
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/15 text-xs font-semibold text-primary">
+                      {r.photoUrl ? (
+                        <img
+                          src={`${API_BASE_URL}${r.photoUrl}`}
+                          alt={r.studentName}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        r.studentName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join("")
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium">{r.studentName}</div>
+                      <div className="font-mono text-xs text-muted-foreground">
+                        {r.admissionNumber}
+                        {r.rollNumber ? ` · Roll ${r.rollNumber}` : ""}
+                      </div>
                     </div>
                   </div>
 
-                  {!locked && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {STATUS_OPTIONS.map((s) => (
+                  <div className="flex flex-wrap items-center gap-2 pl-8 sm:pl-0">
+                    {locked ? (
+                      <>
+                        {r.status && (
+                          <Badge
+                            className={cn(
+                              "gap-1 rounded-md border-0 px-2 py-0.5 text-xs font-medium",
+                              STATUS_STYLES[r.status],
+                            )}
+                          >
+                            <Lock className="h-3 w-3" /> {r.status.replace(/_/g, " ")}
+                          </Badge>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 gap-1.5 rounded-md text-muted-foreground"
+                          onClick={() => openCorrection(r)}
+                        >
+                          Request Correction
+                        </Button>
+                      </>
+                    ) : (
+                      <>
                         <button
-                          key={s}
-                          onClick={() => updateRow(r.studentKey, { status: s })}
+                          onClick={() => updateRow(r.studentKey, { status: "PRESENT" })}
                           className={cn(
-                            "rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
-                            r.status === s
-                              ? STATUS_STYLES[s] + " border-transparent"
-                              : "border-border text-muted-foreground hover:border-primary/50",
+                            "flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors",
+                            isPresent
+                              ? "border-success/40 bg-success/15 text-success"
+                              : "border-border text-muted-foreground hover:border-success/40 hover:text-success",
                           )}
                         >
-                          {s.replace(/_/g, " ")}
+                          <Check className="h-3.5 w-3.5" /> Present
                         </button>
-                      ))}
-                    </div>
-                  )}
+                        <button
+                          onClick={() => updateRow(r.studentKey, { status: "ABSENT" })}
+                          className={cn(
+                            "flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors",
+                            isAbsent
+                              ? "border-destructive/40 bg-destructive/15 text-destructive"
+                              : "border-border text-muted-foreground hover:border-destructive/40 hover:text-destructive",
+                          )}
+                        >
+                          <X className="h-3.5 w-3.5" /> Absent
+                        </button>
 
-                  {!locked && r.status && LEAVE_LINKED_STATUSES.includes(r.status) && (
-                    <Select
-                      value={r.leaveTypeKey ?? ""}
-                      onValueChange={(v) => updateRow(r.studentKey, { leaveTypeKey: v })}
-                    >
-                      <SelectTrigger className="h-8 w-40 rounded-md">
-                        <SelectValue placeholder="Leave type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {leaveTypes.map((lt) => (
-                          <SelectItem key={lt.leaveTypeKey} value={lt.leaveTypeKey}>
-                            {lt.leaveTypeName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
+                        {secondaryStatus && (
+                          <Badge
+                            className={cn(
+                              "rounded-md border-0 px-2 py-0.5 text-xs font-medium",
+                              STATUS_STYLES[secondaryStatus],
+                            )}
+                          >
+                            {secondaryStatus.replace(/_/g, " ")}
+                          </Badge>
+                        )}
 
-                  {!locked && (
-                    <Input
-                      placeholder="Remarks"
-                      className="h-8 w-40 rounded-md"
-                      value={r.remarks ?? ""}
-                      onChange={(e) => updateRow(r.studentKey, { remarks: e.target.value })}
-                    />
-                  )}
+                        {r.status && LEAVE_LINKED_STATUSES.includes(r.status) && (
+                          <Select
+                            value={r.leaveTypeKey ?? ""}
+                            onValueChange={(v) => updateRow(r.studentKey, { leaveTypeKey: v })}
+                          >
+                            <SelectTrigger className="h-8 w-36 rounded-md">
+                              <SelectValue placeholder="Leave type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {leaveTypes.map((lt) => (
+                                <SelectItem key={lt.leaveTypeKey} value={lt.leaveTypeKey}>
+                                  {lt.leaveTypeName}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
 
-                  {r.status && (
-                    <Badge
-                      className={cn(
-                        "rounded-md border-0 px-2 py-0.5 text-xs font-medium",
-                        STATUS_STYLES[r.status],
-                      )}
-                    >
-                      {r.status.replace(/_/g, " ")}
-                    </Badge>
-                  )}
+                        {r.remarks && (
+                          <span
+                            className="flex items-center gap-1 text-xs text-muted-foreground"
+                            title={r.remarks}
+                          >
+                            <MessageSquare className="h-3 w-3" />
+                            <span className="max-w-[8rem] truncate">{r.remarks}</span>
+                          </span>
+                        )}
 
-                  {locked && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 gap-1.5 rounded-md text-muted-foreground"
-                      onClick={() => openCorrection(r)}
-                    >
-                      <Lock className="h-3.5 w-3.5" /> Request Correction
-                    </Button>
-                  )}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-md text-muted-foreground"
+                              aria-label={`More status options for ${r.studentName}`}
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {SECONDARY_STATUS_OPTIONS.map((s) => (
+                              <DropdownMenuItem
+                                key={s}
+                                onClick={() => updateRow(r.studentKey, { status: s })}
+                              >
+                                {s.replace(/_/g, " ")}
+                              </DropdownMenuItem>
+                            ))}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => openRemarks(r)}>
+                              <MessageSquare className="mr-2 h-3.5 w-3.5" /> Add remark
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </>
+                    )}
+                  </div>
                 </div>
               );
             })}
             {!loading && rows.length === 0 && (
-              <div className="flex items-center gap-3 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-3 p-4 text-sm text-muted-foreground">
                 <CalendarCheck className="h-5 w-5 shrink-0" /> No active students enrolled in this
                 section for the selected year.
               </div>
@@ -470,6 +631,74 @@ function AttendancePage() {
           </div>
         </div>
       )}
+
+      <Dialog open={showConfirm} onOpenChange={(v) => !saving && setShowConfirm(v)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Confirm Attendance Submission</DialogTitle>
+            <DialogDescription>
+              You're about to submit attendance for {date}. Once submitted, this register locks and
+              further changes require a Correction Request.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-3 gap-2">
+            <div className="flex flex-col items-center gap-1 rounded-lg border border-success/20 bg-success/5 py-3">
+              <Check className="h-4 w-4 text-success" />
+              <div className="text-lg font-semibold leading-none">{presentCount}</div>
+              <div className="text-xs text-muted-foreground">Present</div>
+            </div>
+            <div className="flex flex-col items-center gap-1 rounded-lg border border-destructive/20 bg-destructive/5 py-3">
+              <X className="h-4 w-4 text-destructive" />
+              <div className="text-lg font-semibold leading-none">{absentCount}</div>
+              <div className="text-xs text-muted-foreground">Absent</div>
+            </div>
+            <div className="flex flex-col items-center gap-1 rounded-lg border border-border bg-muted/40 py-3">
+              <Users2 className="h-4 w-4 text-muted-foreground" />
+              <div className="text-lg font-semibold leading-none">{totalCount}</div>
+              <div className="text-xs text-muted-foreground">Total</div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="rounded-md"
+              onClick={() => setShowConfirm(false)}
+              disabled={saving}
+            >
+              Cancel
+            </Button>
+            <Button className="gap-1.5 rounded-md" onClick={submit} disabled={saving}>
+              <Send className="h-3.5 w-3.5" /> {saving ? "Submitting..." : "Confirm & Submit"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!remarksTarget} onOpenChange={(v) => !v && setRemarksTarget(null)}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add Remark</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            className="rounded-md"
+            rows={3}
+            value={remarksDraft}
+            onChange={(e) => setRemarksDraft(e.target.value)}
+            placeholder="Add a short remark..."
+            autoFocus
+          />
+          <DialogFooter>
+            <Button variant="outline" className="rounded-md" onClick={() => setRemarksTarget(null)}>
+              Cancel
+            </Button>
+            <Button className="rounded-md" onClick={saveRemarks}>
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!correctionTarget} onOpenChange={(v) => !v && setCorrectionTarget(null)}>
         <DialogContent>

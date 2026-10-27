@@ -3,8 +3,10 @@ import { API_BASE_URL } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const GENDER_AVATAR_STYLES: Record<string, string> = {
-  MALE: "bg-[oklch(0.75_0.13_255)]/15 text-[oklch(0.55_0.18_255)]",
-  FEMALE: "bg-[oklch(0.75_0.13_355)]/15 text-[oklch(0.6_0.19_355)]",
+  M: "bg-sky-100 text-sky-600 dark:bg-sky-500/20 dark:text-sky-300",
+  MALE: "bg-sky-100 text-sky-600 dark:bg-sky-500/20 dark:text-sky-300",
+  F: "bg-pink-100 text-pink-600 dark:bg-pink-500/20 dark:text-pink-300",
+  FEMALE: "bg-pink-100 text-pink-600 dark:bg-pink-500/20 dark:text-pink-300",
 };
 const DEFAULT_AVATAR_STYLE = "bg-muted text-muted-foreground";
 
@@ -26,7 +28,7 @@ export function StudentAvatar({
     <div
       className={cn(
         "flex shrink-0 items-center justify-center overflow-hidden rounded-full",
-        !photoUrl && (GENDER_AVATAR_STYLES[gender ?? ""] ?? DEFAULT_AVATAR_STYLE),
+        !photoUrl && (GENDER_AVATAR_STYLES[gender?.trim().toUpperCase() ?? ""] ?? DEFAULT_AVATAR_STYLE),
         className,
       )}
     >

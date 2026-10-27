@@ -245,6 +245,10 @@ function SchoolLogoCard() {
           <p className="mt-1.5 text-xs text-muted-foreground">
             JPG, PNG, WEBP, SVG or GIF. Max 5MB.
           </p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Recommended: 300 × 100px (3:1), transparent PNG or SVG preferred. Other sizes and
+            ratios are also supported and will be fitted automatically.
+          </p>
         </div>
         <input
           ref={fileInputRef}

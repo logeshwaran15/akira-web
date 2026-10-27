@@ -11,6 +11,7 @@ import { DataTable, type Column } from "@/components/erp/DataTable";
 import { Building2 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useAcademicYear } from "@/hooks/use-academic-year";
 
 export const Route = createFileRoute("/classroom-utilization-dashboard")({
   head: () => ({
@@ -22,7 +23,6 @@ export const Route = createFileRoute("/classroom-utilization-dashboard")({
   component: ClassroomUtilizationDashboardPage,
 });
 
-type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type CampusOption = { campusKey: string; campusName: string };
 type UtilizationRow = {
   roomKey: string; roomName: string; roomType: string; buildingName: string | null;
@@ -39,8 +39,7 @@ function utilizationTone(pct: number) {
 }
 
 function ClassroomUtilizationDashboardPage() {
-  const [years, setYears] = useState<AcademicYear[]>([]);
-  const [yearKey, setYearKey] = useState("");
+  const { selectedYearKey: yearKey } = useAcademicYear();
   const [campuses, setCampuses] = useState<CampusOption[]>([]);
   const [campusKey, setCampusKey] = useState("");
   const [roomType, setRoomType] = useState("");
@@ -48,13 +47,8 @@ function ClassroomUtilizationDashboardPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    Promise.all([apiFetch("/api/AcademicYear"), apiFetch("/api/Campus")])
-      .then(([y, c]) => {
-        setYears(y);
-        setCampuses(c);
-        const active = (y as AcademicYear[]).find((yy) => yy.status === "Active") ?? y[0];
-        if (active) setYearKey(active.academicYearKey);
-      })
+    apiFetch("/api/Campus")
+      .then((c: CampusOption[]) => setCampuses(c))
       .catch((err) => toast.error(err instanceof Error ? err.message : "Failed to load filters"));
   }, []);
 
@@ -111,16 +105,7 @@ function ClassroomUtilizationDashboardPage() {
         </span>
       </div>
 
-      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label>Academic Year</Label>
-          <Select value={yearKey} onValueChange={setYearKey}>
-            <SelectTrigger className="rounded-md"><SelectValue placeholder="Choose year" /></SelectTrigger>
-            <SelectContent>
-              {years.map((y) => <SelectItem key={y.academicYearKey} value={y.academicYearKey}>{y.yearName}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label>Campus</Label>
           <Select value={campusKey || "all"} onValueChange={(v) => setCampusKey(v === "all" ? "" : v)}>

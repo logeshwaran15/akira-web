@@ -426,7 +426,7 @@ function YearRolloverPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 rounded-md"
+                        className="h-7 w-7 rounded-md text-purple-600 hover:text-purple-700"
                         onClick={() => openEditItem(item)}
                       >
                         <Pencil className="h-3.5 w-3.5" />

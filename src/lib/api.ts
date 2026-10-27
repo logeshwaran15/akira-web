@@ -2,8 +2,8 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "https://localh
 
 function handleUnauthorized() {
   localStorage.removeItem("akira_token");
-  if (typeof window !== "undefined" && window.location.pathname !== "/login") {
-    window.location.href = "/login";
+  if (typeof window !== "undefined" && window.location.pathname !== "/login" && window.location.pathname !== "/session-expired") {
+    window.location.href = "/session-expired";
   }
 }
 

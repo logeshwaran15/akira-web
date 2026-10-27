@@ -9,6 +9,7 @@ export interface StatCardProps {
   delta?: { value: string; direction: "up" | "down"; suffix?: string };
   icon: LucideIcon;
   tone?: "primary" | "success" | "warning" | "info" | "destructive" | "purple" | "teal";
+  size?: "default" | "compact";
 }
 
 const toneCardStyles: Record<NonNullable<StatCardProps["tone"]>, string> = {
@@ -31,16 +32,30 @@ const toneAccentStyles: Record<NonNullable<StatCardProps["tone"]>, string> = {
   teal: "bg-[oklch(0.55_0.1_200)]",
 };
 
-export function StatCard({ label, value, delta, icon, tone = "primary" }: StatCardProps) {
+export function StatCard({ label, value, delta, icon, tone = "primary", size = "default" }: StatCardProps) {
   const positive = delta?.direction === "up";
+  const compact = size === "compact";
   return (
-    <div className={cn("group relative overflow-hidden rounded-md border p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md", toneCardStyles[tone])}>
+    <div
+      className={cn(
+        "group relative overflow-hidden rounded-md border shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md",
+        compact ? "p-2.5" : "p-4",
+        toneCardStyles[tone],
+      )}
+    >
       <span className={cn("absolute inset-y-0 left-0 w-1", toneAccentStyles[tone])} />
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
-          <div className="text-sm font-medium text-muted-foreground">{label}</div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <div className="font-display text-3xl font-bold tracking-tight text-foreground">{value}</div>
+          <div className={cn("font-medium text-muted-foreground", compact ? "text-xs" : "text-sm")}>{label}</div>
+          <div className={cn("flex items-baseline gap-2", compact ? "mt-0.5" : "mt-2")}>
+            <div
+              className={cn(
+                "font-display font-bold tracking-tight text-foreground",
+                compact ? "text-xl" : "text-3xl",
+              )}
+            >
+              {value}
+            </div>
           </div>
           {delta && (
             <div className="mt-3 flex items-center gap-2 text-xs">
@@ -59,7 +74,7 @@ export function StatCard({ label, value, delta, icon, tone = "primary" }: StatCa
             </div>
           )}
         </div>
-        <IconTile icon={icon} tone={tone} />
+        <IconTile icon={icon} tone={tone} size={compact ? "sm" : "default"} />
       </div>
     </div>
   );

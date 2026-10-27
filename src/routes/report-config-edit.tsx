@@ -26,10 +26,12 @@ import {
   Plus,
   Trash2,
   Wand2,
+  LayoutGrid,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { PageLoader } from "@/components/erp/Spinner";
 import { cn } from "@/lib/utils";
+import { parseReportLayout, type ReportTab } from "@/lib/report-layout";
 
 export const Route = createFileRoute("/report-config-edit")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -150,21 +152,25 @@ function guessDataType(value: unknown): ColumnDef["dataType"] {
 }
 
 function formatSql(sql: string): string {
+  // Only major clause-starting keywords get their own line. `AS`/`ON`
+  // deliberately excluded -- they belong inline with the column/table/join
+  // they attach to (e.g. `SELECT x AS y`, `JOIN t ON ...`); breaking on them
+  // mangles the common case of aliased SELECT columns. Multi-word phrases
+  // are listed before their single-word prefix (e.g. "INNER JOIN" before
+  // "JOIN") so the longer match wins.
   const keywords = [
     "SELECT",
     "FROM",
     "WHERE",
     "AND",
     "OR",
-    "JOIN",
     "INNER JOIN",
     "LEFT JOIN",
     "RIGHT JOIN",
+    "JOIN",
     "GROUP BY",
     "ORDER BY",
     "HAVING",
-    "ON",
-    "AS",
     "WITH",
     "UNION ALL",
     "UNION",
@@ -254,6 +260,13 @@ function ReportConfigEditPage() {
   const [chartX, setChartX] = useState("");
   const [chartY, setChartY] = useState("");
 
+  // Layout mode: "auto" keeps today's auto-derived analytics viewer (V1);
+  // "custom" lets the admin author explicit tabs/widgets (V2), stored
+  // alongside the legacy chart config in the same chartConfigJson column.
+  const [layoutMode, setLayoutMode] = useState<"auto" | "custom">("auto");
+  const [tabsJson, setTabsJson] = useState("");
+  const [tabsJsonError, setTabsJsonError] = useState<string | null>(null);
+
   // Parameters
   const [params, setParams] = useState<ParamDef[]>([]);
 
@@ -293,10 +306,14 @@ function ReportConfigEditPage() {
         }
         if (r.chartConfigJson) {
           try {
-            const cc = JSON.parse(r.chartConfigJson);
-            setChartType(cc.type ?? "bar");
-            setChartX(cc.xField ?? "");
-            setChartY(cc.yField ?? "");
+            const layout = parseReportLayout(r.chartConfigJson);
+            setChartType(layout.legacyChart?.type ?? "bar");
+            setChartX(layout.legacyChart?.xField ?? "");
+            setChartY(layout.legacyChart?.yField ?? "");
+            if (layout.layoutVersion === 2 && layout.tabs) {
+              setLayoutMode("custom");
+              setTabsJson(JSON.stringify(layout.tabs, null, 2));
+            }
           } catch {
             /* ignore */
           }
@@ -393,6 +410,19 @@ function ReportConfigEditPage() {
       return;
     }
 
+    let tabs: ReportTab[] | undefined;
+    if (layoutMode === "custom") {
+      try {
+        tabs = tabsJson.trim() ? (JSON.parse(tabsJson) as ReportTab[]) : [];
+        setTabsJsonError(null);
+      } catch {
+        setTabsJsonError("Invalid JSON — fix the tabs/widgets config before saving.");
+        setActiveTab("columns");
+        toast.error("Invalid layout JSON.");
+        return;
+      }
+    }
+
     setSaving(true);
     try {
       const body = {
@@ -406,7 +436,11 @@ function ReportConfigEditPage() {
         sqlQuery: effectiveSql,
         parametersJson: params.length > 0 ? JSON.stringify(params) : null,
         columnsJson: columns.length > 0 ? JSON.stringify(columns) : null,
-        chartConfigJson: JSON.stringify({ type: chartType, xField: chartX, yField: chartY }),
+        chartConfigJson: JSON.stringify({
+          layoutVersion: layoutMode === "custom" ? 2 : 1,
+          legacyChart: { type: chartType, xField: chartX, yField: chartY },
+          tabs,
+        }),
         permissionsJson: allowRoleBasedAccess
           ? JSON.stringify({ roles: Array.from(permissionRoles) })
           : null,
@@ -428,6 +462,7 @@ function ReportConfigEditPage() {
         await apiFetch("/api/AdhocReport", { method: "POST", body: JSON.stringify(body) });
         toast.success("Report created as a draft — publish it from Configuration when ready");
       }
+
       navigate({ to: "/report-config" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to save report");
@@ -894,17 +929,81 @@ function ReportConfigEditPage() {
                       <SelectValue placeholder="Select column" />
                     </SelectTrigger>
                     <SelectContent>
-                      {columns
-                        .filter((c) => c.dataType === "number" || c.dataType === "currency")
-                        .map((c) => (
-                          <SelectItem key={c.key} value={c.key}>
-                            {c.label}
-                          </SelectItem>
-                        ))}
+                      {columns.filter((c) => c.dataType === "number" || c.dataType === "currency")
+                        .length === 0 ? (
+                        <div className="px-2 py-1.5 text-xs text-muted-foreground">
+                          No Number/Currency columns yet — set a column's Data Type above.
+                        </div>
+                      ) : (
+                        columns
+                          .filter((c) => c.dataType === "number" || c.dataType === "currency")
+                          .map((c) => (
+                            <SelectItem key={c.key} value={c.key}>
+                              {c.label}
+                            </SelectItem>
+                          ))
+                      )}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Only columns typed as Number or Currency (in the table above) appear here.
+                  </p>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-2 border-t border-border pt-4">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <LayoutGrid className="h-4 w-4 text-primary" /> Viewer Layout
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <span
+                    className={cn(
+                      layoutMode === "auto"
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    Auto-analytics
+                  </span>
+                  <Switch
+                    checked={layoutMode === "custom"}
+                    onCheckedChange={(v) => setLayoutMode(v ? "custom" : "auto")}
+                  />
+                  <span
+                    className={cn(
+                      layoutMode === "custom"
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    Custom tabs & widgets
+                  </span>
+                </div>
+              </div>
+
+              {layoutMode === "auto" ? (
+                <p className="text-xs text-muted-foreground">
+                  The viewer auto-derives stat cards and charts from the report's columns (default
+                  behavior, unchanged).
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground">
+                    Define an array of tabs, each with a list of widgets. Each widget's{" "}
+                    <code className="rounded bg-muted px-1">key</code> must be unique within its
+                    tab; field names must match a column key from this report.
+                  </p>
+                  <Textarea
+                    className="min-h-[220px] rounded-md font-mono text-xs"
+                    value={tabsJson}
+                    onChange={(e) => setTabsJson(e.target.value)}
+                    placeholder={`[\n  {\n    "tabName": "Overview",\n    "tabItems": [\n      { "type": "StatCard", "key": "total", "title": "Total Records", "agg": "count" },\n      { "type": "CategoryBreakdown", "key": "byStatus", "field": "Status" }\n    ]\n  }\n]`}
+                  />
+                  {tabsJsonError && <p className="text-xs text-destructive">{tabsJsonError}</p>}
+                </div>
+              )}
             </div>
           </div>
         </TabsContent>
@@ -1080,12 +1179,12 @@ function ReportConfigEditPage() {
       <div className="mt-4 flex items-center justify-between rounded-md border border-border bg-card p-4 shadow-sm">
         <Button
           variant="outline"
-          className="rounded-md border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+          className="rounded-md border-destructive text-destructive"
           onClick={() => navigate({ to: "/report-config" })}
         >
           Cancel
         </Button>
-        <Button className="gap-1.5 rounded-md" disabled={saving} onClick={save}>
+        <Button variant="success" className="gap-1.5 rounded-md" disabled={saving} onClick={save}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           {saving ? "Saving..." : "Save Report"}
         </Button>

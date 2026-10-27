@@ -7,6 +7,7 @@ import { InfoAlert } from "@/components/erp/InfoAlert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1457,12 +1458,11 @@ function ApplicationsPage() {
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1.5">
                         <Label className="text-xs font-normal text-muted-foreground">Date</Label>
-                        <Input
-                          type="date"
-                          className="h-9 rounded-md"
+                        <DatePicker
+                          className="h-9"
                           value={interviewDraft.date}
-                          onChange={(e) =>
-                            setInterviewDraft({ ...interviewDraft, date: e.target.value })
+                          onChange={(v) =>
+                            setInterviewDraft({ ...interviewDraft, date: v })
                           }
                         />
                       </div>
@@ -1563,12 +1563,11 @@ function ApplicationsPage() {
                           <Label className="text-xs font-normal text-muted-foreground">
                             Offer Expiry Date
                           </Label>
-                          <Input
-                            type="date"
-                            className="h-9 rounded-md"
+                          <DatePicker
+                            className="h-9"
                             value={selectDraft.expiryDate}
-                            onChange={(e) =>
-                              setSelectDraft({ ...selectDraft, expiryDate: e.target.value })
+                            onChange={(v) =>
+                              setSelectDraft({ ...selectDraft, expiryDate: v })
                             }
                           />
                         </div>
@@ -1616,12 +1615,11 @@ function ApplicationsPage() {
                           <Label className="text-xs font-normal text-muted-foreground">
                             Offer Expiry Date
                           </Label>
-                          <Input
-                            type="date"
-                            className="h-9 rounded-md"
+                          <DatePicker
+                            className="h-9"
                             value={selectDraft.expiryDate}
-                            onChange={(e) =>
-                              setSelectDraft({ ...selectDraft, expiryDate: e.target.value })
+                            onChange={(v) =>
+                              setSelectDraft({ ...selectDraft, expiryDate: v })
                             }
                           />
                         </div>

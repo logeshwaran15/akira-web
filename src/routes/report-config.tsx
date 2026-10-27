@@ -36,6 +36,7 @@ import {
   MoreVertical,
   FileSpreadsheet,
   CheckCircle2,
+  Link2,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { exportToCsv } from "@/lib/csv";
@@ -171,6 +172,16 @@ function ReportConfigPage() {
     }
   };
 
+  const copyReportUrl = async (row: ReportRow) => {
+    const url = `${window.location.origin}/report-viewer?id=${row.tenantAdhocReportKey}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Report URL copied to clipboard");
+    } catch {
+      toast.error("Failed to copy URL");
+    }
+  };
+
   const openHistory = (row: ReportRow) => {
     setHistoryTarget(row);
     apiFetch(`/api/AdhocReport/${row.tenantAdhocReportKey}/history`)
@@ -240,6 +251,26 @@ function ReportConfigPage() {
     },
     { key: "executionCount", header: "Execution Count", sortable: true, className: "text-center" },
     {
+      key: "view",
+      header: "",
+      className: "w-10",
+      accessor: (r) => (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 gap-1.5 rounded-md border-info/40 text-info hover:bg-info hover:text-info-foreground"
+          onClick={() =>
+            navigate({
+              to: "/report-viewer",
+              search: { id: r.tenantAdhocReportKey, preview: true },
+            })
+          }
+        >
+          <Eye className="h-3.5 w-3.5" /> View
+        </Button>
+      ),
+    },
+    {
       key: "actions",
       header: "Actions",
       className: "w-10",
@@ -267,6 +298,9 @@ function ReportConfigPage() {
               }
             >
               <Eye className="mr-2 h-3.5 w-3.5" /> Preview
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => copyReportUrl(r)}>
+              <Link2 className="mr-2 h-3.5 w-3.5" /> Copy URL
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => duplicateReport(r)}>
               <Copy className="mr-2 h-3.5 w-3.5" /> Duplicate
@@ -332,7 +366,7 @@ function ReportConfigPage() {
           <Button
             variant="outline"
             size="sm"
-            className="h-9 gap-1.5 rounded-md"
+            className="h-9 gap-1.5 rounded-md border-success/30 bg-success/15 text-success hover:bg-success/20"
             onClick={() =>
               exportToCsv(
                 "report-configuration.csv",

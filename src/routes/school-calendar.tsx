@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/erp/PageHeader";
 import { FormDialog } from "@/components/erp/FormDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -539,7 +540,7 @@ function SchoolCalendarPage() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 rounded-md"
+                              className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                               onClick={() => openEdit(ev)}
                             >
                               <Pencil className="h-3.5 w-3.5" />
@@ -591,21 +592,17 @@ function SchoolCalendarPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label required>Start Date</Label>
-              <Input
-                type="date"
+              <DatePicker
                 value={draft.startDate}
-                onChange={(e) => setDraft({ ...draft, startDate: e.target.value })}
-                className="rounded-md"
+                onChange={(v) => setDraft({ ...draft, startDate: v })}
                 required
               />
             </div>
             <div className="space-y-1.5">
               <Label required>End Date</Label>
-              <Input
-                type="date"
+              <DatePicker
                 value={draft.endDate}
-                onChange={(e) => setDraft({ ...draft, endDate: e.target.value })}
-                className="rounded-md"
+                onChange={(v) => setDraft({ ...draft, endDate: v })}
                 required
               />
             </div>
@@ -641,7 +638,7 @@ function SchoolCalendarPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full gap-1.5 rounded-md border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="w-full gap-1.5 rounded-md border-destructive text-destructive"
               onClick={() => {
                 setOpen(false);
                 setDeleteTarget(editing);

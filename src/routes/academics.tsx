@@ -368,7 +368,7 @@ function AcademicYearsPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEdit(r)}
                       title="Edit"
                     >

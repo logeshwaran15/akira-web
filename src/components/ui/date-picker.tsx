@@ -5,6 +5,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
+function isSameDay(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
 export interface DatePickerProps {
   /** ISO date string, e.g. "2026-07-12", matching native <input type="date"> value format. */
   value?: string;
@@ -32,9 +36,15 @@ function toIso(date: Date): string {
 }
 
 const YEARS_PER_PAGE = 12;
-const MONTH_NAMES = Array.from({ length: 12 }, (_, i) =>
-  new Date(2000, i, 1).toLocaleDateString(undefined, { month: "short" }),
-);
+// Hardcoded rather than toLocaleDateString(undefined, ...) -- that resolves to
+// whichever locale the runtime defaults to, which differs between the SSR
+// (Node) environment and the browser and causes a hydration text mismatch.
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_NAMES_LONG = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+const formatFullDate = (d: Date) => `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
 
 type View = "days" | "months" | "years";
 
@@ -64,7 +74,7 @@ export function DatePicker({
   const headerLabel = () => {
     if (view === "years") return `${decadeStart} – ${decadeStart + YEARS_PER_PAGE - 1}`;
     if (view === "months") return String(month.getFullYear());
-    return month.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+    return `${MONTH_NAMES_LONG[month.getMonth()]} ${month.getFullYear()}`;
   };
 
   const stepBack = () => {
@@ -99,37 +109,50 @@ export function DatePicker({
           )}
         >
           <CalendarIcon className="h-4 w-4 shrink-0 opacity-60" />
-          {selected
-            ? selected.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
-            : placeholder}
+          {selected ? formatFullDate(selected) : placeholder}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto overflow-hidden rounded-xl p-0 shadow-lg" align="start">
         {/* Custom header: click the label to drill into a month grid, then a year grid -- no native <select>. */}
-        <div className="flex items-center justify-between border-b border-border px-2 py-2">
-          <Button type="button" variant="ghost" size="icon" className="h-7 w-7 rounded-md" onClick={stepBack}>
+        <div
+          className="flex items-center justify-between px-3 py-2.5 text-white"
+          style={{ background: "linear-gradient(135deg, #FF6B35, #FF7A00)" }}
+        >
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 rounded-full text-white hover:bg-white/20 hover:text-white"
+            onClick={stepBack}
+          >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <button
             type="button"
             onClick={onHeaderClick}
-            className="rounded-md px-2 py-1 text-sm font-medium hover:bg-accent"
+            className="rounded-md px-2 py-1 text-sm font-semibold tracking-tight hover:bg-white/15"
           >
             {headerLabel()}
           </button>
-          <Button type="button" variant="ghost" size="icon" className="h-7 w-7 rounded-md" onClick={stepForward}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 rounded-full text-white hover:bg-white/20 hover:text-white"
+            onClick={stepForward}
+          >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
 
         {view === "years" && (
-          <div className="grid grid-cols-3 gap-1.5 p-3">
+          <div className="grid grid-cols-3 gap-1.5 bg-card p-3">
             {Array.from({ length: YEARS_PER_PAGE }, (_, i) => decadeStart + i).map((year) => (
               <Button
                 key={year}
                 type="button"
                 variant={year === month.getFullYear() ? "default" : "ghost"}
-                className="h-9 rounded-md text-sm"
+                className={cn("h-9 rounded-full text-sm", year === month.getFullYear() && "shadow-sm")}
                 onClick={() => pickYear(year)}
               >
                 {year}
@@ -139,13 +162,13 @@ export function DatePicker({
         )}
 
         {view === "months" && (
-          <div className="grid grid-cols-3 gap-1.5 p-3">
+          <div className="grid grid-cols-3 gap-1.5 bg-card p-3">
             {MONTH_NAMES.map((name, i) => (
               <Button
                 key={name}
                 type="button"
                 variant={i === month.getMonth() ? "default" : "ghost"}
-                className="h-9 rounded-md text-sm"
+                className={cn("h-9 rounded-full text-sm", i === month.getMonth() && "shadow-sm")}
                 onClick={() => pickMonth(i)}
               >
                 {name}
@@ -155,21 +178,43 @@ export function DatePicker({
         )}
 
         {view === "days" && (
-          <Calendar
-            mode="single"
-            captionLayout="label"
-            month={month}
-            onMonthChange={setMonth}
-            selected={selected}
-            onSelect={(date: Date | undefined) => date && onChange(toIso(date))}
-            disabled={(date) => {
-              if (min && date < toDate(min)!) return true;
-              if (max && date > toDate(max)!) return true;
-              return false;
-            }}
-            required={required}
-            components={{ MonthCaption: () => <></>, Nav: () => <></> }}
-          />
+          <div className="bg-card">
+            <Calendar
+              mode="single"
+              captionLayout="label"
+              month={month}
+              onMonthChange={setMonth}
+              selected={selected}
+              onSelect={(date: Date | undefined) => date && onChange(toIso(date))}
+              disabled={(date) => {
+                if (min && date < toDate(min)!) return true;
+                if (max && date > toDate(max)!) return true;
+                return false;
+              }}
+              required={required}
+              modifiers={{ today: (date) => isSameDay(date, new Date()) }}
+              components={{ MonthCaption: () => <></>, Nav: () => <></> }}
+              classNames={{
+                today: "border border-primary text-primary font-semibold rounded-full",
+              }}
+            />
+            <div className="flex items-center justify-between gap-2 border-t border-border px-3 py-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const today = new Date();
+                  setMonth(today);
+                  onChange(toIso(today));
+                }}
+                className="rounded-md px-2 py-1 text-xs font-semibold text-primary hover:bg-primary/10"
+              >
+                Today
+              </button>
+              {selected && (
+                <span className="text-xs text-muted-foreground">{formatFullDate(selected)}</span>
+              )}
+            </div>
+          </div>
         )}
       </PopoverContent>
     </Popover>

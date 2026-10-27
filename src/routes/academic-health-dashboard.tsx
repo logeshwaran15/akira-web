@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/erp/PageHeader";
 import {
-  ShieldCheck, ShieldAlert, ShieldX, ChevronRight, UserX, Gauge, TrendingDown, NotebookPen,
+  ShieldCheck, ShieldAlert, ShieldX, UserX, Gauge, TrendingDown, NotebookPen,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -129,18 +129,6 @@ function AcademicHealthDashboardPage() {
             <div className="text-xs font-medium text-muted-foreground">{m.label}</div>
           </div>
         ))}
-      </div>
-
-      <div className="rounded-md border border-border bg-card p-5 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="font-display text-base font-semibold">Need the details?</h2>
-            <p className="text-xs text-muted-foreground">Every flagged item, with a direct link to fix it, lives on the Coordinator Dashboard.</p>
-          </div>
-          <Link to="/academic-coordinator-dashboard" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
-            Open Coordinator Dashboard <ChevronRight className="h-4 w-4" />
-          </Link>
-        </div>
       </div>
     </div>
   );

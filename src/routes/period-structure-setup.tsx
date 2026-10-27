@@ -6,6 +6,7 @@ import { FormDialog } from "@/components/erp/FormDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TimePicker } from "@/components/ui/time-picker";
 import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -190,7 +191,7 @@ function PeriodStructureSetupPage() {
       className: "text-right",
       accessor: (p) => (
         <div className="flex items-center justify-end gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(p)}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEdit(p)}>
             <Pencil className="h-3.5 w-3.5" />
           </Button>
           <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteTarget(p)}>
@@ -274,11 +275,11 @@ function PeriodStructureSetupPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label required>Start Time</Label>
-              <Input type="time" value={draft.startTime} onChange={(e) => setDraft({ ...draft, startTime: e.target.value })} className="rounded-md" required />
+              <TimePicker value={draft.startTime} onChange={(v) => setDraft({ ...draft, startTime: v })} required />
             </div>
             <div className="space-y-1.5">
               <Label required>End Time</Label>
-              <Input type="time" value={draft.endTime} onChange={(e) => setDraft({ ...draft, endTime: e.target.value })} className="rounded-md" required />
+              <TimePicker value={draft.endTime} onChange={(v) => setDraft({ ...draft, endTime: v })} required />
             </div>
           </div>
         </div>

@@ -278,7 +278,7 @@ function CampusSetupPage() {
                       <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-md" onClick={() => openBuildings(c)}>
                         <Building2 className="h-3.5 w-3.5" /> Buildings
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEditCampus(c)}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEditCampus(c)}>
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteCampusTarget(c)}>
@@ -428,7 +428,7 @@ function CampusSetupPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEditRoom(r)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEditRoom(r)}>
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-destructive" onClick={() => setDeleteRoomTarget(r)}>

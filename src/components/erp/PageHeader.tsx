@@ -29,10 +29,12 @@ export function PageHeader({
 export function IconTile({
   icon: Icon,
   tone = "primary",
+  size = "default",
   className = "",
 }: {
   icon: LucideIcon;
   tone?: "primary" | "success" | "warning" | "info" | "destructive" | "purple" | "teal";
+  size?: "default" | "sm";
   className?: string;
 }) {
   const tones: Record<string, string> = {
@@ -44,11 +46,13 @@ export function IconTile({
     purple: "bg-[oklch(0.75_0.17_300)]/15 text-[oklch(0.55_0.2_300)]",
     teal: "bg-[oklch(0.55_0.1_200)]/15 text-[oklch(0.4_0.12_200)]",
   };
+  const sizes = size === "sm" ? "h-8 w-8" : "h-12 w-12";
+  const iconSize = size === "sm" ? "h-4 w-4" : "h-5 w-5";
   return (
     <div
-      className={`flex h-12 w-12 items-center justify-center rounded-full ${tones[tone]} ${className}`}
+      className={`flex ${sizes} shrink-0 items-center justify-center rounded-full ${tones[tone]} ${className}`}
     >
-      <Icon className="h-5 w-5" />
+      <Icon className={iconSize} />
     </div>
   );
 }

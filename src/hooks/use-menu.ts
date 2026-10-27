@@ -1,5 +1,9 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api";
+// TEMP: overlays mock Exam module menu rows until the backend has real
+// AkiraMenu rows for those screens. See src/lib/mock-store.ts. Remove this
+// import and the withExamModuleMenu(...) call below once that lands.
+import { withExamModuleMenu } from "@/lib/mock-store";
 
 export type MenuItem = {
   akiraMenuKey: string;
@@ -18,21 +22,27 @@ export type MenuItem = {
   canPrint: boolean;
 };
 
-export type MenuNode = MenuItem & { children: MenuItem[] };
+export type MenuNode = MenuItem & { children: MenuNode[] };
 
 const MENU_QUERY_KEY = ["menu"] as const;
 
-function groupByParent(items: MenuItem[]): MenuNode[] {
-  const sections = items
-    .filter((item) => !item.parentMenuKey)
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+// Builds a tree from the flat ParentMenuKey list. Depth isn't capped here --
+// the admin-side Menu Management page enforces the 3-level limit (Main Menu
+// -> Sub Menu -> Child Menu) when items are created, so this just reflects
+// whatever shape the data actually has.
+function buildTree(items: MenuItem[], parentKey: string | null = null, seen = new Set<string>()): MenuNode[] {
+  return items
+    .filter((item) => (item.parentMenuKey ?? null) === parentKey)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((item) => {
+      if (seen.has(item.akiraMenuKey)) return { ...item, children: [] };
+      const nextSeen = new Set(seen).add(item.akiraMenuKey);
+      return { ...item, children: buildTree(items, item.akiraMenuKey, nextSeen) };
+    });
+}
 
-  return sections.map((section) => ({
-    ...section,
-    children: items
-      .filter((item) => item.parentMenuKey === section.akiraMenuKey)
-      .sort((a, b) => a.sortOrder - b.sortOrder),
-  }));
+function groupByParent(items: MenuItem[]): MenuNode[] {
+  return buildTree(items, null);
 }
 
 function hasToken() {
@@ -49,7 +59,8 @@ export function useMenu() {
     queryKey: MENU_QUERY_KEY,
     queryFn: async () => {
       const raw = (await apiFetch("/api/Menu/my")) as RawMenuItem[];
-      return raw.map((item) => ({ ...item, akiraMenuKey: item.akiraMenuKey ?? item.tenantMenuKey! }));
+      const normalized = raw.map((item) => ({ ...item, akiraMenuKey: item.akiraMenuKey ?? item.tenantMenuKey! }));
+      return withExamModuleMenu(normalized) as MenuItem[];
     },
     enabled: hasToken(),
     staleTime: 60_000,

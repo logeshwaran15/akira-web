@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { InfoAlert } from "@/components/erp/InfoAlert";
+import { BackButton } from "@/components/erp/BackButton";
 import { StudentAvatar } from "@/components/erp/StudentAvatar";
 import { PageLoader } from "@/components/erp/Spinner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -64,7 +66,6 @@ import {
   Compass,
   Landmark,
   Linkedin,
-  ArrowLeft,
   BadgeCheck,
   ChevronDown,
   CalendarCheck,
@@ -2651,14 +2652,7 @@ function StudentDetailPage() {
 
   return (
     <div>
-      <Button
-        variant="outline"
-        size="sm"
-        className="mb-4 gap-1.5 rounded-md"
-        onClick={() => navigate({ to: "/students" })}
-      >
-        <ArrowLeft className="h-3.5 w-3.5" /> Back to Directory
-      </Button>
+      <BackButton to="/students" label="Back to Directory" />
 
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -3077,7 +3071,7 @@ function StudentDetailPage() {
                             type="button"
                             size="sm"
                             variant="outline"
-                            className="h-8 rounded-md border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                            className="h-8 rounded-md border-destructive text-destructive"
                             disabled={certificateActioningId === c.studentCertificateKey}
                             onClick={() => setRejectCertificateTarget(c)}
                           >
@@ -3289,7 +3283,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditGuardian(g)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3543,7 +3537,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditAchievement(a)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3633,7 +3627,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditBehavior(b)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3698,7 +3692,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditLeadership(r)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3779,7 +3773,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditCounselling(c)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3854,7 +3848,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditSports(s)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3917,7 +3911,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditClub(c)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -3987,7 +3981,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditEngagement(e)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -4087,7 +4081,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditPortfolio(p)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -4164,7 +4158,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditTalent(t)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -4232,7 +4226,7 @@ function StudentDetailPage() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-md"
+                      className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700"
                       onClick={() => openEditCareer(c)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -4258,7 +4252,7 @@ function StudentDetailPage() {
               <Button
                 size="sm"
                 variant="outline"
-                className="h-9 gap-1.5 rounded-md border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                className="h-9 gap-1.5 rounded-md border-destructive text-destructive"
                 onClick={() => setDeleteAlumniConfirmOpen(true)}
               >
                 <Trash2 className="h-3.5 w-3.5" /> Remove
@@ -5063,12 +5057,10 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Achievement Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={achievementDraft.achievementDate}
-              onChange={(e) =>
-                setAchievementDraft({ ...achievementDraft, achievementDate: e.target.value })
+              onChange={(v) =>
+                setAchievementDraft({ ...achievementDraft, achievementDate: v })
               }
             />
           </div>
@@ -5233,11 +5225,9 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={behaviorDraft.incidentDate}
-              onChange={(e) => setBehaviorDraft({ ...behaviorDraft, incidentDate: e.target.value })}
+              onChange={(v) => setBehaviorDraft({ ...behaviorDraft, incidentDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -5324,12 +5314,10 @@ function StudentDetailPage() {
               </div>
               <div className="space-y-1.5">
                 <Label>Follow-up Date</Label>
-                <Input
-                  type="date"
-                  className="rounded-md"
+                <DatePicker
                   value={behaviorDraft.followUpDate}
-                  onChange={(e) =>
-                    setBehaviorDraft({ ...behaviorDraft, followUpDate: e.target.value })
+                  onChange={(v) =>
+                    setBehaviorDraft({ ...behaviorDraft, followUpDate: v })
                   }
                 />
               </div>
@@ -5404,20 +5392,16 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Start Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={leadershipDraft.startDate}
-              onChange={(e) => setLeadershipDraft({ ...leadershipDraft, startDate: e.target.value })}
+              onChange={(v) => setLeadershipDraft({ ...leadershipDraft, startDate: v })}
             />
           </div>
           <div className="space-y-1.5">
             <Label>End Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={leadershipDraft.endDate}
-              onChange={(e) => setLeadershipDraft({ ...leadershipDraft, endDate: e.target.value })}
+              onChange={(v) => setLeadershipDraft({ ...leadershipDraft, endDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -5517,11 +5501,9 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Session Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={counsellingDraft.sessionDate}
-              onChange={(e) => setCounsellingDraft({ ...counsellingDraft, sessionDate: e.target.value })}
+              onChange={(v) => setCounsellingDraft({ ...counsellingDraft, sessionDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -5592,12 +5574,10 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label>Follow-up Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={counsellingDraft.followUpDate}
-              onChange={(e) =>
-                setCounsellingDraft({ ...counsellingDraft, followUpDate: e.target.value })
+              onChange={(v) =>
+                setCounsellingDraft({ ...counsellingDraft, followUpDate: v })
               }
             />
           </div>
@@ -5700,11 +5680,9 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Event Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={sportsDraft.eventDate}
-              onChange={(e) => setSportsDraft({ ...sportsDraft, eventDate: e.target.value })}
+              onChange={(v) => setSportsDraft({ ...sportsDraft, eventDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -5885,20 +5863,16 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Join Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={clubDraft.joinDate}
-              onChange={(e) => setClubDraft({ ...clubDraft, joinDate: e.target.value })}
+              onChange={(v) => setClubDraft({ ...clubDraft, joinDate: v })}
             />
           </div>
           <div className="space-y-1.5">
             <Label>Leave Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={clubDraft.leaveDate}
-              onChange={(e) => setClubDraft({ ...clubDraft, leaveDate: e.target.value })}
+              onChange={(v) => setClubDraft({ ...clubDraft, leaveDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -5992,12 +5966,10 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={engagementDraft.engagementDate}
-              onChange={(e) =>
-                setEngagementDraft({ ...engagementDraft, engagementDate: e.target.value })
+              onChange={(v) =>
+                setEngagementDraft({ ...engagementDraft, engagementDate: v })
               }
             />
           </div>
@@ -6063,12 +6035,10 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label>Follow-up Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={engagementDraft.followUpDate}
-              onChange={(e) =>
-                setEngagementDraft({ ...engagementDraft, followUpDate: e.target.value })
+              onChange={(v) =>
+                setEngagementDraft({ ...engagementDraft, followUpDate: v })
               }
             />
           </div>
@@ -6166,11 +6136,9 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={portfolioDraft.itemDate}
-              onChange={(e) => setPortfolioDraft({ ...portfolioDraft, itemDate: e.target.value })}
+              onChange={(v) => setPortfolioDraft({ ...portfolioDraft, itemDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -6304,11 +6272,9 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Identified Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={talentDraft.identifiedDate}
-              onChange={(e) => setTalentDraft({ ...talentDraft, identifiedDate: e.target.value })}
+              onChange={(v) => setTalentDraft({ ...talentDraft, identifiedDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -6446,11 +6412,9 @@ function StudentDetailPage() {
           </div>
           <div className="space-y-1.5">
             <Label required>Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={careerDraft.recordDate}
-              onChange={(e) => setCareerDraft({ ...careerDraft, recordDate: e.target.value })}
+              onChange={(v) => setCareerDraft({ ...careerDraft, recordDate: v })}
             />
           </div>
           <div className="space-y-1.5">
@@ -6566,11 +6530,9 @@ function StudentDetailPage() {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <Label>Graduation Date</Label>
-            <Input
-              type="date"
-              className="rounded-md"
+            <DatePicker
               value={alumniDraft.graduationDate}
-              onChange={(e) => setAlumniDraft({ ...alumniDraft, graduationDate: e.target.value })}
+              onChange={(v) => setAlumniDraft({ ...alumniDraft, graduationDate: v })}
             />
           </div>
           <div className="space-y-1.5">

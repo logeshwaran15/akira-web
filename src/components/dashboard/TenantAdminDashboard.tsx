@@ -10,7 +10,6 @@ import {
   UserPlus,
   UserCog,
   CalendarPlus,
-  Receipt,
   FileBarChart2,
   MessageSquare,
   Trophy,
@@ -36,6 +35,7 @@ import { StatCard } from "@/components/erp/StatCard";
 import { cn } from "@/lib/utils";
 import { apiFetch } from "@/lib/api";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { NoticeCarousel, useActiveNotices } from "@/components/dashboard/NoticeBanner";
 
 type AcademicYear = { academicYearKey: string; yearName: string; status: string };
 type Student = {
@@ -118,6 +118,7 @@ function greeting() {
 
 export function TenantAdminDashboard() {
   const { user } = useCurrentUser();
+  const noticeBanners = useActiveNotices();
 
   const [years, setYears] = useState<AcademicYear[]>([]);
   const activeYearKey = years.find((y) => y.status === "Active")?.academicYearKey ?? years[0]?.academicYearKey;
@@ -294,7 +295,6 @@ export function TenantAdminDashboard() {
     { label: "Add Student", to: "/student-add", icon: UserPlus, tone: "primary" },
     { label: "Add Staff", to: "/staff-setup", icon: UserCog, tone: "info" },
     { label: "Create Event", to: "/school-calendar", icon: CalendarPlus, tone: "success" },
-    { label: "Collect Fees", to: "/fees", icon: Receipt, tone: "warning" },
     { label: "Generate Report", to: "/reports", icon: FileBarChart2, tone: "purple" },
     { label: "Communication", to: "/communication-settings", icon: MessageSquare, tone: "teal" },
   ] as const;
@@ -440,7 +440,9 @@ export function TenantAdminDashboard() {
           <h2 className="mb-4 flex items-center gap-2 font-display text-base font-bold">
             <Bell className="h-4 w-4 text-primary" /> Recent Notices
           </h2>
-          {recentNotices.length === 0 ? (
+          {noticeBanners.length > 0 ? (
+            <NoticeCarousel banners={noticeBanners} className="-mx-5 -mb-5 rounded-b-md" />
+          ) : recentNotices.length === 0 ? (
             <div className="py-8 text-center text-sm text-muted-foreground">No recent notices.</div>
           ) : (
             <div className="space-y-3">

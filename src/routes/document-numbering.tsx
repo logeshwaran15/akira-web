@@ -197,7 +197,7 @@ function DocumentNumberingPage() {
                             </Button>
                           </>
                         )}
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md" onClick={() => openEdit(t.code)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md text-purple-600 hover:text-purple-700" onClick={() => openEdit(t.code)}>
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -287,7 +287,7 @@ function DocumentNumberingPage() {
                   <TableCell>{new Date(l.createdOn).toLocaleString()}</TableCell>
                   <TableCell className="text-right">
                     {l.status === "ISSUED" && (
-                      <Button variant="ghost" size="sm" className="h-8 rounded-md text-destructive" onClick={() => setCancelTarget(l)}>Cancel</Button>
+                      <Button variant="ghost" size="sm" className="h-8 rounded-md text-destructive hover:bg-transparent hover:text-destructive" onClick={() => setCancelTarget(l)}>Cancel</Button>
                     )}
                   </TableCell>
                 </TableRow>

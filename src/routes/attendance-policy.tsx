@@ -170,7 +170,7 @@ function AttendancePolicyPage() {
             <div key={s.academicStageKey} className="rounded-md border border-border bg-card p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="font-display text-base font-semibold">{s.stageName}</h2>
-                <Button size="sm" className="h-9 gap-1.5 rounded-md" onClick={() => saveStage(s)} disabled={savingKey === s.academicStageKey}>
+                <Button variant="success" size="sm" className="h-9 gap-1.5 rounded-md" onClick={() => saveStage(s)} disabled={savingKey === s.academicStageKey}>
                   {savingKey === s.academicStageKey ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
                   Save
                 </Button>
@@ -222,7 +222,7 @@ function AttendancePolicyPage() {
             <h2 className="font-display text-base font-semibold">Shortage Alerts & Staff Attendance</h2>
             <p className="text-xs text-muted-foreground">Tenant-wide thresholds and staff shift configuration.</p>
           </div>
-          <Button size="sm" className="h-9 gap-1.5 rounded-md" onClick={saveAlertConfig} disabled={alertSaving}>
+          <Button variant="success" size="sm" className="h-9 gap-1.5 rounded-md" onClick={saveAlertConfig} disabled={alertSaving}>
             {alertSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />} Save
           </Button>
         </div>
